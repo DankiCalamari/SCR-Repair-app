@@ -1,0 +1,134 @@
+{% extends "pdf/base.html" %}
+{% block title %}Intake Receipt - {{ ticket_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Intake Receipt &mdash; {{ ticket_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="two-columns">
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Receipt Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Ticket Number</div>
+          <div class="info-value strong">{{ ticket_number }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Date Received</div>
+          <div class="info-value">{{ intake_date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Customer Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Name</div>
+          <div class="info-value strong">{{ customer_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phone</div>
+          <div class="info-value">{{ customer_phone }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email</div>
+          <div class="info-value">{{ customer_email or "N/A" }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Address</div>
+          <div class="info-value">{{ customer_address or "N/A" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Device Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Device Type</div>
+      <div class="info-value">{{ device_type }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Brand</div>
+      <div class="info-value">{{ device_brand }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Model</div>
+      <div class="info-value">{{ device_model }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Colour</div>
+      <div class="info-value">{{ device_colour or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">IMEI</div>
+      <div class="info-value">{{ device_imei or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Serial Number</div>
+      <div class="info-value">{{ device_serial or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Passcode</div>
+      <div class="info-value">{{ device_passcode or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Accessories</div>
+      <div class="info-value">{{ device_accessories or "None" }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Existing Damage</div>
+  <div class="description-box">{{ existing_damage or "None noted" }}</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Issue Description</div>
+  <div class="description-box">{{ issue_description }}</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Technician Notes</div>
+  <div class="blank-lines">
+    <div class="blank-line"></div>
+    <div class="blank-line"></div>
+    <div class="blank-line"></div>
+  </div>
+</div>
+
+<div class="terms-box mt-16">
+  <h4>Terms</h4>
+  <ul>
+    <li>Devices unclaimed after 60 days from notification may be disposed of without further notice.</li>
+    <li>Parts remain the property of Sunset Country Repairs until full payment is received.</li>
+    <li>A 90-day workmanship warranty applies to all completed repairs.</li>
+    <li>Sunset Country Repairs is not liable for data loss — customers are advised to back up data before repair.</li>
+  </ul>
+</div>
+
+<div class="signature-section">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer Signature</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Staff Signature</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block qr_code %}
+{% if qr_code_data %}
+<img src="{{ qr_code_data }}" alt="Scan to track repair" width="80" height="80" />
+{% else %}
+<div class="qr-placeholder">QR Code</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "pdf/base.html" %}
+{% block title %}Tax Invoice - {{ invoice_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Tax Invoice &mdash; {{ invoice_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="two-columns">
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Invoice Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Invoice Number</div>
+          <div class="info-value strong">{{ invoice_number }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Date Issued</div>
+          <div class="info-value">{{ date_issued }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Due Date</div>
+          <div class="info-value">{{ due_date }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Status</div>
+          <div class="info-value"><span class="status-badge status-{{ status_class }}">{{ status }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Bill To</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Name</div>
+          <div class="info-value strong">{{ customer_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phone</div>
+          <div class="info-value">{{ customer_phone }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email</div>
+          <div class="info-value">{{ customer_email or "N/A" }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Address</div>
+          <div class="info-value">{{ customer_address or "N/A" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Repair Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Ticket Number</div>
+      <div class="info-value">{{ ticket_number }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Device</div>
+      <div class="info-value">{{ device_type }} - {{ device_brand }} {{ device_model }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Line Items</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="text-right">Quantity</th>
+        <th class="text-right">Unit Price</th>
+        <th class="text-right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in line_items %}
+      <tr>
+        <td>{{ item.description }}</td>
+        <td class="text-right">{{ item.quantity }}</td>
+        <td class="text-right amount">${{ "%.2f"|format(item.unit_price) }}</td>
+        <td class="text-right amount">${{ "%.2f"|format(item.total) }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="3" class="text-right">Subtotal</td>
+        <td class="text-right amount">${{ "%.2f"|format(subtotal) }}</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="text-right">GST (10%)</td>
+        <td class="text-right amount">${{ "%.2f"|format(gst_amount) }}</td>
+      </tr>
+      <tr class="table-total-row">
+        <td colspan="3" class="text-right"><strong>Total</strong></td>
+        <td class="text-right amount"><strong>${{ "%.2f"|format(total_amount) }}</strong></td>
+      </tr>
+      {% if amount_paid %}
+      <tr>
+        <td colspan="3" class="text-right">Amount Paid</td>
+        <td class="text-right amount">${{ "%.2f"|format(amount_paid) }}</td>
+      </tr>
+      <tr class="table-total-row">
+        <td colspan="3" class="text-right"><strong>Balance Due</strong></td>
+        <td class="text-right amount"><strong>${{ "%.2f"|format(balance_due) }}</strong></td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<div class="terms-box">
+  <h4>Payment Instructions</h4>
+  <p>Please reference invoice number <strong>{{ invoice_number }}</strong> when making payment.</p>
+  <ul>
+    <li>Payment is due within 14 days of invoice date.</li>
+    <li>Parts remain the property of Sunset Country Repairs until full payment is received.</li>
+    <li>A 90-day workmanship warranty applies from date of repair completion.</li>
+  </ul>
+</div>
+
+<div class="signature-section">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer Acknowledgement</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">For Sunset Country Repairs</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block qr_code %}
+{% if qr_code_data %}
+<img src="{{ qr_code_data }}" alt="Scan to view invoice" width="80" height="80" />
+{% else %}
+<div class="qr-placeholder">QR Code</div>
+{% endif %}
+{% endblock %}

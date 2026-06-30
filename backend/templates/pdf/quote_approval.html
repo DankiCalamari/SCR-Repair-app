@@ -1,0 +1,85 @@
+{% extends "pdf/base.html" %}
+{% block title %}Quote Approval - {{ quote_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Quote Approval &mdash; {{ quote_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="section">
+  <div class="section-title">Approval Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Quote Number</div>
+      <div class="info-value strong">{{ quote_number }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Approval Date</div>
+      <div class="info-value">{{ approval_date }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Action</div>
+      <div class="info-value"><span class="status-badge status-approved">Approved</span></div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">IP Address</div>
+      <div class="info-value">{{ ip_address or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Customer Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Name</div>
+      <div class="info-value strong">{{ customer_name }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Phone</div>
+      <div class="info-value">{{ customer_phone }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Email</div>
+      <div class="info-value">{{ customer_email or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Quote Summary</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Device</div>
+      <div class="info-value">{{ device_type }} - {{ device_brand }} {{ device_model }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Total Amount</div>
+      <div class="info-value strong">${{ "%.2f"|format(total_amount) }} (incl. GST)</div>
+    </div>
+  </div>
+</div>
+
+{% if digital_signature %}
+<div class="section">
+  <div class="section-title">Digital Signature</div>
+  <div class="description-box" style="font-family: cursive; font-size: 14pt;">{{ digital_signature }}</div>
+</div>
+{% endif %}
+
+<div class="terms-box mt-16">
+  <h4>Approval Confirmation</h4>
+  <p>By approving this quote, the customer authorises Sunset Country Repairs to proceed with the repair work as described. The customer acknowledges the total cost, terms and conditions, and warranty information outlined in the original quote document.</p>
+</div>
+
+<div class="signature-section">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer Name</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: {{ approval_date }}
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Authorised By</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "pdf/base.html" %}
+{% block title %}Collection Receipt - {{ ticket_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Collection Receipt &mdash; {{ ticket_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="two-columns">
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Collection Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Ticket Number</div>
+          <div class="info-value strong">{{ ticket_number }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Collection Date</div>
+          <div class="info-value">{{ collection_date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Customer Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Name</div>
+          <div class="info-value strong">{{ customer_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phone</div>
+          <div class="info-value">{{ customer_phone }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Device Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Device Type</div>
+      <div class="info-value">{{ device_type }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Brand &amp; Model</div>
+      <div class="info-value">{{ device_brand }} {{ device_model }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Colour</div>
+      <div class="info-value">{{ device_colour or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">IMEI</div>
+      <div class="info-value">{{ device_imei or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+{% if repair_summary %}
+<div class="section">
+  <div class="section-title">Repair Summary</div>
+  <div class="description-box">{{ repair_summary }}</div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="section-title">Warranty Information</div>
+  <div class="description-box">
+    <strong>90-Day Workmanship Warranty</strong><br />
+    Warranty Number: {{ warranty_number or "N/A" }}<br />
+    Issue Date: {{ warranty_issue_date or collection_date }}<br />
+    Expiry Date: {{ warranty_expiry_date or "N/A" }}<br /><br />
+    This warranty covers the original repair workmanship only. It does not cover new faults, physical damage, liquid damage, unauthorized modification, or software issues unrelated to the repair.
+  </div>
+</div>
+
+<div class="terms-box mt-16">
+  <h4>Collection Acknowledgement</h4>
+  <p>By signing below, the customer acknowledges that the above device has been collected in satisfactory condition and that they have been informed of the warranty terms and aftercare instructions.</p>
+</div>
+
+<div class="signature-section">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer Signature</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Staff Signature</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "pdf/base.html" %}
+{% block title %}Warranty Certificate - {{ warranty_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Warranty Certificate &mdash; {{ warranty_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="section">
+  <div class="section-title">Warranty Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Warranty Number</div>
+      <div class="info-value strong">{{ warranty_number }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Issue Date</div>
+      <div class="info-value">{{ issue_date }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Expiry Date</div>
+      <div class="info-value">{{ expiry_date }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Status</div>
+      <div class="info-value"><span class="status-badge status-active">Active</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Customer Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Name</div>
+      <div class="info-value strong">{{ customer_name }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Phone</div>
+      <div class="info-value">{{ customer_phone }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Email</div>
+      <div class="info-value">{{ customer_email or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Device Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Device Type</div>
+      <div class="info-value">{{ device_type }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Brand &amp; Model</div>
+      <div class="info-value">{{ device_brand }} {{ device_model }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">IMEI</div>
+      <div class="info-value">{{ device_imei or "N/A" }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Serial Number</div>
+      <div class="info-value">{{ device_serial or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+{% if repair_summary %}
+<div class="section">
+  <div class="section-title">Repair Summary</div>
+  <div class="description-box">{{ repair_summary }}</div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="section-title">Warranty Terms &amp; Conditions</div>
+  <div class="terms-box" style="float: none; width: auto;">
+    <h4>What is Covered</h4>
+    <ul>
+      <li>Workmanship defects related to the original repair for a period of 90 days from the date of repair completion.</li>
+      <li>Replacement parts installed by Sunset Country Repairs that fail under normal use within the warranty period.</li>
+    </ul>
+
+    <h4 style="margin-top: 10px;">What is NOT Covered</h4>
+    <ul>
+      <li>Physical damage (cracked screens, bent frames, water damage) occurring after repair completion.</li>
+      <li>Liquid damage of any kind.</li>
+      <li>Software issues, viruses, or data loss unrelated to the original repair.</li>
+      <li>Unauthorized modification or third-party repair attempts.</li>
+      <li>Pre-existing faults not related to the original repair.</li>
+      <li>Normal wear and tear, including battery degradation.</li>
+      <li>Accessories or peripherals not supplied by Sunset Country Repairs.</li>
+    </ul>
+
+    <h4 style="margin-top: 10px;">How to Make a Claim</h4>
+    <p>Contact Sunset Country Repairs with your warranty number and a description of the issue. The device must be returned for inspection before any warranty work is undertaken. Proof of warranty (this certificate or SMS/Email confirmation) is required.</p>
+  </div>
+</div>
+
+<div class="signature-section" style="margin-top: 32px;">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: {{ issue_date }}
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">For Sunset Country Repairs</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block qr_code %}
+{% if qr_code_data %}
+<img src="{{ qr_code_data }}" alt="Scan to validate warranty" width="80" height="80" />
+{% else %}
+<div class="qr-placeholder">Scan to Validate</div>
+{% endif %}
+{% endblock %}

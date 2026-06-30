@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Sunset Country Repairs{% endblock %}</title>
+<style>
+  @page {
+    size: A4;
+    margin: 12mm 14mm 14mm 14mm;
+    @bottom-center {
+      content: counter(page) " of " counter(pages);
+      font-size: 8px;
+      color: #888888;
+    }
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 10pt;
+    color: #333333;
+    line-height: 1.4;
+    background: #ffffff;
+  }
+
+  /* ── Header ─────────────────────────────────────────────── */
+  .header {
+    background: #1a3a5c;
+    color: #ffffff;
+    padding: 16px 20px;
+    margin: -12mm -14mm 16px -14mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header-left h1 {
+    font-size: 18pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+  }
+
+  .header-left .tagline {
+    font-size: 8pt;
+    color: #a8c4e0;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 8pt;
+    color: #a8c4e0;
+    line-height: 1.6;
+  }
+
+  .header-right a {
+    color: #a8c4e0;
+    text-decoration: none;
+  }
+
+  /* ── Document Title ─────────────────────────────────────── */
+  .document-title {
+    background: #e8eef4;
+    border-left: 4px solid #1a3a5c;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    font-size: 14pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Info Sections ──────────────────────────────────────── */
+  .section {
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #d0d8e2;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+
+  .info-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+
+  .info-item {
+    flex: 1 1 45%;
+    min-width: 200px;
+  }
+
+  .info-label {
+    font-size: 7.5pt;
+    color: #666666;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: 600;
+  }
+
+  .info-value {
+    font-size: 10pt;
+    color: #333333;
+    padding: 2px 0;
+  }
+
+  .info-value.strong {
+    font-weight: 700;
+    font-size: 11pt;
+  }
+
+  /* ── Tables ─────────────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+  }
+
+  thead th {
+    background: #1a3a5c;
+    color: #ffffff;
+    font-size: 8.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 7px 10px;
+    text-align: left;
+  }
+
+  tbody td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e0e6ed;
+    font-size: 9.5pt;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f7f9fc;
+  }
+
+  .table-total-row td {
+    font-weight: 700;
+    background: #e8eef4;
+    border-top: 2px solid #1a3a5c;
+    border-bottom: none;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .amount {
+    font-family: "Courier New", monospace;
+    font-weight: 600;
+  }
+
+  /* ── Description / Notes ────────────────────────────────── */
+  .description-box {
+    background: #fafbfc;
+    border: 1px solid #e0e6ed;
+    border-radius: 3px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 9.5pt;
+    white-space: pre-wrap;
+  }
+
+  .blank-lines {
+    margin: 12px 0;
+  }
+
+  .blank-line {
+    border-bottom: 1px solid #cccccc;
+    height: 24px;
+  }
+
+  /* ── Signature Section ──────────────────────────────────── */
+  .signature-section {
+    display: flex;
+    gap: 40px;
+    margin-top: 24px;
+    page-break-inside: avoid;
+  }
+
+  .signature-box {
+    flex: 1;
+  }
+
+  .signature-line {
+    border-top: 1px solid #333333;
+    margin-top: 48px;
+    padding-top: 4px;
+    font-size: 8pt;
+    color: #666666;
+  }
+
+  .signature-label {
+    font-weight: 600;
+    color: #333333;
+    font-size: 9pt;
+  }
+
+  /* ── Totals Summary ─────────────────────────────────────── */
+  .totals-box {
+    float: right;
+    width: 260px;
+    margin-bottom: 14px;
+  }
+
+  .totals-box table {
+    width: 100%;
+  }
+
+  .totals-box td {
+    padding: 4px 10px;
+    font-size: 9.5pt;
+  }
+
+  .totals-box .grand-total td {
+    font-size: 12pt;
+    font-weight: 700;
+    background: #1a3a5c;
+    color: #ffffff;
+    border: none;
+  }
+
+  /* ── QR Code ────────────────────────────────────────────── */
+  .qr-placeholder {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7pt;
+    color: #999999;
+    text-align: center;
+    background: #fafafa;
+  }
+
+  /* ── Footer ─────────────────────────────────────────────── */
+  .footer {
+    margin-top: 24px;
+    padding-top: 10px;
+    border-top: 2px solid #1a3a5c;
+    font-size: 7.5pt;
+    color: #888888;
+    page-break-inside: avoid;
+  }
+
+  .footer-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .footer-column {
+    flex: 1;
+  }
+
+  .footer-column h4 {
+    font-size: 8pt;
+    color: #1a3a5c;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .footer-column p {
+    line-height: 1.5;
+  }
+
+  .footer-abn {
+    text-align: center;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid #e0e6ed;
+    font-size: 8pt;
+    color: #666666;
+  }
+
+  /* ── Misc ───────────────────────────────────────────────── */
+  .status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .status-draft { background: #e8eef4; color: #1a3a5c; }
+  .status-sent { background: #fff3cd; color: #856404; }
+  .status-approved, .status-paid, .status-active { background: #d4edda; color: #155724; }
+  .status-declined, .status-void, .status-cancelled { background: #f8d7da; color: #721c24; }
+  .status-expired, .status-overdue { background: #e2e3e5; color: #383d41; }
+
+  .clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .two-columns {
+    display: flex;
+    gap: 24px;
+  }
+
+  .column-half {
+    flex: 1;
+  }
+
+  .mt-10 { margin-top: 10px; }
+  .mt-16 { margin-top: 16px; }
+  .mb-8 { margin-bottom: 8px; }
+
+  /* ── Terms ──────────────────────────────────────────────── */
+  .terms-box {
+    background: #f7f9fc;
+    border: 1px solid #d0d8e2;
+    border-radius: 3px;
+    padding: 10px 12px;
+    font-size: 8pt;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .terms-box h4 {
+    font-size: 9pt;
+    color: #1a3a5c;
+    margin-bottom: 6px;
+  }
+
+  .terms-box ul {
+    padding-left: 16px;
+  }
+
+  .terms-box ul li {
+    margin-bottom: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- HEADER                                                    -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="header">
+  <div class="header-left">
+    <h1>Sunset Country Repairs</h1>
+    <div class="tagline">Mobile Electronics Repair Service &mdash; Sunraysia Region</div>
+  </div>
+  <div class="header-right">
+    <div>Phone: 0400 000 000</div>
+    <div>Email: <a href="mailto:repairs@sunsetcountry.com.au">repairs@sunsetcountry.com.au</a></div>
+    <div>ABN: 00 000 000 000</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- DOCUMENT TITLE                                            -->
+<!-- ════════════════════════════════════════════════════════──── -->
+{% block document_title %}
+{% endblock %}
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- MAIN CONTENT                                              -->
+<!-- ════════════════════════════════════════════════════════════ -->
+{% block content %}
+{% endblock %}
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                    -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="footer">
+  <div class="footer-columns">
+    <div class="footer-column">
+      <h4>Warranty</h4>
+      <p>All repairs carry a 90-day workmanship warranty from date of completion. Warranty covers the original repair only and does not extend to new faults, physical damage, liquid damage, or unauthorized modification.</p>
+    </div>
+    <div class="footer-column">
+      <h4>Terms &amp; Conditions</h4>
+      <p>Devices unclaimed after 60 days from notification may be disposed of. Parts remain the property of Sunset Country Repairs until full payment is received. GST is charged at 10% as required by Australian tax law.</p>
+    </div>
+    <div class="footer-column">
+      <h4>QR Code</h4>
+      {% block qr_code %}
+      <div class="qr-placeholder">
+        QR Code
+      </div>
+      {% endblock %}
+    </div>
+  </div>
+  <div class="footer-abn">
+    ABN: 00 000 000 000 &nbsp;|&nbsp; Sunset Country Repairs &nbsp;|&nbsp; Sunraysia Region, VIC
+  </div>
+</div>
+
+</body>
+</html>

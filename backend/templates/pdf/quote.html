@@ -1,0 +1,147 @@
+{% extends "pdf/base.html" %}
+{% block title %}Quote - {{ quote_number }}{% endblock %}
+{% block document_title %}
+<div class="document-title">Quote &mdash; {{ quote_number }}</div>
+{% endblock %}
+{% block content %}
+<div class="two-columns">
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Quote Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Quote Number</div>
+          <div class="info-value strong">{{ quote_number }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Date Issued</div>
+          <div class="info-value">{{ date_issued }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Valid Until</div>
+          <div class="info-value">{{ valid_until }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Status</div>
+          <div class="info-value"><span class="status-badge status-{{ status_class }}">{{ status }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column-half">
+    <div class="section">
+      <div class="section-title">Customer Details</div>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Name</div>
+          <div class="info-value strong">{{ customer_name }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phone</div>
+          <div class="info-value">{{ customer_phone }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email</div>
+          <div class="info-value">{{ customer_email or "N/A" }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Device Details</div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-label">Device</div>
+      <div class="info-value">{{ device_type }} - {{ device_brand }} {{ device_model }}</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Colour</div>
+      <div class="info-value">{{ device_colour or "N/A" }}</div>
+    </div>
+  </div>
+</div>
+
+{% if issue_description %}
+<div class="section">
+  <div class="section-title">Issue Description</div>
+  <div class="description-box">{{ issue_description }}</div>
+</div>
+{% endif %}
+
+{% if quote_description %}
+<div class="section">
+  <div class="section-title">Quote Description</div>
+  <div class="description-box">{{ quote_description }}</div>
+</div>
+{% endif %}
+
+<div class="section">
+  <div class="section-title">Cost Breakdown</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="text-right">Quantity</th>
+        <th class="text-right">Unit Price</th>
+        <th class="text-right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in line_items %}
+      <tr>
+        <td>{{ item.description }}</td>
+        <td class="text-right">{{ item.quantity }}</td>
+        <td class="text-right amount">${{ "%.2f"|format(item.unit_price) }}</td>
+        <td class="text-right amount">${{ "%.2f"|format(item.total) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="table-total-row">
+        <td colspan="3" class="text-right">Subtotal</td>
+        <td class="text-right amount">${{ "%.2f"|format(subtotal) }}</td>
+      </tr>
+      <tr class="table-total-row">
+        <td colspan="3" class="text-right">GST (10%)</td>
+        <td class="text-right amount">${{ "%.2f"|format(gst_amount) }}</td>
+      </tr>
+      <tr class="table-total-row">
+        <td colspan="3" class="text-right strong">Total</td>
+        <td class="text-right amount strong">${{ "%.2f"|format(total_amount) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="terms-box">
+  <h4>Terms &amp; Conditions</h4>
+  <ul>
+    <li>This quote is valid for 14 days from the date of issue.</li>
+    <li>All prices are in Australian Dollars (AUD) and include GST where applicable.</li>
+    <li>Parts remain the property of Sunset Country Repairs until full payment is received.</li>
+    <li>Workmanship is covered by a 90-day warranty from date of repair completion.</li>
+    <li>Any additional faults found during repair will be communicated before proceeding.</li>
+    <li>Devices unclaimed after 60 days from notification may be disposed of.</li>
+  </ul>
+</div>
+
+<div class="signature-section">
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Customer Approval</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date: ____/____/________
+    </div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-line">
+      <span class="signature-label">Digital Signature / IP</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block qr_code %}
+{% if qr_code_data %}
+<img src="{{ qr_code_data }}" alt="Scan to approve quote" width="80" height="80" />
+{% else %}
+<div class="qr-placeholder">QR Code</div>
+{% endif %}
+{% endblock %}
