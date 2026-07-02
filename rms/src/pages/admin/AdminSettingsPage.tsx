@@ -20,6 +20,7 @@ const sections: SettingSection[] = [
   { id: "email-incoming", label: "Email (IMAP)", icon: Mail },
   { id: "sms", label: "SMS Gateway", icon: Smartphone },
   { id: "security", label: "Security", icon: Shield },
+  { id: "sso", label: "SSO (Authentik)", icon: Shield },
   { id: "notifications", label: "Notifications", icon: Bell },
 ];
 
@@ -77,6 +78,12 @@ export default function AdminSettingsPage() {
   const [sessionTimeout, setSessionTimeout] = useState("60");
   const [requireEmailVerify, setRequireEmailVerify] = useState(true);
 
+  // SSO (Authentik)
+  const [authentikUrl, setAuthentikUrl] = useState("");
+  const [authentikClientId, setAuthentikClientId] = useState("");
+  const [authentikClientSecret, setAuthentikClientSecret] = useState("");
+  const [authentikRedirectUri, setAuthentikRedirectUri] = useState("");
+
   // Notifications
   const [notifyNewLead, setNotifyNewLead] = useState(true);
   const [notifyQuoteApproved, setNotifyQuoteApproved] = useState(true);
@@ -121,6 +128,10 @@ export default function AdminSettingsPage() {
       if (s.notify_quote_approved !== undefined) setNotifyQuoteApproved(s.notify_quote_approved === "true");
       if (s.notify_repair_complete !== undefined) setNotifyRepairComplete(s.notify_repair_complete === "true");
       if (s.notify_warranty_claim !== undefined) setNotifyWarrantyClaim(s.notify_warranty_claim === "true");
+      if (s.authentik_url) setAuthentikUrl(s.authentik_url);
+      if (s.authentik_client_id) setAuthentikClientId(s.authentik_client_id);
+      if (s.authentik_client_secret) setAuthentikClientSecret(s.authentik_client_secret);
+      if (s.authentik_redirect_uri) setAuthentikRedirectUri(s.authentik_redirect_uri);
     }
   }, [serverSettings]);
 
@@ -188,6 +199,11 @@ export default function AdminSettingsPage() {
         } else if (activeSection === "security") {
           settingsToSave.session_timeout = sessionTimeout;
           settingsToSave.require_email_verify = String(requireEmailVerify);
+        } else if (activeSection === "sso") {
+          settingsToSave.authentik_url = authentikUrl;
+          settingsToSave.authentik_client_id = authentikClientId;
+          settingsToSave.authentik_client_secret = authentikClientSecret;
+          settingsToSave.authentik_redirect_uri = authentikRedirectUri;
         } else if (activeSection === "notifications") {
           settingsToSave.notify_new_lead = String(notifyNewLead);
           settingsToSave.notify_quote_approved = String(notifyQuoteApproved);
@@ -652,6 +668,40 @@ export default function AdminSettingsPage() {
                       >
                         <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${requireEmailVerify ? "left-5.5" : "left-0.5"}`} />
                       </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeSection === "sso" && (
+                <div>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">SSO Configuration (Authentik)</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Authentik URL</label>
+                      <input type="url" value={authentikUrl} onChange={(e) => setAuthentikUrl(e.target.value)}
+                        placeholder="https://auth.example.com"
+                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                      <p className="mt-1 text-xs text-surface-500">Your Authentik server URL</p>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Client ID</label>
+                      <input type="text" value={authentikClientId} onChange={(e) => setAuthentikClientId(e.target.value)}
+                        placeholder="OAuth client ID from Authentik"
+                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Client Secret</label>
+                      <input type="password" value={authentikClientSecret} onChange={(e) => setAuthentikClientSecret(e.target.value)}
+                        placeholder="OAuth client secret from Authentik"
+                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Redirect URI</label>
+                      <input type="url" value={authentikRedirectUri} onChange={(e) => setAuthentikRedirectUri(e.target.value)}
+                        placeholder="https://yourdomain.com/api/v1/auth/sso/callback"
+                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                      <p className="mt-1 text-xs text-surface-500">Must match the callback URL configured in Authentik</p>
                     </div>
                   </div>
                 </div>

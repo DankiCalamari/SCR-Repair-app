@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import { useAuthStore } from "./store/auth-store";
@@ -16,6 +16,50 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+function SplashScreen() {
+  const [checking, setChecking] = useState(true);
+  const [needsSetup, setNeedsSetup] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const initialize = async () => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        try {
+          await authApi.getMe();
+          setIsAuthenticated(true);
+        } catch {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+        }
+      }
+      setChecking(false);
+    };
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    if (!checking && !isAuthenticated) {
+      authApi.checkSetupStatus()
+        .then((status) => setNeedsSetup(status.needs_setup))
+        .catch(() => setNeedsSetup(false));
+    }
+  }, [checking, isAuthenticated]);
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-warm-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (needsSetup) {
+    return <Navigate to="/setup" replace />;
+  }
+  return <Navigate to="/login" replace />;
+}
 
 function AuthInitializer({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
@@ -49,8 +93,8 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-900">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-warm-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
       </div>
     );
   }
@@ -71,6 +115,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthInitializer>
+          <SplashScreen />
           <App />
         </AuthInitializer>
       </QueryClientProvider>

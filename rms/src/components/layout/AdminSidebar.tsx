@@ -47,11 +47,11 @@ export default function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen flex-col border-r border-surface-800 bg-surface-950 transition-all duration-200",
+        "flex h-screen flex-col border-r border-warm-800 bg-warm-950 transition-all duration-200",
         collapsed ? "w-16" : "w-56"
       )}
     >
-      <div className="flex h-14 items-center justify-between border-b border-surface-800 px-4">
+      <div className="flex h-14 items-center justify-between border-b border-warm-800 px-4">
         {!collapsed && (
           <div className="flex items-center gap-2">
             {logoUrl ? (
@@ -81,8 +81,8 @@ export default function AdminSidebar() {
                   cn(
                     "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-accent-500/10 text-accent-500"
-                      : "text-surface-400 hover:bg-surface-800 hover:text-surface-100",
+                      ? "bg-copper-500/10 text-copper-500"
+                      : "text-warm-400 hover:bg-warm-800 hover:text-warm-100",
                     collapsed && "justify-center px-1.5"
                   )
                 }
@@ -95,7 +95,7 @@ export default function AdminSidebar() {
         </ul>
       </nav>
 
-      <div className="border-t border-surface-800 p-1.5 space-y-0.5">
+      <div className="border-t border-warm-800 p-1.5 space-y-0.5">
         {isSupported && (
           <button
             onClick={toggle}
@@ -103,8 +103,8 @@ export default function AdminSidebar() {
             className={cn(
               "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
               isSubscribed
-                ? "text-accent-500 hover:bg-surface-800"
-                : "text-surface-400 hover:bg-surface-800 hover:text-surface-100",
+                ? "text-copper-500 hover:bg-warm-800"
+                : "text-warm-400 hover:bg-warm-800 hover:text-warm-100",
               collapsed && "justify-center px-1.5"
             )}
             title={isSubscribed ? "Push notifications enabled — click to disable" : "Enable push notifications"}
@@ -121,14 +121,14 @@ export default function AdminSidebar() {
         )}
         <a
           href="/"
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-surface-400 transition-colors hover:bg-surface-800 hover:text-surface-100"
+          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
         >
           <Globe className="h-4 w-4 shrink-0" />
           {!collapsed && <span>Back to Website</span>}
         </a>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-surface-400 transition-colors hover:bg-surface-800 hover:text-surface-100"
+          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
         >
           {collapsed ? (
             <ChevronRight className="mx-auto h-4 w-4" />
@@ -141,7 +141,7 @@ export default function AdminSidebar() {
         </button>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-surface-400 transition-colors hover:bg-surface-800 hover:text-red-400"
+          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-red-400"
         >
           <LogOut className="h-4 w-4 shrink-0" />
           {!collapsed && <span>Logout</span>}

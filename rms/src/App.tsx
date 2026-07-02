@@ -11,6 +11,7 @@ import { useFavicon } from "./hooks/use-favicon";
 
 const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
+const SetupPage = lazy(() => import("./pages/auth/SetupPage"));
 
 const PortalDashboardPage = lazy(() => import("./pages/portal/PortalDashboardPage"));
 const PortalRepairDetailPage = lazy(() => import("./pages/portal/PortalRepairDetailPage"));
@@ -65,7 +66,7 @@ function PortalLayout({ children }: { children: React.ReactNode }) {
 function AdminLayout({ children }: { children: React.ReactNode }) {
   useFavicon();
   return (
-    <div className="flex min-h-screen bg-surface-950 text-surface-100 dark">
+    <div className="flex min-h-screen bg-warm-900 text-warm-50">
       <AdminSidebar />
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
@@ -75,7 +76,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 function PageLoader() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-warm-50">
-      <div className="h-7 w-7 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
     </div>
   );
 }
@@ -85,6 +86,7 @@ export default function App() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Auth routes */}
+        <Route path="/setup" element={<SetupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 

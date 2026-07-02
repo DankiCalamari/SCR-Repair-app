@@ -1,6 +1,11 @@
+import secrets
+from urllib.parse import urlencode
+
+import httpx
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -22,6 +27,167 @@ from services.auth_service import (
 )
 
 router = APIRouter()
+
+
+def _get_secure_cookie(request: Request) -> bool:
+    """Check if we should set secure cookies based on the request protocol."""
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "").lower()
+    return forwarded_proto == "https" or settings.APP_ENV != "production"
+
+
+@router.get("/sso/login")
+async def sso_login(request: Request):
+    """Initiate Authentik SSO login flow."""
+    if not settings.AUTHENTIK_URL or not settings.AUTHENTIK_CLIENT_ID:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="SSO is not configured",
+        )
+    
+    # Build the redirect URI using the forwarded host if behind proxy
+    forwarded_host = request.headers.get("X-Forwarded-Host", "")
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "http")
+    if forwarded_host:
+        base_url = f"{forwarded_proto}://{forwarded_host}"
+    else:
+        base_url = settings.APP_URL
+    
+    redirect_uri = settings.AUTHENTIK_REDIRECT_URI or f"{base_url}/api/v1/auth/sso/callback"
+    state = secrets.token_urlsafe(32)
+    
+    params = {
+        "client_id": settings.AUTHENTIK_CLIENT_ID,
+        "redirect_uri": redirect_uri,
+        "response_type": "code",
+        "scope": "openid email profile",
+        "state": state,
+    }
+    
+    auth_url = f"{settings.AUTHENTIK_URL}/application/o/authorize/?{urlencode(params)}"
+    return RedirectResponse(url=auth_url)
+
+
+@router.get("/sso/callback")
+async def sso_callback(code: str, state: str = None, request: Request = None, db: AsyncSession = Depends(get_db)):
+    """Handle Authentik SSO callback."""
+    if not settings.AUTHENTIK_URL or not settings.AUTHENTIK_CLIENT_ID or not settings.AUTHENTIK_CLIENT_SECRET:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="SSO is not configured",
+        )
+    
+    # Build the redirect URI using the forwarded host if behind proxy
+    forwarded_host = request.headers.get("X-Forwarded-Host", "")
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "http")
+    if forwarded_host:
+        base_url = f"{forwarded_proto}://{forwarded_host}"
+    else:
+        base_url = settings.APP_URL
+    
+    redirect_uri = settings.AUTHENTIK_REDIRECT_URI or f"{base_url}/api/v1/auth/sso/callback"
+    
+    token_url = f"{settings.AUTHENTIK_URL}/application/o/token/"
+    token_data = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": redirect_uri,
+        "client_id": settings.AUTHENTIK_CLIENT_ID,
+        "client_secret": settings.AUTHENTIK_CLIENT_SECRET,
+    }
+    
+    async with httpx.AsyncClient() as client:
+        token_response = await client.post(token_url, data=token_data)
+        
+        if token_response.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="SSO authentication failed",
+            )
+        
+        tokens = token_response.json()
+        access_token = tokens.get("access_token")
+        
+        if not access_token:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="No access token received from SSO provider",
+            )
+        
+        userinfo_response = await client.get(
+            f"{settings.AUTHENTIK_URL}/application/o/userinfo/",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        
+        if userinfo_response.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Failed to get user info from SSO provider",
+            )
+        
+        userinfo = userinfo_response.json()
+        email = userinfo.get("email")
+        
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="No email received from SSO provider",
+            )
+    
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    
+    if not user:
+        from schemas.user import UserCreate
+        user_create = UserCreate(
+            email=email,
+            full_name=userinfo.get("name", userinfo.get("preferred_username", "SSO User")),
+            phone=None,
+            password=hash_password(secrets.token_urlsafe(16)),
+            role="customer",
+            is_active=True,
+        )
+        user = await create_user(user_create, db)
+    
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is inactive",
+        )
+    
+    user.last_login = datetime.now(timezone.utc).replace(tzinfo=None)
+    await db.flush()
+    
+    token_data = {"sub": str(user.id)}
+    jwt_access_token = create_access_token(token_data)
+    jwt_refresh_token = create_refresh_token(token_data)
+    
+    # Check for HTTPS behind proxy
+    forwarded_proto = request.headers.get("X-Forwarded-Proto", "http").lower()
+    is_https = forwarded_proto == "https"
+    
+    # Build redirect URL using forwarded headers
+    forwarded_host = request.headers.get("X-Forwarded-Host", "")
+    redirect_base = f"{forwarded_proto}://{forwarded_host}" if forwarded_host else settings.APP_URL
+    response = RedirectResponse(url=f"{redirect_base}/app/login")
+    
+    response.set_cookie(
+        key="access_token",
+        value=jwt_access_token,
+        httponly=True,
+        secure=is_https,
+        samesite="lax",
+        path="/"
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=jwt_refresh_token,
+        httponly=True,
+        secure=is_https,
+        samesite="lax",
+        path="/"
+    )
+    
+    return response
 
 
 @router.post("/login", response_model=Token)

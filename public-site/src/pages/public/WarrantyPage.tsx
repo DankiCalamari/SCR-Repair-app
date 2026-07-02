@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { Wrench, Shield, CheckCircle, XCircle, Clock, Phone } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 interface WarrantyResult {
@@ -28,10 +29,10 @@ const notCovered = [
 ];
 
 const claimSteps = [
-  { title: "Contact us", description: "Reach out via the contact form, phone or email. Provide your warranty number or repair details." },
-  { title: "Describe the issue", description: "Let us know what's happening, when it started and any relevant details." },
-  { title: "Bring or send the device", description: "We'll arrange for you to bring it in or schedule a pickup." },
-  { title: "Warranty repair", description: "If the claim is valid, we carry out the repair at no extra cost." },
+  { title: "Give us a call", description: "Ring us or drop us a message with your warranty number and what's gone wrong." },
+  { title: "Tell us what happened", description: "Let us know when the issue started and any details that might help." },
+  { title: "Bring it in", description: "We'll check it over and confirm if it's covered under warranty." },
+  { title: "We fix it", description: "If it's a valid claim, we get it sorted at no extra cost." },
 ];
 
 export default function WarrantyPage() {
@@ -64,33 +65,50 @@ export default function WarrantyPage() {
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-900">
-      <section className="bg-warm-900 text-white">
+      {/* Hero */}
+      <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-          <h1 className="font-heading text-3xl font-bold sm:text-4xl">Warranty Information</h1>
-          <p className="mt-3 text-warm-300 max-w-xl">All our repairs are backed by a 90-day workmanship warranty. Here's what that means.</p>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-lg bg-copper-600 flex items-center justify-center">
+              <Shield className="h-5 w-5 text-white" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold text-warm-900 sm:text-4xl">
+              Warranty Information
+            </h1>
+          </div>
+          <p className="text-warm-700 max-w-xl">
+            All our repairs come with a 90-day workmanship warranty. Here's the deal - plain and simple.
+          </p>
         </div>
       </section>
 
+      {/* What's Covered - Two column */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid gap-10 sm:grid-cols-2 max-w-3xl">
+          <div className="grid gap-10 sm:grid-cols-2 max-w-4xl">
             <div>
-              <h2 className="font-heading text-lg font-semibold text-warm-900">What's covered</h2>
-              <ul className="mt-4 space-y-3">
+              <h2 className="font-heading text-lg font-bold text-copper-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                What's Covered
+              </h2>
+              <ul className="space-y-3">
                 {covered.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="text-green-600 mt-0.5">✓</span>
                     <span className="text-sm text-warm-600">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h2 className="font-heading text-lg font-semibold text-warm-900">What's not covered</h2>
-              <ul className="mt-4 space-y-3">
+              <h2 className="font-heading text-lg font-bold text-warm-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                <XCircle className="h-5 w-5" />
+                What's Not Covered
+              </h2>
+              <ul className="space-y-3">
                 {notCovered.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="text-red-500 mt-0.5">✕</span>
                     <span className="text-sm text-warm-600">{item}</span>
                   </li>
                 ))}
@@ -100,61 +118,111 @@ export default function WarrantyPage() {
         </div>
       </section>
 
-      <section className="border-t border-warm-200 bg-white py-12 sm:py-16">
+      {/* Claim Process */}
+      <section className="border-t-2 border-copper-200 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h2 className="font-heading text-lg font-semibold text-warm-900">How to make a claim</h2>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 max-w-3xl">
+          <h2 className="font-heading text-2xl font-bold text-warm-900 mb-8">
+            Making a Warranty Claim
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl">
             {claimSteps.map((item, i) => (
-              <div key={item.title}>
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-accent-500 text-xs font-bold text-white">{i + 1}</span>
-                <h3 className="mt-2 font-heading text-sm font-semibold text-warm-900">{item.title}</h3>
-                <p className="mt-1 text-sm text-warm-500 leading-relaxed">{item.description}</p>
+              <div key={item.title} className="text-center">
+                <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-copper-600 text-white font-bold mb-3">
+                  {i + 1}
+                </div>
+                <h3 className="font-heading text-sm font-bold text-warm-900">{item.title}</h3>
+                <p className="mt-2 text-xs text-warm-600 leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-warm-200 py-12 sm:py-16">
+      {/* Warranty Check */}
+      <section className="border-t-2 border-copper-200 py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="max-w-md">
-            <h2 className="font-heading text-lg font-semibold text-warm-900">Check your warranty</h2>
-            <p className="mt-1.5 text-sm text-warm-500">Enter your warranty number to check its status.</p>
-            <form onSubmit={handleCheck} className="mt-4">
-              <div className="flex gap-2">
-                <input type="text" value={warrantyNumber} onChange={(e) => setWarrantyNumber(e.target.value)} placeholder="Warranty number" className="flex-1 rounded border border-warm-200 bg-white px-3 py-2 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500" />
-                <button type="submit" disabled={isChecking || !warrantyNumber.trim()} className={cn("rounded px-4 py-2 text-sm font-medium transition-colors", isChecking || !warrantyNumber.trim() ? "cursor-not-allowed bg-accent-300 text-white" : "bg-accent-500 text-white hover:bg-accent-600")}>
-                  {isChecking ? "Checking..." : "Check"}
-                </button>
-              </div>
+            <div className="flex items-center gap-3 mb-4">
+              <Wrench className="h-6 w-6 text-copper-600" />
+              <h2 className="font-heading text-xl font-bold text-warm-900">Check Your Warranty</h2>
+            </div>
+            <p className="text-sm text-warm-600 mb-4">
+              Enter your warranty number to check if it's still valid.
+            </p>
+            <form onSubmit={handleCheck} className="space-y-3">
+              <input
+                type="text"
+                value={warrantyNumber}
+                onChange={(e) => setWarrantyNumber(e.target.value)}
+                placeholder="Warranty number (e.g. WR-12345)"
+                className="block w-full rounded-lg border-2 border-copper-200 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500"
+              />
+              <button
+                type="submit"
+                disabled={isChecking || !warrantyNumber.trim()}
+                className={cn(
+                  "w-full rounded-lg px-4 py-3 text-sm font-semibold transition-all",
+                  isChecking || !warrantyNumber.trim()
+                    ? "cursor-not-allowed bg-copper-300 text-white"
+                    : "bg-copper-600 text-white hover:bg-copper-700"
+                )}
+              >
+                {isChecking ? "Checking..." : "Check Warranty"}
+              </button>
             </form>
-            {error && <div className="mt-3 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+
+            {error && (
+              <div className="mt-4 rounded-lg border-2 border-red-500/30 bg-red-50 p-4 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
             {result && (
-              <div className={cn("mt-3 rounded border p-3", result.valid ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50")}>
-                <p className={cn("text-sm font-medium", result.valid ? "text-green-700" : "text-yellow-700")}>{result.message}</p>
+              <div className={cn(
+                "mt-4 rounded-lg border-2 p-4",
+                result.valid
+                  ? "border-green-500/30 bg-green-50"
+                  : "border-yellow-500/30 bg-yellow-50"
+              )}>
+                <p className={cn(
+                  "text-sm font-medium",
+                  result.valid ? "text-green-700" : "text-yellow-700"
+                )}>
+                  {result.message}
+                </p>
                 {result.warranty_number && (
-                  <div className="mt-1.5 space-y-0.5 text-xs text-warm-500">
-                    <p>Number: {result.warranty_number}</p>
+                  <div className="mt-2 space-y-1 text-xs text-warm-600">
+                    <p>Warranty #: {result.warranty_number}</p>
                     {result.status && <p>Status: {result.status}</p>}
                     {result.expiry_date && <p>Expires: {result.expiry_date}</p>}
                   </div>
                 )}
               </div>
             )}
-            <p className="mt-3 text-xs text-warm-400">Lost your warranty number? Contact us with your name and repair date and we'll look it up.</p>
+
+            <p className="mt-4 text-xs text-warm-500">
+              Lost your warranty number? Give us a call with your name and repair date - we'll look it up.
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-warm-200 py-12 sm:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-warm-900">Need to make a claim?</h2>
-              <p className="mt-1 text-warm-500">Get in touch and we'll sort it out.</p>
-            </div>
-            <Link to="/contact" className="inline-block rounded bg-accent-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-600 transition-colors">Contact Us</Link>
-          </div>
+      {/* Contact CTA */}
+      <section className="border-t-2 border-copper-200 bg-white py-12">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
+          <h2 className="font-heading text-xl font-bold text-warm-900 mb-3">
+            Need to claim your warranty?
+          </h2>
+          <p className="text-warm-600 mb-6">
+            Get in touch and we'll sort it out for you.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 rounded-lg bg-copper-600 px-8 py-3 text-sm font-semibold text-white hover:bg-copper-700 transition-all"
+          >
+            <Phone className="h-4 w-4" />
+            Contact Us
+          </Link>
         </div>
       </section>
     </div>

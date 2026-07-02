@@ -1,165 +1,157 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SERVICE_AREAS } from "../../lib/constants";
+import { Wrench, Clock, MapPin, Shield, Phone, Users, Award } from "lucide-react";
 
 const services = [
   {
-    title: "Smartphone Repair",
-    description: "Cracked screens, dead batteries, charging ports, water damage — we fix iPhones, Samsung, Google Pixel and most other phones.",
+    title: "Phone Screen Repairs",
+    description: "Cracked screens fixed same day. iPhone, Samsung, Google Pixel & more.",
+    icon: "📱",
   },
   {
-    title: "Tablet Repair",
-    description: "iPad and Android tablet screen replacements, battery swaps, and software issues sorted.",
+    title: "Battery Replacements",
+    description: "Bring your device back to life with a fresh battery.",
+    icon: "🔋",
   },
   {
-    title: "Laptop Repair",
-    description: "Screen replacements, keyboard fixes, performance issues and hardware repairs for most laptop brands.",
+    title: "Laptop Fixes",
+    description: "Screens, keyboards, charging ports - we handle it all.",
+    icon: "💻",
   },
   {
-    title: "Gaming Console Repair",
-    description: "PlayStation, Xbox and Nintendo Switch repairs — disc drives, HDMI ports, overheating and controller issues.",
-  },
-];
-
-const process = [
-  {
-    step: "1",
-    title: "Get in touch",
-    description: "Call, text, email or fill in the contact form. Tell us what device you have and what's wrong with it.",
+    title: "Tablet Repairs",
+    description: "iPad and Android tablets restored to working order.",
+    icon: "📲",
   },
   {
-    step: "2",
-    title: "We diagnose the problem",
-    description: "We'll take a look and let you know what needs doing and how much it'll cost before we start any work.",
-  },
-  {
-    step: "3",
-    title: "We repair your device",
-    description: "Most common repairs are done within a day or two. We'll keep you updated on how it's going.",
-  },
-  {
-    step: "4",
-    title: "Pick up your device",
-    description: "Collect your repaired device, or we can drop it back to you if you're in the Sunraysia area.",
+    title: "Game Console Repair",
+    description: "PlayStation, Xbox, Nintendo Switch - back in action fast.",
+    icon: "🎮",
   },
 ];
 
-const faqs = [
+const whyChooseUs = [
   {
-    question: "How long do repairs take?",
-    answer: "Most common repairs like screen replacements and battery swaps are completed within 24 to 48 hours. More complex repairs or those needing parts to be ordered may take a bit longer — we'll let you know upfront.",
+    title: "Local & Trusted",
+    description: "Serving Mildura and Sunraysia since 2010.",
+    icon: Users,
   },
   {
-    question: "Do you offer a warranty?",
-    answer: "Yes. Every repair comes with a 90-day workmanship warranty. If the same issue comes back within that period, we'll fix it at no extra cost.",
+    title: "Quick Turnaround",
+    description: "Most repairs done within 24-48 hours.",
+    icon: Clock,
   },
   {
-    question: "Can you repair water-damaged devices?",
-    answer: "We can assess water-damaged devices and often recover them, depending on the extent of the damage. The sooner you bring it in, the better the chance of a successful repair.",
+    title: "Fixed Price Quotes",
+    description: "No surprises. We quote before any work.",
+    icon: Shield,
   },
   {
-    question: "Do I need to book an appointment?",
-    answer: "No appointment needed. You can drop off your device or contact us to arrange a pickup. For complex repairs, we may call you to discuss the issue first.",
-  },
-  {
-    question: "What devices do you repair?",
-    answer: "We repair smartphones, tablets, laptops, gaming consoles, smart watches and other portable electronics. If you're not sure whether we can fix something, just ask.",
+    title: "90-Day Warranty",
+    description: "If it breaks again, we fix it free.",
+    icon: Award,
   },
 ];
 
 export default function HomePage() {
   useEffect(() => {
-    document.title = "Sunset Country Repairs | Electronics Repair Across Sunraysia";
+    document.title = "Sunset Country Repairs | Electronics Repair Mildura";
   }, []);
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-900">
-      {/* Hero */}
-      <section className="bg-warm-900 text-white">
-        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-          <div className="max-w-2xl">
-            <h1 className="font-heading text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-              Electronics repair across Sunraysia
-            </h1>
-            <p className="mt-4 text-lg text-warm-300 leading-relaxed">
-              We fix smartphones, tablets, laptops, gaming consoles and more. Based in Mildura, servicing Irymple, Red Cliffs, Merbein, Nichols Point, Buronga, Gol Gol, Wentworth and the surrounding areas.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/contact"
-                className="inline-block rounded bg-accent-500 px-6 py-3 text-sm font-semibold text-white hover:bg-accent-600 transition-colors"
-              >
-                Contact Us
-              </Link>
-              <Link
-                to="/services"
-                className="inline-block rounded border border-warm-600 px-6 py-3 text-sm font-semibold text-warm-200 hover:border-warm-400 hover:text-white transition-colors"
-              >
-                Our Services
-              </Link>
-            </div>
+      {/* Hero Section - Handwritten style */}
+      <section className="relative bg-gradient-to-br from-copper-50 to-white border-b-2 border-copper-200">
+        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+          {/* Hand-drawn style badge */}
+          <div className="inline-flex items-center gap-2 rounded-full bg-copper-100 px-4 py-1.5 mb-6 border border-copper-200">
+            <Wrench className="h-4 w-4 text-copper-700" />
+            <span className="text-xs font-medium text-copper-800 uppercase tracking-wider">Local Repair Shop</span>
           </div>
-        </div>
-      </section>
 
-      {/* Services */}
-      <section className="py-14 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="max-w-xl">
-            <h2 className="font-heading text-2xl font-bold text-warm-900 sm:text-3xl">
-              What we fix
-            </h2>
-            <p className="mt-2 text-warm-500">
-              We repair most types of portable electronics. If you're not sure whether we can help, get in touch and ask.
-            </p>
-          </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {services.map((service) => (
-              <div
-                key={service.title}
-                className="rounded-lg border border-warm-200 bg-white p-5"
-              >
-                <h3 className="font-heading text-base font-semibold text-warm-900">
-                  {service.title}
-                </h3>
-                <p className="mt-1.5 text-sm text-warm-500 leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6">
+          <h1 className="font-heading text-4xl font-bold text-warm-900 sm:text-5xl lg:text-6xl max-w-3xl">
+            Broken phone? We'll fix it.
+          </h1>
+
+          <p className="mt-4 text-lg text-warm-700 max-w-2xl leading-relaxed">
+            Based in Mildura, we repair smartphones, tablets, laptops and gaming consoles 
+            across the Sunraysia region. No appointment needed - just bring it in.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-lg bg-copper-600 px-6 py-3 text-sm font-semibold text-white hover:bg-copper-700 transition-all hover:shadow-lg"
+            >
+              <Phone className="h-4 w-4" />
+              Call Now - 03 5023 0000
+            </Link>
             <Link
               to="/services"
-              className="text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-copper-600 px-6 py-3 text-sm font-semibold text-copper-700 hover:bg-copper-50 transition-all"
             >
-              See all services &rarr;
+              See All Services
             </Link>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="border-t border-warm-200 bg-white py-14 sm:py-20">
+      {/* Services Grid - Card style with hand-drawn borders */}
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="max-w-xl">
-            <h2 className="font-heading text-2xl font-bold text-warm-900 sm:text-3xl">
-              How it works
+          <div className="mb-12">
+            <h2 className="font-heading text-3xl font-bold text-warm-900 sm:text-4xl">
+              What We Fix
             </h2>
-            <p className="mt-2 text-warm-500">
-              Straightforward process from start to finish.
+            <p className="mt-3 text-warm-600 max-w-xl">
+              We don't just repair - we bring your devices back to life.
             </p>
           </div>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {process.map((item) => (
-              <div key={item.step}>
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent-500 text-sm font-bold text-white">
-                  {item.step}
-                </span>
-                <h3 className="mt-3 font-heading text-base font-semibold text-warm-900">
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {services.map((service) => (
+              <div
+                key={service.title}
+                className="group relative rounded-lg border-2 border-copper-200 bg-white p-6 transition-all hover:shadow-lg hover:border-copper-300"
+              >
+                <div className="text-3xl mb-3">{service.icon}</div>
+                <h3 className="font-heading text-lg font-semibold text-warm-900">
+                  {service.title}
+                </h3>
+                <p className="mt-2 text-sm text-warm-600 leading-relaxed">
+                  {service.description}
+                </p>
+                <Link
+                  to="/contact"
+                  className="mt-4 inline-block text-xs font-medium text-copper-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  Get a quote →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us - Stats style */}
+      <section className="border-t-2 border-copper-200 bg-copper-50/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="mb-12">
+            <h2 className="font-heading text-3xl font-bold text-warm-900 sm:text-4xl">
+              Why Locals Trust Us
+            </h2>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {whyChooseUs.map((item) => (
+              <div key={item.title} className="text-center">
+                <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-copper-100 mb-4">
+                  <item.icon className="h-6 w-6 text-copper-700" />
+                </div>
+                <h3 className="font-heading text-sm font-bold text-warm-900 uppercase tracking-wide">
                   {item.title}
                 </h3>
-                <p className="mt-1.5 text-sm text-warm-500 leading-relaxed">
+                <p className="mt-2 text-xs text-warm-600">
                   {item.description}
                 </p>
               </div>
@@ -168,88 +160,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Service Areas */}
-      <section className="border-t border-warm-200 py-14 sm:py-20">
+      {/* Service Area - Map style */}
+      <section className="border-t-2 border-copper-200 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="max-w-xl">
-            <h2 className="font-heading text-2xl font-bold text-warm-900 sm:text-3xl">
-              Where we service
-            </h2>
-            <p className="mt-2 text-warm-500">
-              Based in Mildura, we cover the Sunraysia region and surrounding areas. Pickup and drop-off available.
-            </p>
-          </div>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {SERVICE_AREAS.map((area) => (
-              <span
-                key={area}
-                className="rounded-full border border-warm-200 bg-white px-4 py-1.5 text-sm text-warm-700"
-              >
-                {area}
-              </span>
-            ))}
-          </div>
-          <div className="mt-6">
-            <Link
-              to="/service-areas"
-              className="text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors"
-            >
-              Service area details &rarr;
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="border-t border-warm-200 bg-white py-14 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="max-w-xl">
-            <h2 className="font-heading text-2xl font-bold text-warm-900 sm:text-3xl">
-              Frequently asked questions
-            </h2>
-          </div>
-          <div className="mt-8 space-y-6 max-w-2xl">
-            {faqs.map((faq) => (
-              <div key={faq.question}>
-                <h3 className="font-heading text-base font-semibold text-warm-900">
-                  {faq.question}
-                </h3>
-                <p className="mt-1.5 text-sm text-warm-500 leading-relaxed">
-                  {faq.answer}
+          <div className="rounded-lg border-2 border-copper-200 bg-white p-8">
+            <div className="flex items-start gap-4 mb-6">
+              <MapPin className="h-8 w-8 text-copper-600 flex-shrink-0" />
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-warm-900">
+                  Serving Sunraysia
+                </h2>
+                <p className="mt-2 text-warm-600">
+                  Based in Mildura, we cover the entire Sunraysia region including:
                 </p>
               </div>
-            ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              {["Mildura", "Irymple", "Red Cliffs", "Merbein", "Nichols Point", 
+                "Buronga", "Gol Gol", "Wentworth"].map((area) => (
+                <span
+                  key={area}
+                  className="rounded-md border border-copper-200 bg-copper-50 px-3 py-1.5 text-xs font-medium text-copper-800"
+                >
+                  {area}
+                </span>
+              ))}
+            </div>
+
+            <p className="mt-4 text-sm text-warm-600">
+              Can't make it to us? We offer pickup and drop-off across the region.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <section className="border-t border-warm-200 py-14 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="rounded-lg border border-warm-200 bg-white p-6 sm:p-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="font-heading text-xl font-bold text-warm-900 sm:text-2xl">
-                Need something repaired?
-              </h2>
-              <p className="mt-1.5 text-warm-500">
-                Get in touch and we'll let you know what we can do. No obligation.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/contact"
-                className="inline-block rounded bg-accent-500 px-6 py-3 text-sm font-semibold text-white hover:bg-accent-600 transition-colors"
-              >
-                Contact Us
-              </Link>
-              <Link
-                to="/warranty"
-                className="inline-block rounded border border-warm-200 px-6 py-3 text-sm font-semibold text-warm-700 hover:border-warm-300 transition-colors"
-              >
-                Warranty Info
-              </Link>
-            </div>
-          </div>
+      {/* Simple CTA */}
+      <section className="border-t-2 border-copper-200 bg-white py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-warm-900 sm:text-3xl">
+            Got a device that needs fixing?
+          </h2>
+          <p className="mt-3 text-warm-600">
+            Drop in anytime or give us a call for a free quote.
+          </p>
+          <Link
+            to="/contact"
+            className="mt-6 inline-block rounded-lg bg-copper-600 px-8 py-3 text-sm font-semibold text-white hover:bg-copper-700 transition-all"
+          >
+            Contact Us
+          </Link>
         </div>
       </section>
     </div>

@@ -4,6 +4,7 @@ import { useAuthStore } from "../../store/auth-store";
 import { useSettings } from "../../hooks/use-settings";
 import { useFavicon } from "../../hooks/use-favicon";
 import { EMAIL_REGEX } from "../../lib/constants";
+import { Shield } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ export default function LoginPage() {
   useFavicon();
   const logoUrl = settings?.logo_url;
   const businessName = settings?.business_name || "Sunset Country Repairs";
+  const ssoEnabled = settings?.authentik_url && settings?.authentik_client_id;
 
   if (isAuthenticated && user) {
     if (user.role === "admin" || user.role === "staff") {
@@ -125,7 +127,7 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 autoComplete="email"
                 disabled={isLoading}
-                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-accent-500 focus:ring-1 focus:ring-accent-500 disabled:opacity-50 ${
+                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50 ${
                   emailError ? "border-red-500" : "border-warm-200"
                 }`}
               />
@@ -148,7 +150,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 autoComplete="current-password"
                 disabled={isLoading}
-                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-accent-500 focus:ring-1 focus:ring-accent-500 disabled:opacity-50 ${
+                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50 ${
                   passwordError ? "border-red-500" : "border-warm-200"
                 }`}
               />
@@ -159,7 +161,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center rounded-lg bg-accent-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-warm-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center rounded-lg bg-copper-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-copper-600 focus:outline-none focus:ring-2 focus:ring-copper-500 focus:ring-offset-2 focus:ring-offset-warm-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -190,10 +192,28 @@ export default function LoginPage() {
             </button>
           </form>
 
+          {/* SSO Login */}
+          {ssoEnabled && (
+            <>
+              <div className="my-6 flex items-center gap-4 text-sm text-warm-400">
+                <div className="flex-1 border-t border-warm-200"></div>
+                <span>Or</span>
+                <div className="flex-1 border-t border-warm-200"></div>
+              </div>
+              <a
+                href="/api/v1/auth/sso/login"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-copper-500 bg-white px-4 py-2.5 font-semibold text-copper-600 transition-colors hover:bg-copper-50 focus:outline-none focus:ring-2 focus:ring-copper-500"
+              >
+                <Shield className="h-4 w-4" />
+                Sign in with SSO
+              </a>
+            </>
+          )}
+
           {/* Register Link */}
           <div className="mt-6 text-center text-sm text-warm-500">
             Don&apos;t have an account?{" "}
-            <Link to="/register" className="font-medium text-accent-500 hover:text-accent-600">
+            <Link to="/register" className="font-medium text-copper-600 hover:text-copper-700">
               Register
             </Link>
           </div>

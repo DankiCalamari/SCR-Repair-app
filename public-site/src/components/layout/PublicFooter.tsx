@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
+import { Wrench, MapPin, Phone } from "lucide-react";
 import { useSettingsContext } from "../../context/settings-context";
 
 const serviceLinks = [
-  { to: "/services", label: "Services" },
-  { to: "/service-areas", label: "Service Areas" },
-  { to: "/warranty", label: "Warranty" },
+  { to: "/services", label: "Repair Services" },
+  { to: "/warranty", label: "Warranty Info" },
 ];
 
 const companyLinks = [
-  { to: "/about", label: "About" },
+  { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
   { to: "/privacy", label: "Privacy" },
 ];
@@ -18,24 +18,48 @@ export default function PublicFooter() {
   const businessName = settings.business_name || "Sunset Country Repairs";
 
   return (
-    <footer className="border-t border-warm-200 bg-warm-100">
-      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+    <footer className="relative border-t-2 border-copper-200 bg-gradient-to-b from-white to-copper-50/30">
+      {/* Hand-drawn style decorative element */}
+      <div className="absolute inset-x-0 top-0 h-1 bg-copper-300 opacity-30" style={{
+        backgroundImage: "repeating-linear-gradient(90deg, transparent, transparent 8px, #d97706 8px, #d97706 10px)"
+      }}></div>
+
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 sm:grid-cols-3">
+          {/* Brand section */}
           <div>
-            <Link to="/" className="flex items-center gap-2">
-              <img src={settings.logo_url || "/logo.svg"} alt={businessName} className="h-6 w-auto object-contain" />
+            <Link to="/" className="flex items-center gap-2 mb-4">
+              <div className="p-1.5 bg-copper-100 rounded-lg">
+                <img src={settings.logo_url || "/logo.svg"} alt={businessName} className="h-8 w-auto object-contain" />
+              </div>
             </Link>
-            <p className="mt-3 text-sm text-warm-500 leading-relaxed">
-              Electronics repair across the Sunraysia region. Mildura, Red Cliffs, Irymple, Merbein, Nichols Point, Buronga, Gol Gol, and Wentworth.
+            <p className="text-sm text-warm-600 leading-relaxed mb-4">
+              Your local electronics repair shop in Mildura. We fix what matters to you.
             </p>
+
+            {/* Quick contact badges */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-sm text-warm-700">
+                <Phone className="h-3.5 w-3.5 text-copper-600" />
+                <span>{settings.business_phone || "03 5023 0000"}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-warm-700">
+                <MapPin className="h-3.5 w-3.5 text-copper-600" />
+                <span>Mildura</span>
+              </div>
+            </div>
           </div>
 
+          {/* Services */}
           <div>
-            <h4 className="text-sm font-semibold text-warm-800">Services</h4>
-            <ul className="mt-3 space-y-2">
+            <h4 className="text-sm font-bold text-copper-800 uppercase tracking-wider mb-4">Services</h4>
+            <ul className="space-y-2">
               {serviceLinks.map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="text-sm text-warm-500 hover:text-accent-600 transition-colors">
+                  <Link 
+                    to={link.to} 
+                    className="inline-block text-sm text-warm-600 hover:text-copper-700 transition-colors underline-offset-2 hover:underline"
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -43,35 +67,43 @@ export default function PublicFooter() {
             </ul>
           </div>
 
+          {/* Company */}
           <div>
-            <h4 className="text-sm font-semibold text-warm-800">Company</h4>
-            <ul className="mt-3 space-y-2">
+            <h4 className="text-sm font-bold text-copper-800 uppercase tracking-wider mb-4">Company</h4>
+            <ul className="space-y-2 mb-4">
               {companyLinks.map((link) => (
                 <li key={link.to}>
-                  <Link to={link.to} className="text-sm text-warm-500 hover:text-accent-600 transition-colors">
+                  <Link 
+                    to={link.to} 
+                    className="inline-block text-sm text-warm-600 hover:text-copper-700 transition-colors underline-offset-2 hover:underline"
+                  >
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            <div className="mt-4">
-              <Link
-                to="/contact"
-                className="inline-block rounded bg-accent-500 px-4 py-2 text-sm font-medium text-white hover:bg-accent-600 transition-colors"
-              >
-                Get a Quote
-              </Link>
-            </div>
+
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-lg bg-copper-600 px-4 py-2 text-sm font-medium text-white hover:bg-copper-700 transition-colors"
+            >
+              <Wrench className="h-3.5 w-3.5" />
+              Get a Free Quote
+            </Link>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-warm-200 pt-5 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <p className="text-xs text-warm-400">
-            &copy; {new Date().getFullYear()} Sunset Country Repairs. All rights reserved.
+        <div className="mt-10 pt-6 border-t border-copper-200 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          <p className="text-xs text-warm-500">
+            &copy; {new Date().getFullYear()} {businessName}. Est. 2010.
           </p>
-          <Link to="/terms" className="text-xs text-warm-400 hover:text-warm-600 transition-colors">
-            Terms &amp; Conditions
-          </Link>
+          <div className="flex items-center gap-4 text-xs">
+            <Link to="/terms" className="text-warm-500 hover:text-copper-600 transition-colors underline-offset-2 hover:underline">
+              Terms & Conditions
+            </Link>
+            <span className="text-copper-300">|</span>
+            <span className="text-warm-500">ABN: {settings.abn || "12 345 678 901"}</span>
+          </div>
         </div>
       </div>
     </footer>

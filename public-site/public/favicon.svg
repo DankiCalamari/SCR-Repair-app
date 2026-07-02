@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
   <defs>
-    <linearGradient id="sunset" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#ef4444"/>
+    <linearGradient id="favGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c2410c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
   </defs>
-  <circle cx="16" cy="16" r="14" fill="url(#sunset)"/>
-  <circle cx="16" cy="14" r="5" fill="#fff" opacity="0.9"/>
-  <rect x="2" y="20" width="28" height="3" rx="1.5" fill="#fff" opacity="0.5"/>
-  <path d="M8 23 L10 28 L12 23" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 23 L16 29 L18 23" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M20 23 L22 28 L24 23" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Circle background -->
+  <circle cx="16" cy="16" r="14" fill="#fff" stroke="#e7e5e4" stroke-width="1"/>
+  <!-- Screwdriver handle -->
+  <rect x="11" y="17" width="4" height="3" rx="0.5" fill="#92400e"/>
+  <!-- Screwdriver tip -->
+  <path d="M11 17 L9 19 L11 21 Z" fill="#d97706"/>
+  <!-- Wrench -->
+  <path d="M15 9 L21 15 L23 13 L17 7 Z" fill="url(#favGrad)"/>
 </svg>

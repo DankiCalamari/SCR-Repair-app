@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { MapPin, Truck } from "lucide-react";
 import { SERVICE_AREAS } from "../../lib/constants";
 
 const areaDescriptions: Record<string, string> = {
-  Mildura: "Our base. Full pickup and drop-off available throughout Mildura.",
-  "Red Cliffs": "Pickup and drop-off available for Red Cliffs residents.",
-  "Irymple": "Regular service routes through the Irymple district.",
-  Merbein: "We service Merbein and surrounding areas.",
-  "Nichols Point": "Pickup and drop-off available for Nichols Point and nearby areas.",
-  Buronga: "Cross-river service available for Buronga residents.",
-  "Gol Gol": "Gol Gol residents can access our pickup and drop-off service.",
-  Wentworth: "We extend our service to Wentworth and the surrounding district.",
+  Mildura: "Our workshop's here. Just bring your device in.",
+  "Red Cliffs": "Regular pickup runs. Usually same-day or next-day service.",
+  "Irymple": "Easy drop-off point available. Quick turnaround on most repairs.",
+  Merbein: "Pickup service covers Merbein and surrounding areas.",
+  "Nichols Point": "We come to you - arrange a pickup at your convenience.",
+  Buronga: "Cross-river service available. Give us a call to arrange.",
+  "Gol Gol": "Pickup and drop-off service for Gol Gol residents.",
+  Wentworth: "Extended service area. Contact for timing details.",
 };
 
 export default function ServiceAreasPage() {
@@ -20,40 +21,73 @@ export default function ServiceAreasPage() {
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-900">
-      <section className="bg-warm-900 text-white">
+      {/* Hero */}
+      <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-          <h1 className="font-heading text-3xl font-bold sm:text-4xl">Service Areas</h1>
-          <p className="mt-3 text-warm-300 max-w-xl">
-            Based in Mildura, we cover the Sunraysia region. Pickup and drop-off available across all areas listed below.
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-lg bg-copper-600 flex items-center justify-center">
+              <MapPin className="h-5 w-5 text-white" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold text-warm-900 sm:text-4xl">
+              Where We Work
+            </h1>
+          </div>
+          <p className="text-warm-700 max-w-xl">
+            Mildura-based repair shop serving the Sunraysia region. Can't get to us? We'll come to you.
           </p>
         </div>
       </section>
 
+      {/* Areas Grid */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="grid gap-4 sm:grid-cols-2 max-w-2xl">
             {SERVICE_AREAS.map((area) => (
-              <div key={area} className="rounded-lg border border-warm-200 bg-white p-4">
-                <h2 className="font-heading text-base font-semibold text-warm-900">{area}</h2>
-                <p className="mt-1 text-sm text-warm-500">{areaDescriptions[area]}</p>
+              <div
+                key={area}
+                className="rounded-lg border-2 border-copper-200 bg-white p-5 hover:shadow-md transition-shadow"
+              >
+                <h2 className="font-heading text-lg font-bold text-copper-800">{area}</h2>
+                <p className="mt-2 text-sm text-warm-600">{areaDescriptions[area]}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-10 max-w-2xl">
-            <div className="rounded-lg border border-warm-200 bg-white p-5">
-              <h2 className="font-heading text-base font-semibold text-warm-900">Pickup &amp; Drop-off</h2>
-              <p className="mt-2 text-sm text-warm-500 leading-relaxed">
-                If you can't get to us, we can come to you. We run regular pickup and drop-off routes across the Sunraysia area. Contact us to arrange a time that suits.
-              </p>
+      {/* Pickup Service */}
+      <section className="border-t-2 border-copper-200 bg-white py-12 sm:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="rounded-lg border-2 border-dashed border-copper-300 bg-copper-50/30 p-8 max-w-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <Truck className="h-7 w-7 text-copper-700" />
+              <h2 className="font-heading text-xl font-bold text-warm-900">
+                Pickup & Drop-off
+              </h2>
             </div>
-
-            <p className="mt-6 text-sm text-warm-500">
-              Not in one of these areas?{" "}
-              <Link to="/contact" className="font-medium text-accent-600 hover:text-accent-700">Get in touch</Link>
-              {" "}— we may still be able to help.
+            <p className="text-sm text-warm-700">
+              We run regular pickup routes across the region. If you can't get to us, give us a call 
+              and we'll sort out a time to collect your device.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="border-t-2 border-copper-200 py-12 sm:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 text-center">
+          <h2 className="font-heading text-xl font-bold text-warm-900 mb-3">
+            Outside our area?
+          </h2>
+          <p className="text-warm-600 mb-6">
+            Give us a shout - we do our best to help everyone.
+          </p>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 rounded-lg bg-copper-600 px-8 py-3 text-sm font-semibold text-white hover:bg-copper-700 transition-all"
+          >
+            Contact Us
+          </Link>
         </div>
       </section>
     </div>

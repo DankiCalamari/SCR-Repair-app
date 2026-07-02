@@ -44,6 +44,7 @@ from models.warranty import WarrantyRecord, WarrantyClaim  # noqa: F401
 from models.lead import Lead  # noqa: F401
 from models.audit_log import AuditLog  # noqa: F401
 from models.system_setting import SystemSetting  # noqa: F401
+from models.user import UserRole  # noqa: F401
 
 # ── Logging ──────────────────────────────────────────────────────────────
 configure_logging()
@@ -142,8 +143,8 @@ async def lifespan(app: FastAPI):
         ("business_name", "Sunset Country Repairs", "Business trading name"),
         ("business_email", "info@sunsetcountryrepairs.com.au", "Primary business email"),
         ("business_phone", "03 5023 0000", "Business phone number"),
-        ("business_address", "123 Main Street, Mildura VIC 3500", "Business address"),
-        ("abn", "12 345 678 901", "Australian Business Number"),
+        ("business_address", "Mildura", "Business location"),
+        ("abn", "", "Australian Business Number"),
         ("primary_color", "#f59e0b", "Primary brand color"),
         ("accent_color", "#10b981", "Accent brand color"),
         ("smtp_port", "587", "SMTP server port"),

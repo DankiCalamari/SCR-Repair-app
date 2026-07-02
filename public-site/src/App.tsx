@@ -4,6 +4,7 @@ import PublicNavbar from "./components/layout/PublicNavbar";
 import PublicFooter from "./components/layout/PublicFooter";
 import { useSettingsContext } from "./context/settings-context";
 import { useFavicon } from "./hooks/use-favicon";
+import { Wrench } from "lucide-react";
 
 const HomePage = lazy(() => import("./pages/public/HomePage"));
 const ServicesPage = lazy(() => import("./pages/public/ServicesPage"));
@@ -30,7 +31,10 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
 function PageLoader() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-warm-50">
-      <div className="h-7 w-7 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+      <div className="relative">
+        <div className="h-10 w-10 rounded-lg border-2 border-copper-500 border-t-transparent animate-spin" />
+        <Wrench className="absolute inset-0 m-auto h-4 w-4 text-copper-600" />
+      </div>
     </div>
   );
 }

@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # Authentik SSO Configuration
+    AUTHENTIK_URL: Optional[str] = None
+    AUTHENTIK_CLIENT_ID: Optional[str] = None
+    AUTHENTIK_CLIENT_SECRET: Optional[str] = None
+    AUTHENTIK_REDIRECT_URI: Optional[str] = None
+
     SMS_GATEWAY_USERNAME: str = ""
     SMS_GATEWAY_PASSWORD: str = ""
     SMS_API_KEY: str = ""

@@ -26,3 +26,8 @@ export async function getMe(): Promise<User> {
 export async function logout(): Promise<void> {
   await apiClient.post("/auth/logout");
 }
+
+export async function checkSetupStatus(): Promise<{ needs_setup: boolean; admin_exists: boolean }> {
+  const { data } = await apiClient.get("/public/setup-status");
+  return data;
+}

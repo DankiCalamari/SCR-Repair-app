@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { Wrench, Clock, MapPin, Phone, Mail, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DEVICE_TYPES, EMAIL_REGEX, AUSTRALIAN_PHONE_REGEX } from "../../lib/constants";
 import { cn } from "../../lib/utils";
@@ -100,7 +101,7 @@ export default function ContactPage() {
       setFormData(initialFormData);
       setErrors({});
     } catch (err: unknown) {
-      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again or contact us directly.");
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again or call us directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -108,11 +109,19 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-warm-50 text-warm-900">
-      <section className="bg-warm-900 text-white">
+      {/* Hero with personality */}
+      <section className="relative bg-gradient-to-b from-copper-50 to-white border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-          <h1 className="font-heading text-3xl font-bold sm:text-4xl">Contact Us</h1>
-          <p className="mt-3 text-warm-300 max-w-xl">
-            Tell us what's wrong with your device and we'll get back to you with a quote.
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-10 w-10 rounded-lg bg-copper-600 flex items-center justify-center">
+              <Phone className="h-5 w-5 text-white" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold text-warm-900 sm:text-4xl">
+              Get In Touch
+            </h1>
+          </div>
+          <p className="text-warm-700 max-w-xl">
+            Got a broken device? We'll give you a straight-up quote - no mucking around.
           </p>
         </div>
       </section>
@@ -122,88 +131,177 @@ export default function ContactPage() {
           <div className="grid gap-10 lg:grid-cols-5">
             <div className="lg:col-span-3">
               {submitSuccess ? (
-                <div className="rounded-lg border border-green-200 bg-green-50 p-6">
-                  <h2 className="font-heading text-lg font-semibold text-green-800">Message sent</h2>
-                  <p className="mt-2 text-sm text-green-700">Thanks for getting in touch. We've received your enquiry and will be in touch soon.</p>
-                  <button onClick={() => setSubmitSuccess(false)} className="mt-4 text-sm font-medium text-accent-600 hover:text-accent-700">
+                <div className="rounded-lg border-2 border-green-500/30 bg-green-50 p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-600" />
+                    <h2 className="font-heading text-xl font-bold text-green-800">
+                      Message sent!
+                    </h2>
+                  </div>
+                  <p className="text-sm text-green-700">
+                    Cheers for getting in touch. We've got your message and will call you within the hour.
+                  </p>
+                  <button
+                    onClick={() => setSubmitSuccess(false)}
+                    className="mt-6 text-sm font-medium text-copper-600 hover:text-copper-700 transition-colors"
+                  >
                     Send another message
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
                   {submitError && (
-                    <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">{submitError}</div>
+                    <div className="rounded-lg border-2 border-red-500/30 bg-red-50 p-4 text-sm text-red-700">
+                      {submitError}
+                    </div>
                   )}
 
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-warm-700">
-                      Name <span className="text-red-500">*</span>
+                    <label htmlFor="name" className="block text-sm font-medium text-warm-800">
+                      Your Name <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="text" id="name" name="name" value={formData.name} onChange={handleChange}
-                      className={cn("mt-1.5 block w-full rounded border bg-white px-3 py-2.5 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500", errors.name ? "border-red-400" : "border-warm-200")}
-                      placeholder="Your name"
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={cn(
+                        "mt-2 block w-full rounded-lg border-2 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500",
+                        errors.name ? "border-red-400" : "border-copper-200"
+                      )}
+                      placeholder="John Smith"
                     />
-                    {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                    {errors.name && <p className="mt-1.5 text-xs text-red-600">{errors.name}</p>}
                   </div>
 
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-warm-700">
+                      <label htmlFor="phone" className="block text-sm font-medium text-warm-800">
                         Phone <span className="text-red-500">*</span>
                       </label>
                       <input
-                        type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange}
-                        className={cn("mt-1.5 block w-full rounded border bg-white px-3 py-2.5 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500", errors.phone ? "border-red-400" : "border-warm-200")}
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={cn(
+                          "mt-2 block w-full rounded-lg border-2 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500",
+                          errors.phone ? "border-red-400" : "border-copper-200"
+                        )}
                         placeholder="0400 000 000"
                       />
-                      {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
+                      {errors.phone && <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p>}
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-warm-700">Email</label>
+                      <label htmlFor="email" className="block text-sm font-medium text-warm-800">
+                        Email
+                      </label>
                       <input
-                        type="email" id="email" name="email" value={formData.email} onChange={handleChange}
-                        className={cn("mt-1.5 block w-full rounded border bg-white px-3 py-2.5 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500", errors.email ? "border-red-400" : "border-warm-200")}
-                        placeholder="your@email.com"
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={cn(
+                          "mt-2 block w-full rounded-lg border-2 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500",
+                          errors.email ? "border-red-400" : "border-copper-200"
+                        )}
+                        placeholder="john@email.com"
                       />
-                      {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+                      {errors.email && <p className="mt-1.5 text-xs text-red-600">{errors.email}</p>}
                     </div>
                   </div>
 
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
-                      <label htmlFor="device_type" className="block text-sm font-medium text-warm-700">Device Type</label>
-                      <select id="device_type" name="device_type" value={formData.device_type} onChange={handleChange} className="mt-1.5 block w-full rounded border border-warm-200 bg-white px-3 py-2.5 text-sm text-warm-900 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                      <label htmlFor="device_type" className="block text-sm font-medium text-warm-800">
+                        Device Type
+                      </label>
+                      <select
+                        id="device_type"
+                        name="device_type"
+                        value={formData.device_type}
+                        onChange={handleChange}
+                        className="mt-2 block w-full rounded-lg border-2 border-copper-200 bg-white px-4 py-3 text-sm text-warm-900 focus:outline-none focus:ring-2 focus:ring-copper-500"
+                      >
                         <option value="">Select a device</option>
-                        {DEVICE_TYPES.map((type: string) => (<option key={type} value={type}>{type}</option>))}
+                        {DEVICE_TYPES.map((type: string) => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="device_model" className="block text-sm font-medium text-warm-700">Device Model</label>
-                      <input type="text" id="device_model" name="device_model" value={formData.device_model} onChange={handleChange} className="mt-1.5 block w-full rounded border border-warm-200 bg-white px-3 py-2.5 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500" placeholder="e.g. iPhone 14 Pro" />
+                      <label htmlFor="device_model" className="block text-sm font-medium text-warm-800">
+                        Device Model
+                      </label>
+                      <input
+                        type="text"
+                        id="device_model"
+                        name="device_model"
+                        value={formData.device_model}
+                        onChange={handleChange}
+                        className="mt-2 block w-full rounded-lg border-2 border-copper-200 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500"
+                        placeholder="e.g. iPhone 14 Pro"
+                      />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="issue_description" className="block text-sm font-medium text-warm-700">
-                      What's wrong? <span className="text-red-500">*</span>
+                    <label htmlFor="issue_description" className="block text-sm font-medium text-warm-800">
+                      What's the problem? <span className="text-red-500">*</span>
                     </label>
-                    <textarea id="issue_description" name="issue_description" rows={4} value={formData.issue_description} onChange={handleChange}
-                      className={cn("mt-1.5 block w-full rounded border bg-white px-3 py-2.5 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-accent-500", errors.issue_description ? "border-red-400" : "border-warm-200")}
-                      placeholder="Describe the problem..."
+                    <textarea
+                      id="issue_description"
+                      name="issue_description"
+                      rows={4}
+                      value={formData.issue_description}
+                      onChange={handleChange}
+                      className={cn(
+                        "mt-2 block w-full rounded-lg border-2 bg-white px-4 py-3 text-sm text-warm-900 placeholder-warm-400 focus:outline-none focus:ring-2 focus:ring-copper-500",
+                        errors.issue_description ? "border-red-400" : "border-copper-200"
+                      )}
+                      placeholder="Describe the problem... e.g. cracked screen, won't turn on"
                     />
-                    {errors.issue_description && <p className="mt-1 text-xs text-red-600">{errors.issue_description}</p>}
+                    {errors.issue_description && (
+                      <p className="mt-1.5 text-xs text-red-600">{errors.issue_description}</p>
+                    )}
                   </div>
 
                   <div>
                     <fieldset>
-                      <legend className="block text-sm font-medium text-warm-700">Preferred contact method</legend>
-                      <div className="mt-2 flex flex-wrap gap-3">
-                        {(["phone", "email", "sms"] as const).map((method) => (
-                          <label key={method} className={cn("flex cursor-pointer items-center gap-2 rounded border px-3 py-2 text-sm", formData.preferred_contact_method === method ? "border-accent-500 bg-accent-50 text-accent-700" : "border-warm-200 bg-white text-warm-600")}>
-                            <input type="radio" name="preferred_contact_method" value={method} checked={formData.preferred_contact_method === method} onChange={handleChange} className="sr-only" />
-                            <span className={cn("h-3.5 w-3.5 rounded-full border-2", formData.preferred_contact_method === method ? "border-accent-500 bg-accent-500" : "border-warm-400")} />
-                            {method === "phone" ? "Phone" : method === "email" ? "Email" : "SMS"}
+                      <legend className="block text-sm font-medium text-warm-800 mb-2">
+                        Best way to reach you
+                      </legend>
+                      <div className="flex flex-wrap gap-3">
+                        {(["phone", "sms", "email"] as const).map((method) => (
+                          <label
+                            key={method}
+                            className={cn(
+                              "flex cursor-pointer items-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm transition-all",
+                              formData.preferred_contact_method === method
+                                ? "border-copper-500 bg-copper-50 text-copper-800"
+                                : "border-copper-200 bg-white text-warm-700 hover:bg-copper-50"
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="preferred_contact_method"
+                              value={method}
+                              checked={formData.preferred_contact_method === method}
+                              onChange={handleChange}
+                              className="sr-only"
+                            />
+                            <span
+                              className={cn(
+                                "h-3 w-3 rounded-full border-2",
+                                formData.preferred_contact_method === method
+                                  ? "border-copper-500 bg-copper-500"
+                                  : "border-copper-300"
+                              )}
+                            />
+                            {method === "phone" ? "Phone" : method === "sms" ? "SMS" : "Email"}
                           </label>
                         ))}
                       </div>
@@ -211,8 +309,15 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <button type="submit" disabled={isSubmitting}
-                      className={cn("inline-flex items-center justify-center rounded px-6 py-2.5 text-sm font-semibold transition-colors", isSubmitting ? "cursor-not-allowed bg-accent-400 text-white" : "bg-accent-500 text-white hover:bg-accent-600")}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={cn(
+                        "inline-flex items-center justify-center rounded-lg px-8 py-3 text-sm font-semibold transition-all",
+                        isSubmitting
+                          ? "cursor-not-allowed bg-copper-400 text-white"
+                          : "bg-copper-600 text-white hover:bg-copper-700 hover:shadow-lg"
+                      )}
                     >
                       {isSubmitting ? "Sending..." : "Send Message"}
                     </button>
@@ -221,24 +326,37 @@ export default function ContactPage() {
               )}
             </div>
 
-            <div className="lg:col-span-2 space-y-6">
-              <div className="rounded-lg border border-warm-200 bg-white p-5">
-                <h3 className="font-heading text-sm font-semibold text-warm-900">Phone</h3>
-                <p className="mt-1.5 text-sm text-warm-500">Call or text to talk about your repair.</p>
+            {/* Contact Info Sidebar */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="rounded-lg border-2 border-copper-200 bg-white p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="h-8 w-8 rounded bg-copper-100 flex items-center justify-center">
+                    <Phone className="h-4 w-4 text-copper-700" />
+                  </div>
+                  <h3 className="font-heading text-sm font-bold text-warm-900">Call Us</h3>
+                </div>
+                <p className="text-sm text-warm-600">
+                  Chat directly about your repair. We're happy to give you a rough estimate over the phone.
+                </p>
+                <p className="mt-2 text-copper-700 font-medium">03 5023 0000</p>
               </div>
-              <div className="rounded-lg border border-warm-200 bg-white p-5">
-                <h3 className="font-heading text-sm font-semibold text-warm-900">Email</h3>
-                <p className="mt-1.5 text-sm text-warm-500">Send us a message and we'll reply within a few hours.</p>
-              </div>
-              <div className="rounded-lg border border-warm-200 bg-white p-5">
-                <h3 className="font-heading text-sm font-semibold text-warm-900">Service Area</h3>
-                <p className="mt-1.5 text-sm text-warm-500">Sunraysia region — Mildura, Red Cliffs, Irymple, Merbein, Nichols Point, Buronga, Gol Gol, Wentworth.</p>
-                <Link to="/service-areas" className="mt-2 text-sm font-medium text-accent-600 hover:text-accent-700">Service areas &rarr;</Link>
-              </div>
-              <div className="rounded-lg border border-accent-200 bg-accent-50 p-5">
-                <h3 className="font-heading text-sm font-semibold text-warm-900">90-Day Warranty</h3>
-                <p className="mt-1.5 text-sm text-warm-500">All repairs backed by our workmanship warranty.</p>
-                <Link to="/warranty" className="mt-2 text-sm font-medium text-accent-600 hover:text-accent-700">Warranty details &rarr;</Link>
+
+              <div className="rounded-lg border-2 border-copper-200 bg-white p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="h-8 w-8 rounded bg-copper-100 flex items-center justify-center">
+                    <MapPin className="h-4 w-4 text-copper-700" />
+                  </div>
+                  <h3 className="font-heading text-sm font-bold text-warm-900">Find Us</h3>
+                </div>
+                <p className="text-sm text-warm-600">
+                  Mildura, VIC
+                </p>
+                <Link
+                  to="/service-areas"
+                  className="mt-2 inline-block text-sm font-medium text-copper-600 hover:text-copper-700 transition-colors"
+                >
+                  Service areas →
+                </Link>
               </div>
             </div>
           </div>

@@ -30,14 +30,14 @@ export default function AdminDashboardPage() {
       label: "New Leads",
       value: dashboardStats?.new_leads ?? 0,
       icon: Users,
-      color: "text-accent-500 bg-accent-500/10",
+      color: "text-copper-500 bg-copper-500/10",
       link: "/admin/leads",
     },
     {
       label: "Active Repairs",
       value: dashboardStats?.active_repairs ?? 0,
       icon: Wrench,
-      color: "text-accent-500 bg-accent-500/10",
+      color: "text-copper-500 bg-copper-500/10",
       link: "/admin/repairs",
     },
     {
@@ -73,8 +73,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-surface-100">Dashboard</h1>
-          <p className="mt-2 text-surface-400">Overview of your repair business</p>
+          <h1 className="font-heading text-3xl font-bold text-warm-100">Dashboard</h1>
+          <p className="mt-2 text-warm-400">Overview of your repair business</p>
         </div>
 
         {/* Stats Grid */}
@@ -83,12 +83,12 @@ export default function AdminDashboardPage() {
             <Link
               key={stat.label}
               to={stat.link}
-              className="rounded-lg border border-surface-800 bg-surface-900 p-5 transition hover:border-accent-500/30"
+              className="rounded-lg border border-warm-700 bg-warm-900 p-5 transition hover:border-copper-500/30"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-surface-400">{stat.label}</p>
-                  <p className="mt-1 text-2xl font-bold text-surface-100">{stat.value}</p>
+                  <p className="text-sm text-warm-400">{stat.label}</p>
+                  <p className="mt-1 text-2xl font-bold text-warm-100">{stat.value}</p>
                 </div>
                 <div className={cn("rounded-full p-3", stat.color)}>
                   <stat.icon className="h-6 w-6" />
@@ -100,26 +100,26 @@ export default function AdminDashboardPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Recent Repairs */}
-          <div className="rounded-lg border border-surface-800 bg-surface-900">
-            <div className="flex items-center justify-between border-b border-surface-800 px-5 py-4">
-              <h2 className="font-heading text-lg font-semibold text-surface-100">Recent Repairs</h2>
-              <Link to="/admin/repairs" className="flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400">
+          <div className="rounded-lg border border-warm-700 bg-warm-900">
+            <div className="flex items-center justify-between border-b border-warm-700 px-5 py-4">
+              <h2 className="font-heading text-lg font-semibold text-warm-100">Recent Repairs</h2>
+              <Link to="/admin/repairs" className="flex items-center gap-1 text-sm text-copper-500 hover:text-copper-600">
                 View All <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="divide-y divide-surface-800">
+            <div className="divide-y divide-warm-700">
               {recentRepairs?.data?.length === 0 ? (
-                <div className="p-5 text-center text-surface-400">No repairs yet</div>
+                <div className="p-5 text-center text-warm-400">No repairs yet</div>
               ) : (
                 recentRepairs?.data?.slice(0, 8).map((repair: any) => (
                   <Link
                     key={repair.id}
                     to={`/admin/repairs`}
-                    className="flex items-center justify-between px-5 py-3 transition hover:bg-surface-800"
+                    className="flex items-center justify-between px-5 py-3 transition hover:bg-warm-800"
                   >
                     <div>
-                      <p className="font-medium text-surface-100">{repair.ticket_number}</p>
-                      <p className="text-sm text-surface-400">{repair.issue_description?.slice(0, 50)}...</p>
+                      <p className="font-medium text-warm-100">{repair.ticket_number}</p>
+                      <p className="text-sm text-warm-400">{repair.issue_description?.slice(0, 50)}...</p>
                     </div>
                     <span className={cn("rounded-full border px-2.5 py-0.5 text-xs font-medium", getStatusColor(repair.status))}>
                       {getStatusLabel(repair.status)}
@@ -131,28 +131,28 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Recent Leads */}
-          <div className="rounded-lg border border-surface-800 bg-surface-900">
-            <div className="flex items-center justify-between border-b border-surface-800 px-5 py-4">
-              <h2 className="font-heading text-lg font-semibold text-surface-100">New Leads</h2>
-              <Link to="/admin/leads" className="flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400">
+          <div className="rounded-lg border border-warm-700 bg-warm-900">
+            <div className="flex items-center justify-between border-b border-warm-700 px-5 py-4">
+              <h2 className="font-heading text-lg font-semibold text-warm-100">New Leads</h2>
+              <Link to="/admin/leads" className="flex items-center gap-1 text-sm text-copper-500 hover:text-copper-600">
                 View All <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="divide-y divide-surface-800">
+            <div className="divide-y divide-warm-700">
               {recentLeads?.data?.length === 0 ? (
-                <div className="p-5 text-center text-surface-400">No new leads</div>
+                <div className="p-5 text-center text-warm-400">No new leads</div>
               ) : (
                 recentLeads?.data?.slice(0, 5).map((lead: any) => (
                   <Link
                     key={lead.id}
                     to={`/admin/leads`}
-                    className="flex items-center justify-between px-5 py-3 transition hover:bg-surface-800"
+                    className="flex items-center justify-between px-5 py-3 transition hover:bg-warm-800"
                   >
                     <div>
-                      <p className="font-medium text-surface-100">{lead.name}</p>
-                      <p className="text-sm text-surface-400">{lead.phone} &bull; {lead.device_type || "Unknown device"}</p>
+                      <p className="font-medium text-warm-100">{lead.name}</p>
+                      <p className="text-sm text-warm-400">{lead.phone} &bull; {lead.device_type || "Unknown device"}</p>
                     </div>
-                    <span className="text-xs text-surface-400">{formatDate(lead.created_at)}</span>
+                    <span className="text-xs text-warm-400">{formatDate(lead.created_at)}</span>
                   </Link>
                 ))
               )}
@@ -162,23 +162,23 @@ export default function AdminDashboardPage() {
 
         {/* Quick Actions */}
         <div className="mt-8">
-          <h2 className="mb-4 font-heading text-lg font-semibold text-surface-100">Quick Actions</h2>
+          <h2 className="mb-4 font-heading text-lg font-semibold text-warm-100">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <Link to="/admin/repairs" className="rounded-lg border border-surface-800 bg-surface-900 p-4 text-center transition hover:border-accent-500/30">
-              <Wrench className="mx-auto h-6 w-6 text-accent-500" />
-              <p className="mt-2 text-sm font-medium text-surface-100">New Repair</p>
+            <Link to="/admin/repairs" className="rounded-lg border border-warm-700 bg-warm-900 p-4 text-center transition hover:border-copper-500/30">
+              <Wrench className="mx-auto h-6 w-6 text-copper-500" />
+              <p className="mt-2 text-sm font-medium text-warm-100">New Repair</p>
             </Link>
-            <Link to="/admin/customers" className="rounded-lg border border-surface-800 bg-surface-900 p-4 text-center transition hover:border-accent-500/30">
-              <Users className="mx-auto h-6 w-6 text-accent-500" />
-              <p className="mt-2 text-sm font-medium text-surface-100">Add Customer</p>
+            <Link to="/admin/customers" className="rounded-lg border border-warm-700 bg-warm-900 p-4 text-center transition hover:border-copper-500/30">
+              <Users className="mx-auto h-6 w-6 text-copper-500" />
+              <p className="mt-2 text-sm font-medium text-warm-100">Add Customer</p>
             </Link>
-            <Link to="/admin/sms" className="rounded-lg border border-surface-800 bg-surface-900 p-4 text-center transition hover:border-accent-500/30">
+            <Link to="/admin/sms" className="rounded-lg border border-warm-700 bg-warm-900 p-4 text-center transition hover:border-copper-500/30">
               <MessageSquare className="mx-auto h-6 w-6 text-green-400" />
-              <p className="mt-2 text-sm font-medium text-surface-100">Send SMS</p>
+              <p className="mt-2 text-sm font-medium text-warm-100">Send SMS</p>
             </Link>
-            <Link to="/admin/quotes" className="rounded-lg border border-surface-800 bg-surface-900 p-4 text-center transition hover:border-accent-500/30">
+            <Link to="/admin/quotes" className="rounded-lg border border-warm-700 bg-warm-900 p-4 text-center transition hover:border-copper-500/30">
               <FileText className="mx-auto h-6 w-6 text-yellow-400" />
-              <p className="mt-2 text-sm font-medium text-surface-100">Create Quote</p>
+              <p className="mt-2 text-sm font-medium text-warm-100">Create Quote</p>
             </Link>
           </div>
         </div>

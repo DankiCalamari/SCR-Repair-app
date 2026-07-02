@@ -87,3 +87,11 @@ export async function uploadEmailSignature(file: File): Promise<{ url: string; f
   });
   return data;
 }
+
+/**
+ * Check if initial setup is needed (no admin users exist).
+ */
+export async function getSetupStatus(): Promise<{ needs_setup: boolean; admin_exists: boolean }> {
+  const { data } = await apiClient.get("/public/setup-status");
+  return data;
+}
