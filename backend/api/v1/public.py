@@ -1,6 +1,6 @@
 """Public endpoints that do not require authentication."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -59,17 +59,27 @@ async def get_setup_status(db=Depends(get_db)):
 
 @router.post("/public/setup", status_code=201)
 async def initial_setup(
-    full_name: str,
-    email: str,
-    password: str,
-    phone: str | None = None,
+    request: dict,
     db: AsyncSession = Depends(get_db),
 ):
     """Create the first admin user. Can only be called when no admin exists."""
+    from services.auth_service import hash_password
+    
+    full_name = request.get("full_name", "")
+    email = request.get("email", "")
+    password = request.get("password", "")
+    phone = request.get("phone")
+    
+    # Validate required fields
+    if not full_name or not email or not password:
+        raise HTTPException(
+            status_code=422,
+            detail="full_name, email, and password are required"
+        )
+    
     # Check if admin already exists
     result = await db.execute(select(User).where(User.role == UserRole.ADMIN).limit(1))
     if result.scalar_one_or_none() is not None:
-        from fastapi import HTTPException
         raise HTTPException(
             status_code=403,
             detail="Setup already completed. Admin user already exists."
@@ -78,16 +88,12 @@ async def initial_setup(
     # Check if email is already registered
     result = await db.execute(select(User).where(User.email == email))
     if result.scalar_one_or_none() is not None:
-        from fastapi import HTTPException
         raise HTTPException(
             status_code=409,
             detail="A user with this email already exists"
         )
     
     # Create admin user
-    from schemas.user import UserCreate
-    from services.auth_service import hash_password
-    
     user = User(
         email=email,
         hashed_password=hash_password(password),

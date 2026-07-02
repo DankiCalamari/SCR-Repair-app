@@ -17,56 +17,17 @@ const queryClient = new QueryClient({
   },
 });
 
-function SplashScreen() {
+function RouterInitializer() {
   const [checking, setChecking] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const initialize = async () => {
-      const token = localStorage.getItem("access_token");
-      if (token) {
-        try {
-          await authApi.getMe();
-          setIsAuthenticated(true);
-        } catch {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-        }
-      }
-      setChecking(false);
-    };
-    initialize();
-  }, []);
-
-  useEffect(() => {
-    if (!checking && !isAuthenticated) {
-      authApi.checkSetupStatus()
-        .then((status) => setNeedsSetup(status.needs_setup))
-        .catch(() => setNeedsSetup(false));
-    }
-  }, [checking, isAuthenticated]);
-
-  if (checking) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (needsSetup) {
-    return <Navigate to="/setup" replace />;
-  }
-  return <Navigate to="/login" replace />;
-}
-
-function AuthInitializer({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
   const setUser = useAuthStore((s) => s.setUser);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
+    setHasToken(!!token);
+
+    // Initialize auth if token exists
     if (token) {
       authApi.getMe()
         .then((user) => {
@@ -84,22 +45,33 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
             isStaff: false,
             isCustomer: false,
           });
-        })
-        .finally(() => setReady(true));
-    } else {
-      setReady(true);
+        });
     }
+
+    // Check setup status
+    authApi.checkSetupStatus()
+      .then((status) => {
+        setNeedsSetup(status.needs_setup);
+      })
+      .catch(() => setNeedsSetup(false))
+      .finally(() => setChecking(false));
   }, [setUser]);
 
-  if (!ready) {
+  if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-900">
+      <div className="flex min-h-screen items-center justify-center bg-warm-50">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
       </div>
     );
   }
 
-  return <>{children}</>;
+  // When setup is needed and no token, redirect to setup
+  if (needsSetup && !hasToken) {
+    return <Navigate to="/setup" replace />;
+  }
+
+  // Otherwise render the app normally (which has its own routing)
+  return <App />;
 }
 
 if ("serviceWorker" in navigator) {
@@ -114,10 +86,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AuthInitializer>
-          <SplashScreen />
-          <App />
-        </AuthInitializer>
+        <RouterInitializer />
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, AlertCircle, Wrench } from "lucide-react";
+import { CheckCircle, Wrench } from "lucide-react";
 
 export default function SetupPage() {
   const [fullName, setFullName] = useState("");
