@@ -273,7 +273,7 @@ app.add_middleware(NoCacheMiddleware)
 # Mount RMS assets and static files at /app
 if os.path.isdir(_RMS_DIR):
     app.mount("/app/assets", StaticFiles(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
-    # Serve root-level static files from RMS dist (logo.svg, favicon.svg, etc.)
+    # Serve root-level static files from RMS dist (logo.svg, favicon.svg, sw.js, etc.)
     app.mount("/app/static", StaticFiles(directory=_RMS_DIR), name="rms-root")
 
 # Mount public-site assets at root /assets
@@ -315,8 +315,8 @@ async def rms_spa(full_path: str):
 @app.get("/{full_path:path}", include_in_schema=False)
 async def public_spa(full_path: str):
     """Serve the public-site SPA for any non-API, non-asset route."""
-    # Don't intercept API, uploads, or asset paths
-    if full_path.startswith(("api/", "uploads/", "assets/", "app/", "docs", "redoc", "openapi")):
+    # Don't intercept API, uploads, asset paths, or RMS PWA assets
+    if full_path.startswith(("api/", "uploads/", "assets/", "app/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
         raise HTTPException(status_code=404)
     if os.path.isdir(_PUBLIC_SITE_DIR):
         index = os.path.join(_PUBLIC_SITE_DIR, "index.html")

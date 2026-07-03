@@ -31,9 +31,20 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
         navigateFallback: "/app/index.html",
+        // Ensure service worker always checks for updates
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            urlPattern: /\/app\//,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "rms-navigation",
+              expiration: { maxEntries: 10 },
+            },
+          },
+        ],
       },
       devOptions: {
         enabled: false,
