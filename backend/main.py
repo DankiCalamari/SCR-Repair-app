@@ -258,7 +258,10 @@ _RMS_DIR = os.path.join(os.path.dirname(__file__), "rms", "dist")
 class NoCacheMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
-        if request.url.path.startswith("/assets/") or request.url.path.startswith("/app/assets/"):
+        # Disable caching for assets and SPA index files
+        if (request.url.path.startswith("/assets/") or 
+            request.url.path.startswith("/app/assets/") or
+            request.url.path.startswith("/app/") and not request.url.path.startswith("/app/api/")):
             response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
             response.headers["Pragma"] = "no-cache"
             response.headers["Expires"] = "0"
@@ -291,11 +294,19 @@ async def rms_spa(full_path: str):
     if full_path in ("sw.js", "manifest.webmanifest", "registerSW.js"):
         file_path = os.path.join(_RMS_DIR, full_path)
         if os.path.isfile(file_path):
-            return FileResponse(file_path)
+            return FileResponse(file_path, headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            })
     if os.path.isdir(_RMS_DIR):
         index = os.path.join(_RMS_DIR, "index.html")
         if os.path.isfile(index):
-            return FileResponse(index)
+            return FileResponse(index, headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            })
     raise HTTPException(status_code=404)
 
 @app.get("/{full_path:path}", include_in_schema=False)
@@ -307,5 +318,9 @@ async def public_spa(full_path: str):
     if os.path.isdir(_PUBLIC_SITE_DIR):
         index = os.path.join(_PUBLIC_SITE_DIR, "index.html")
         if os.path.isfile(index):
-            return FileResponse(index)
+            return FileResponse(index, headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            })
     raise HTTPException(status_code=404)
