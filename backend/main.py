@@ -293,7 +293,8 @@ async def rms_spa(full_path: str):
     # Don't intercept API paths
     if full_path.startswith("api/") or full_path.startswith("uploads/"):
         raise HTTPException(status_code=404)
-    # Serve PWA assets directly from RMS dist
+    # Serve PWA assets directly from RMS dist (if they exist)
+    # Return 404 for missing PWA assets instead of serving index.html
     if full_path in ("sw.js", "manifest.webmanifest", "registerSW.js"):
         file_path = os.path.join(_RMS_DIR, full_path)
         if os.path.isfile(file_path):
@@ -302,6 +303,8 @@ async def rms_spa(full_path: str):
                 "Pragma": "no-cache",
                 "Expires": "0"
             })
+        # Return empty 404 for missing PWA assets to prevent manifest/HTML confusion
+        raise HTTPException(status_code=404)
     if os.path.isdir(_RMS_DIR):
         index = os.path.join(_RMS_DIR, "index.html")
         if os.path.isfile(index):

@@ -17,10 +17,32 @@ const queryClient = new QueryClient({
   },
 });
 
+// Simple error boundary for debugging
+class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null as Error | null };
+  
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: "20px", backgroundColor: "#fee", minHeight: "100vh" }}>
+          <h1 style={{ color: "red" }}>Something went wrong</h1>
+          <pre style={{ color: "red" }}>{this.state.error?.message}</pre>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function RouterInitializer() {
   const [checking, setChecking] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
   const [hasToken, setHasToken] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const setUser = useAuthStore((s) => s.setUser);
 
   useEffect(() => {
@@ -53,16 +75,37 @@ function RouterInitializer() {
       .then((status) => {
         setNeedsSetup(status.needs_setup);
       })
-      .catch(() => setNeedsSetup(false))
+      .catch((e: unknown) => {
+        console.error("Setup status check failed:", e);
+        setNeedsSetup(false);
+      })
       .finally(() => setChecking(false));
   }, [setUser]);
 
   if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-warm-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
+      <div style={{ 
+        display: "flex", 
+        minHeight: "100vh", 
+        alignItems: "center", 
+        justifyContent: "center",
+        backgroundColor: "#fefaf6"
+      }}>
+        <div style={{ 
+          width: "2rem", 
+          height: "2rem", 
+          border: "4px solid #e06645",
+          borderTopColor: "transparent",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite"
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
+  }
+
+  if (error) {
+    return <div style={{ padding: "20px", color: "red" }}>{error}</div>;
   }
 
   // When setup is needed and no token, redirect to setup
@@ -74,12 +117,21 @@ function RouterInitializer() {
   return <App />;
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter basename="/app">
-      <QueryClientProvider client={queryClient}>
-        <RouterInitializer />
-      </QueryClientProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+try {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <BrowserRouter basename="/app">
+          <QueryClientProvider client={queryClient}>
+            <RouterInitializer />
+          </QueryClientProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+} catch (e) {
+  console.error("Failed to render app:", e);
+  document.getElementById("root")!.innerHTML = 
+    "<div style='padding:20px;background:#fee;color:red;min-height:100vh'>" +
+    "<h1>Render Error</h1><pre>" + (e as Error).message + "</pre></div>";
+}
