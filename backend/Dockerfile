@@ -47,4 +47,5 @@ COPY --from=frontend-build /build/rms/dist /app/rms/dist
 
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Use asyncio loop explicitly to avoid IPv6-only binding issues on macOS
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--loop", "asyncio"]
