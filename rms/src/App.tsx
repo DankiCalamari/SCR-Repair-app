@@ -90,6 +90,9 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
+        {/* Root redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
         {/* Customer portal routes */}
         <Route
           element={
@@ -143,7 +146,7 @@ export default function App() {
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
         </Route>
 
-        {/* Catch all */}
+        {/* Catch all - redirect to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Suspense>
