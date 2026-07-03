@@ -346,16 +346,16 @@ export default function ContactPage() {
                   <div className="h-8 w-8 rounded bg-copper-100 flex items-center justify-center">
                     <MapPin className="h-4 w-4 text-copper-700" />
                   </div>
-                  <h3 className="font-heading text-sm font-bold text-warm-900">Find Us</h3>
+                  <h3 className="font-heading text-sm font-bold text-warm-900">Service Area</h3>
                 </div>
                 <p className="text-sm text-warm-600">
-                  Mildura, VIC
+                  Mobile service across Mildura and Sunraysia.
                 </p>
                 <Link
                   to="/service-areas"
                   className="mt-2 inline-block text-sm font-medium text-copper-600 hover:text-copper-700 transition-colors"
                 >
-                  Service areas →
+                  Areas we cover →
                 </Link>
               </div>
             </div>

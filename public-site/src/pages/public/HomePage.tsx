@@ -32,8 +32,8 @@ const services = [
 
 const whyChooseUs = [
   {
-    title: "Local & Trusted",
-    description: "Serving Mildura and Sunraysia since 2010.",
+    title: "Mobile Service",
+    description: "We come to you across Mildura and Sunraysia.",
     icon: Users,
   },
   {
@@ -66,16 +66,16 @@ export default function HomePage() {
           {/* Hand-drawn style badge */}
           <div className="inline-flex items-center gap-2 rounded-full bg-copper-100 px-4 py-1.5 mb-6 border border-copper-200">
             <Wrench className="h-4 w-4 text-copper-700" />
-            <span className="text-xs font-medium text-copper-800 uppercase tracking-wider">Local Repair Shop</span>
+            <span className="text-xs font-medium text-copper-800 uppercase tracking-wider">Mobile Repair Service</span>
           </div>
 
           <h1 className="font-heading text-4xl font-bold text-warm-900 sm:text-5xl lg:text-6xl max-w-3xl">
-            Broken phone? We'll fix it.
+            We come to you. Mobile repairs across Sunraysia.
           </h1>
 
           <p className="mt-4 text-lg text-warm-700 max-w-2xl leading-relaxed">
-            Based in Mildura, we repair smartphones, tablets, laptops and gaming consoles 
-            across the Sunraysia region. No appointment needed - just bring it in.
+            Based in Mildura, we're a mobile electronics repair service covering the Sunraysia region.
+            We'll pick up your device, repair it, and deliver it back - no need to leave home.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
@@ -189,7 +189,7 @@ export default function HomePage() {
             </div>
 
             <p className="mt-4 text-sm text-warm-600">
-              Can't make it to us? We offer pickup and drop-off across the region.
+              We come to you - no need to leave your home or workplace.
             </p>
           </div>
         </div>
