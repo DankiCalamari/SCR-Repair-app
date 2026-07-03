@@ -74,14 +74,6 @@ function RouterInitializer() {
   return <App />;
 }
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/app/static/sw.js").catch(() => {
-      // Service worker registration failed — app still works without it
-    });
-  });
-}
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter basename="/app">
