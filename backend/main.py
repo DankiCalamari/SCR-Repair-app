@@ -290,6 +290,9 @@ from fastapi import HTTPException
 @app.get("/app/{full_path:path}", include_in_schema=False)
 async def rms_spa(full_path: str):
     """Serve the RMS SPA for any /app/* route."""
+    # Don't intercept API paths
+    if full_path.startswith("api/") or full_path.startswith("uploads/"):
+        raise HTTPException(status_code=404)
     # Serve PWA assets directly from RMS dist
     if full_path in ("sw.js", "manifest.webmanifest", "registerSW.js"):
         file_path = os.path.join(_RMS_DIR, full_path)
