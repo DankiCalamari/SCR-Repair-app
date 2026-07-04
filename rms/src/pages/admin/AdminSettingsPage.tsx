@@ -71,6 +71,7 @@ export default function AdminSettingsPage() {
 
   // SMS Gateway (Dedicated)
   const [smsUsername, setSmsUsername] = useState("");
+  const [smsDeviceId, setSmsDeviceId] = useState("");
   const [smsWebhookSecret, setSmsWebhookSecret] = useState("");
   const [smsIsActive, setSmsIsActive] = useState(true);
 
@@ -138,6 +139,7 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     if (smsSettings) {
       setSmsUsername(smsSettings.username);
+      setSmsDeviceId(smsSettings.device_id || "");
       setSmsWebhookSecret(smsSettings.webhook_secret || "");
       setSmsIsActive(smsSettings.is_active);
     }
@@ -165,6 +167,7 @@ export default function AdminSettingsPage() {
         await smsUpdateMutation.mutateAsync({
           gateway_url: "https://api.sms-gate.app",
           username: smsUsername,
+          device_id: smsDeviceId,
           webhook_secret: smsWebhookSecret,
           is_active: smsIsActive,
         });
@@ -605,6 +608,46 @@ export default function AdminSettingsPage() {
                       </button>
                     </div>
 
+                    <div className="rounded-lg border border-warm-800 bg-warm-900 p-5">
+                      <div className="space-y-4">
+                        <div>
+                          <label className="mb-1.5 block text-sm font-medium text-warm-300">Gateway Username</label>
+                          <input
+                            type="text"
+                            value={smsUsername}
+                            onChange={(e) => setSmsUsername(e.target.value)}
+                            placeholder="Your SMS Gate username"
+                            className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none"
+                          />
+                          <p className="mt-1 text-xs text-warm-500">Find this in your SMS Gate dashboard</p>
+                        </div>
+                        
+                        <div>
+                          <label className="mb-1.5 block text-sm font-medium text-warm-300">Device ID (Optional)</label>
+                          <input
+                            type="text"
+                            value={smsDeviceId}
+                            onChange={(e) => setSmsDeviceId(e.target.value)}
+                            placeholder="e.g. B8Xolb9..."
+                            className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none"
+                          />
+                          <p className="mt-1 text-xs text-warm-500">If auto-detection fails, manually enter your device ID. Leave empty to auto-detect.</p>
+                        </div>
+                        
+                        <div>
+                          <label className="mb-1.5 block text-sm font-medium text-warm-300">Webhook Secret</label>
+                          <input
+                            type="text"
+                            value={smsWebhookSecret}
+                            onChange={(e) => setSmsWebhookSecret(e.target.value)}
+                            placeholder="Random secret for webhook verification"
+                            className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none"
+                          />
+                          <p className="mt-1 text-xs text-warm-500">Used to verify incoming webhook requests</p>
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="rounded-lg border border-copper-500/20 bg-copper-500/5 p-5">
                       <div className="flex items-start gap-4">
                         <div className="rounded-full bg-copper-500/10 p-2.5 text-copper-500">
@@ -613,12 +656,10 @@ export default function AdminSettingsPage() {
                         <div>
                           <p className="font-semibold text-warm-50">Dedicated SMS Gateway</p>
                           <p className="mt-1 text-sm text-warm-400">
-                            The application is currently configured to use a dedicated Android device as your SMS gateway.
+                            The application uses a dedicated Android device as your SMS gateway via SMS Gate Cloud.
                           </p>
                           <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 text-xs sm:grid-cols-2">
                             <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Provider</span><span className="text-warm-200">SMS Gate Cloud</span></div>
-                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Username</span><span className="text-warm-200">8ACQBH</span></div>
-                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Device ID</span><span className="font-mono text-warm-200">B8Xolb9...</span></div>
                             <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Auth Mode</span><span className="text-warm-200">Basic Auth</span></div>
                           </div>
                         </div>

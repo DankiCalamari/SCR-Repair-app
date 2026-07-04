@@ -43,6 +43,7 @@ export interface SmsGatewaySettings {
   gateway_url: string;
   username: string;
   password?: string;
+  device_id?: string;
   is_active: boolean;
   webhook_secret?: string;
   webhook_url?: string;

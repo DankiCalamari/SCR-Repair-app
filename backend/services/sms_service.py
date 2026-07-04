@@ -30,15 +30,18 @@ class SmsGateClient:
         auth_str = f"{username}:{password}"
         self.auth_header = f"Basic {base64.b64encode(auth_str.encode()).decode()}"
 
-    async def send_message(self, phone_numbers: list[str], body: str, sim_number: int | None = None) -> dict:
+    async def send_message(self, phone_numbers: list[str], body: str, sim_number: int | None = None, device_id_override: str | None = None) -> dict:
         """Enqueue message via Cloud API."""
+        import logging
+        logger = logging.getLogger(__name__)
+        
         # Payload according to https://docs.sms-gate.app/integration/api/
         # The gateway API requires a deviceId to route the message.
-        device = await self.get_device_state()
-        device_id = device.get("id")
+        device = await self.get_device_state(device_id_override)
+        device_id = device.get("id") or device_id_override
         
         if not device_id:
-            raise Exception("No active SMS device found to send the message.")
+            raise Exception("No active SMS device found to send the message. Check gateway configuration.")
 
         # Ensure phone numbers are in international format (e.g., +61...)
         formatted_numbers = []
@@ -61,34 +64,76 @@ class SmsGateClient:
         if sim_number is not None:
             payload["simNumber"] = sim_number
 
-        import logging
-        logger = logging.getLogger(__name__)
+        # Try different possible API endpoint paths
+        endpoint_paths = [
+            "/3rdparty/v1/message",
+            "/api/v1/message",
+            "/v1/message",
+            "/message",
+        ]
+        
         logger.info(f"Sending SMS payload: {payload}")
 
         async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(
-                f"{self.url}/3rdparty/v1/message",
-                json=payload,
-                headers={
-                    "Authorization": self.auth_header,
-                    "Content-Type": "application/json",
-                },
-            )
-            response.raise_for_status()
-            return response.json()
+            for path in endpoint_paths:
+                try:
+                    response = await client.post(
+                        f"{self.url}{path}",
+                        json=payload,
+                        headers={
+                            "Authorization": self.auth_header,
+                            "Content-Type": "application/json",
+                        },
+                    )
+                    if response.status_code in (200, 201, 202):
+                        return response.json()
+                    elif response.status_code != 404:
+                        response.raise_for_status()
+                except httpx.HTTPStatusError as e:
+                    if e.response.status_code == 404:
+                        continue
+                    raise
+            raise Exception("SMS gateway API endpoint not found - gateway may be misconfigured")
 
     async def get_devices(self) -> list[dict]:
         """List registered devices."""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        # Try different possible API endpoint paths
+        endpoint_paths = [
+            "/3rdparty/v1/devices",
+            "/api/v1/devices", 
+            "/v1/devices",
+            "/devices",
+        ]
+        
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(
-                f"{self.url}/3rdparty/v1/devices",
-                headers={"Authorization": self.auth_header},
-            )
-            response.raise_for_status()
-            return response.json()
+            for path in endpoint_paths:
+                try:
+                    response = await client.get(
+                        f"{self.url}{path}",
+                        headers={"Authorization": self.auth_header},
+                    )
+                    if response.status_code == 200:
+                        return response.json()
+                    elif response.status_code != 404:
+                        # Non-404 error, stop trying
+                        response.raise_for_status()
+                except httpx.HTTPStatusError as e:
+                    if e.response.status_code != 404:
+                        raise
+                    continue
+            
+            logger.warning(f"SMS Gate API: All device endpoint paths returned 404 - gateway may be misconfigured")
+            return []
 
-    async def get_device_state(self) -> dict:
+    async def get_device_state(self, device_id_override: str | None = None) -> dict:
         """Retrieve state for the gateway device."""
+        # If device_id is provided (from settings), use it directly
+        if device_id_override:
+            return {"id": device_id_override, "status": "configured", "simCards": []}
+        
         devices = await self.get_devices()
         if devices:
             # Assuming the first device is the primary one
@@ -200,10 +245,14 @@ async def send_sms(
     await db.flush()
     await db.refresh(sms)
 
+    # Get stored gateway settings for device_id fallback
+    gw_settings = await get_gateway_settings(db)
+    device_id_override = gw_settings.device_id if gw_settings else None
+
     client = SmsGateClient()
 
     try:
-        response_data = await client.send_message([to_number], body, sim_number=sim_number)
+        response_data = await client.send_message([to_number], body, sim_number=sim_number, device_id_override=device_id_override)
         sms.status = SmsStatus.SENT
         if isinstance(response_data, list) and len(response_data) > 0:
             sms.external_id = str(response_data[0].get("id"))
@@ -292,11 +341,15 @@ async def process_webhook(event: str, payload: dict, db: AsyncSession) -> SmsMes
 
 async def get_gateway_status(db: AsyncSession) -> dict:
     """Check SMS gateway health and return status information."""
+    import logging
+    logger = logging.getLogger(__name__)
+    
     client = SmsGateClient()
+    
     try:
         device = await client.get_device_state()
         if not device:
-            return {"connected": False, "message": "Device not found"}
+            return {"connected": False, "message": "Device not found - check if device is registered in SMS Gate dashboard"}
             
         return {
             "connected": True,
@@ -307,7 +360,10 @@ async def get_gateway_status(db: AsyncSession) -> dict:
             "sim_cards": device.get("simCards", []),
         }
     except Exception as exc:
-        return {"connected": False, "message": str(exc)}
+        error_msg = str(exc)
+        if "404" in error_msg or "Not Found" in error_msg:
+            return {"connected": False, "message": "SMS Gate API endpoint returned 404 - device may not be registered in SMS Gate dashboard"}
+        return {"connected": False, "message": error_msg}
 
 
 async def test_sms_gateway(db: AsyncSession) -> dict:

@@ -39,6 +39,8 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// This component handles the initial setup check and renders the appropriate app
+// The App component already has /setup route defined, so we let it handle routing
 function RouterInitializer() {
   const [checking, setChecking] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
@@ -102,17 +104,7 @@ function RouterInitializer() {
     );
   }
 
-  // If setup is needed, render a minimal router just for setup page
-  if (needsSetup) {
-    return (
-      <Routes>
-        <Route path="/setup" element={<SetupPage />} />
-        <Route path="*" element={<Navigate to="/setup" replace />} />
-      </Routes>
-    );
-  }
-
-  // Otherwise render the full app
+  // Otherwise render the app normally - App has its own routing with /setup route
   return <App />;
 }
 

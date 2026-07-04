@@ -68,6 +68,7 @@ class SmsGatewaySettingsSchema(BaseModel):
     gateway_url: str
     username: str
     password: Optional[str] = None
+    device_id: Optional[str] = None
     is_active: bool = True
     webhook_secret: Optional[str] = None
     webhook_url: Optional[str] = None
@@ -79,6 +80,7 @@ class SmsGatewaySettingsUpdate(BaseModel):
     gateway_url: str
     username: str
     password: Optional[str] = None
+    device_id: Optional[str] = None
     is_active: bool = True
     webhook_secret: Optional[str] = None
 

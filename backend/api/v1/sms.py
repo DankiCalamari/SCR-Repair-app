@@ -154,6 +154,7 @@ async def get_sms_settings(
         return SmsGatewaySettingsSchema(
             gateway_url="https://api.sms-gate.app",
             username=settings.SMS_GATEWAY_USERNAME,
+            device_id=None,
             is_active=True,
             webhook_secret=settings.SMS_WEBHOOK_SECRET,
             webhook_url=webhook_url,
@@ -163,6 +164,7 @@ async def get_sms_settings(
         id=gw_settings.id,
         gateway_url="https://api.sms-gate.app",
         username=gw_settings.username,
+        device_id=gw_settings.device_id,
         is_active=gw_settings.is_active,
         webhook_secret=gw_settings.webhook_secret,
         webhook_url=webhook_url,
@@ -183,6 +185,7 @@ async def update_sms_settings(
             gateway_url=data.gateway_url,
             username=data.username,
             password=data.password or "",
+            device_id=data.device_id,
             webhook_secret=data.webhook_secret,
             is_active=data.is_active,
         )
@@ -192,6 +195,7 @@ async def update_sms_settings(
         gw_settings.username = data.username
         if data.password:
             gw_settings.password = data.password
+        gw_settings.device_id = data.device_id
         gw_settings.webhook_secret = data.webhook_secret
         gw_settings.is_active = data.is_active
 
@@ -203,6 +207,7 @@ async def update_sms_settings(
         id=gw_settings.id,
         gateway_url="https://api.sms-gate.app",
         username=gw_settings.username,
+        device_id=gw_settings.device_id,
         is_active=gw_settings.is_active,
         webhook_secret=gw_settings.webhook_secret,
         webhook_url=webhook_url,

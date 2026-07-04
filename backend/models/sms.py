@@ -47,9 +47,10 @@ class SmsGatewaySettings(Base):
     __tablename__ = "sms_gateway_settings"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    gateway_url: Mapped[str] = mapped_column(String(255), nullable=False)
+    gateway_url: Mapped[str] = mapped_column(String(255), nullable=False, default="https://api.sms-gate.app")
     username: Mapped[str] = mapped_column(String(100), nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
+    device_id: Mapped[str] = mapped_column(String(100), nullable=True)
     is_active: Mapped[bool] = mapped_column(default=True, nullable=False)
     webhook_secret: Mapped[str] = mapped_column(String(100), nullable=True)
     last_health_check: Mapped[datetime] = mapped_column(DateTime, nullable=True)
