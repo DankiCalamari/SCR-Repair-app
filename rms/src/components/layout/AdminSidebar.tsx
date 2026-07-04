@@ -47,31 +47,38 @@ export default function AdminSidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen flex-col border-r border-warm-800 bg-warm-950 transition-all duration-200",
-        collapsed ? "w-16" : "w-56"
+        "flex h-screen flex-col border-r border-warm-800/50 bg-gradient-to-b from-warm-950 to-warm-900 transition-all duration-300",
+        collapsed ? "w-16" : "w-60"
       )}
     >
-      <div className="flex h-14 items-center justify-between border-b border-warm-800 px-4">
+      {/* Header */}
+      <div className="flex h-16 items-center justify-between border-b border-warm-800/50 px-4">
         {!collapsed && (
           <div className="flex items-center gap-2">
             {logoUrl ? (
-              <img src={logoUrl} alt="Logo" className="h-5 w-auto object-contain" />
+              <img src={logoUrl} alt="Logo" className="h-6 w-auto object-contain" />
             ) : (
-              <img src="/app/static/logo.svg" alt="Logo" className="h-5 w-auto object-contain" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-copper-500">
+                <Wrench className="h-5 w-5 text-white" />
+              </div>
             )}
+            <span className="font-heading text-lg font-semibold text-warm-100">RMS</span>
           </div>
         )}
         {collapsed && (
           logoUrl ? (
             <img src={logoUrl} alt="Logo" className="mx-auto h-5 w-auto object-contain" />
           ) : (
-            <img src="/app/static/logo.svg" alt="Logo" className="mx-auto h-5 w-auto object-contain" />
+            <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-lg bg-copper-500">
+              <Wrench className="h-4 w-4 text-white" />
+            </div>
           )
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 py-3">
-        <ul className="space-y-0.5">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto py-4">
+        <ul className="space-y-1 px-2">
           {allItems.map((item) => (
             <li key={item.to}>
               <NavLink
@@ -79,15 +86,15 @@ export default function AdminSidebar() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                     isActive
-                      ? "bg-copper-500/10 text-copper-500"
-                      : "text-warm-400 hover:bg-warm-800 hover:text-warm-100",
-                    collapsed && "justify-center px-1.5"
+                      ? "bg-copper-500/15 text-copper-400 shadow-inner"
+                      : "text-warm-400 hover:bg-warm-800/50 hover:text-warm-200",
+                    collapsed && "justify-center px-2.5"
                   )
                 }
               >
-                <item.icon className="h-4 w-4 shrink-0" />
+                <item.icon className={cn("h-5 w-5 shrink-0", collapsed ? "mx-auto" : "")} />
                 {!collapsed && <span>{item.label}</span>}
               </NavLink>
             </li>
@@ -95,24 +102,25 @@ export default function AdminSidebar() {
         </ul>
       </nav>
 
-      <div className="border-t border-warm-800 p-1.5 space-y-0.5">
+      {/* Footer Actions */}
+      <div className="border-t border-warm-800/50 space-y-1 p-2">
         {isSupported && (
           <button
             onClick={toggle}
             disabled={isLoading}
             className={cn(
-              "flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors",
+              "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
               isSubscribed
-                ? "text-copper-500 hover:bg-warm-800"
-                : "text-warm-400 hover:bg-warm-800 hover:text-warm-100",
-              collapsed && "justify-center px-1.5"
+                ? "text-copper-400 hover:bg-warm-800/50"
+                : "text-warm-400 hover:bg-warm-800/50 hover:text-warm-200",
+              collapsed && "justify-center px-2.5"
             )}
             title={isSubscribed ? "Push notifications enabled — click to disable" : "Enable push notifications"}
           >
             {isSubscribed ? (
-              <Bell className="h-4 w-4 shrink-0" />
+              <Bell className="h-5 w-5 shrink-0" />
             ) : (
-              <BellOff className="h-4 w-4 shrink-0" />
+              <BellOff className="h-5 w-5 shrink-0" />
             )}
             {!collapsed && (
               <span>{isSubscribed ? "Notifications On" : "Enable Notifications"}</span>
@@ -121,29 +129,38 @@ export default function AdminSidebar() {
         )}
         <a
           href="/"
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800/50 hover:text-warm-200",
+            collapsed && "justify-center px-2.5"
+          )}
         >
-          <Globe className="h-4 w-4 shrink-0" />
+          <Globe className="h-5 w-5 shrink-0" />
           {!collapsed && <span>Back to Website</span>}
         </a>
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800/50 hover:text-warm-200",
+            collapsed && "justify-center px-2.5"
+          )}
         >
           {collapsed ? (
-            <ChevronRight className="mx-auto h-4 w-4" />
+            <ChevronRight className="mx-auto h-5 w-5" />
           ) : (
             <>
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-5 w-5" />
               <span>Collapse</span>
             </>
           )}
         </button>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium text-warm-400 transition-colors hover:bg-warm-800 hover:text-red-400"
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-warm-400 transition-colors hover:bg-red-500/10 hover:text-red-400",
+            collapsed && "justify-center px-2.5"
+          )}
         >
-          <LogOut className="h-4 w-4 shrink-0" />
+          <LogOut className="h-5 w-5 shrink-0" />
           {!collapsed && <span>Logout</span>}
         </button>
       </div>
