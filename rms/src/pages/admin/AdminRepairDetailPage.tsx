@@ -252,6 +252,7 @@ export default function AdminRepairDetailPage() {
     queryKey: ["admin-repair-sms", id],
     queryFn: () => listSmsMessages(0, 50, id),
     enabled: !!id && activeTab === "communication",
+    refetchInterval: 30000,
   });
 
   const { data: templates } = useQuery({
@@ -269,6 +270,7 @@ export default function AdminRepairDetailPage() {
     queryKey: ["admin-repair-email", id],
     queryFn: () => listEmails(0, 50, id),
     enabled: !!id && activeTab === "communication",
+    refetchInterval: 30000,
   });
 
   const { data: photos } = useQuery({
@@ -302,12 +304,20 @@ export default function AdminRepairDetailPage() {
       customer_id: repair?.customer?.id,
       sim_number: simNumber
     }),
-    onSuccess: () => { invalidateRepair(); setSmsBody(""); },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
+      invalidateRepair();
+      setSmsBody("");
+    },
   });
 
   const templateSmsMutation = useMutation({
     mutationFn: (templateId: string) => sendSmsTemplate({ template_id: templateId, repair_id: id, sim_number: simNumber }),
-    onSuccess: () => { invalidateRepair(); setSelectedTemplateId(""); },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
+      invalidateRepair();
+      setSelectedTemplateId("");
+    },
   });
 
   // Quote mutations
@@ -332,7 +342,9 @@ export default function AdminRepairDetailPage() {
       repair_id: id!,
       customer_id: repair?.customer?.id || null,
     }),
-    onSuccess: () => { /* could show toast */ },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
+    },
   });
 
   const uploadQuotePdfMutation = useMutation({
@@ -360,7 +372,16 @@ export default function AdminRepairDetailPage() {
   const markPaidMutation = useMutation({
     mutationFn: ({ invoiceId, amount }: { invoiceId: string; amount: number }) =>
       markInvoicePaid(invoiceId, { paid_amount: amount }),
-    onSuccess: invalidateRepair,
+    onSuccess: () => {
+      invalidateRepair();
+      alert("Invoice marked as paid");
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to mark invoice as paid: ${message || "Unknown error"}`);
+    },
   });
 
   const sendInvoiceEmailMutation = useMutation({
@@ -369,6 +390,9 @@ export default function AdminRepairDetailPage() {
       repair_id: id!,
       customer_id: repair?.customer?.id || null,
     }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
+    },
   });
 
   const { data: photoCategoryCounts } = useQuery<PhotoCategoryCount[]>({

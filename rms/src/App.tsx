@@ -23,7 +23,6 @@ const AdminInvoicesPage = lazy(() => import("./pages/admin/AdminInvoicesPage"));
 const AdminSmsPage = lazy(() => import("./pages/admin/AdminSmsPage"));
 const AdminEmailPage = lazy(() => import("./pages/admin/AdminEmailPage"));
 const AdminWarrantyPage = lazy(() => import("./pages/admin/AdminWarrantyPage"));
-const AdminLeadsPage = lazy(() => import("./pages/admin/AdminLeadsPage"));
 const AdminSystemHealthPage = lazy(() => import("./pages/admin/AdminSystemHealthPage"));
 const AdminRepairDetailPage = lazy(() => import("./pages/admin/AdminRepairDetailPage"));
 const AdminCustomerDetailPage = lazy(() => import("./pages/admin/AdminCustomerDetailPage"));
@@ -126,7 +125,6 @@ export default function App() {
           <Route path="/admin/email" element={<AdminEmailPage />} />
           <Route path="/admin/communications" element={<AdminCommunicationsPage />} />
           <Route path="/admin/warranty" element={<AdminWarrantyPage />} />
-          <Route path="/admin/leads" element={<AdminLeadsPage />} />
           <Route path="/admin/system-health" element={<AdminSystemHealthPage />} />
           <Route path="/admin/repairs/:id" element={<AdminRepairDetailPage />} />
           <Route path="/admin/customers/:id" element={<AdminCustomerDetailPage />} />

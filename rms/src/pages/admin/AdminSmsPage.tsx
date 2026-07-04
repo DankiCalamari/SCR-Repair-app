@@ -29,11 +29,13 @@ export default function AdminSmsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-sms", page],
     queryFn: () => listSmsMessages(page * pageSize, pageSize),
+    refetchInterval: 30000,
   });
 
   const { data: unassignedData, isLoading: isLoadingUnassigned } = useQuery({
     queryKey: ["admin-sms-unassigned", unassignedPage],
     queryFn: () => listSmsMessages(unassignedPage * pageSize, pageSize, undefined, undefined, undefined, true),
+    refetchInterval: 30000,
   });
 
   const { data: repairsData } = useQuery({
@@ -67,8 +69,16 @@ export default function AdminSmsPage() {
     mutationFn: () => sendSms({ to_number: toNumber, body: messageBody, sim_number: simNumber }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-sms"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-sms-unassigned"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
       setToNumber("");
       setMessageBody("");
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to send SMS: ${message || "Unknown error"}`);
     },
   });
 

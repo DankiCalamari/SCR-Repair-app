@@ -209,14 +209,21 @@ async def update_sms_settings(
     )
 
 
-@router.post("/webhook", status_code=status.HTTP_200_OK)
+@router.post("/webhook", status_code=status.HTTP_200_OK, include_in_schema=False)
 async def sms_webhook(
     payload: SmsWebhookPayload,
     db: AsyncSession = Depends(get_db),
 ):
-    # Process webhook events from SMS Gate
-    result_msg = await process_webhook(payload.event, payload.payload, db)
-    return {"status": "ok", "message_id": str(result_msg.id) if result_msg else None}
+    """Webhook endpoint for SMS Gate - no auth required."""
+    try:
+        result_msg = await process_webhook(payload.event, payload.payload, db)
+        return {"status": "ok", "message_id": str(result_msg.id) if result_msg else None}
+    except Exception as exc:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"SMS webhook error: {exc}")
+        # Still return 200 to prevent retries on expected errors
+        return {"status": "error", "message": str(exc)}
 
 
 @router.get("/gateway-status", response_model=SmsGatewayStatus)

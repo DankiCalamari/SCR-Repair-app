@@ -40,9 +40,16 @@ export default function AdminEmailPage() {
     mutationFn: () => sendEmail({ to_address: toAddress, subject, body }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-email"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
       setToAddress("");
       setSubject("");
       setBody("");
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to send email: ${message || "Unknown error"}`);
     },
   });
 

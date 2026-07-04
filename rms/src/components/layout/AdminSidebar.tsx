@@ -4,7 +4,7 @@ import { useSettings } from "../../hooks/use-settings";
 import { usePushNotifications } from "../../hooks/use-push-notifications";
 import {
   LayoutDashboard, Wrench, Users, FileText, Receipt,
-  MessageSquare, Mail, Shield, UserPlus, Settings,
+  MessageSquare, Mail, Shield, Settings,
   LogOut, ChevronLeft, ChevronRight, Zap, Inbox, Globe, Bell, BellOff
 } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -20,7 +20,6 @@ const navItems: { to: string; label: string; icon: React.ElementType; end?: bool
   { to: "/admin/email", label: "Email", icon: Mail },
   { to: "/admin/communications", label: "Unassigned", icon: Inbox },
   { to: "/admin/warranty", label: "Warranty", icon: Shield },
-  { to: "/admin/leads", label: "Leads", icon: UserPlus },
   { to: "/admin/system-health", label: "System", icon: Zap },
 ];
 

@@ -46,6 +46,7 @@ export default function AdminCustomerDetailPage() {
     queryKey: ["admin-customer-sms", id],
     queryFn: () => listSmsMessages(0, 50, undefined, id),
     enabled: !!id && activeTab === "communication",
+    refetchInterval: 30000,
   });
 
   const { data: templates } = useQuery({
@@ -58,6 +59,7 @@ export default function AdminCustomerDetailPage() {
     queryKey: ["admin-customer-email", id],
     queryFn: () => listEmails(0, 50, undefined, id),
     enabled: !!id && activeTab === "communication",
+    refetchInterval: 30000,
   });
 
   const updateMutation = useMutation({
@@ -78,6 +80,7 @@ export default function AdminCustomerDetailPage() {
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-customer-sms", id] });
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
       setSmsBody("");
     },
   });
@@ -90,6 +93,7 @@ export default function AdminCustomerDetailPage() {
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-customer-sms", id] });
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
       setSelectedTemplateId("");
     },
   });

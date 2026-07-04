@@ -16,10 +16,10 @@ import type { Repair, EmailTemplate, SmsTemplate } from "../../types";
 import type { UnassignedCommunication, Conversation, ConversationMessage } from "../../api/communications";
 import {
   Mail, MessageSquare, Link2, ChevronLeft, ChevronRight, Inbox,
-  X, Send, FileText, UserPlus, Phone, CheckCircle2, ArrowLeft,
+  X, Send, UserPlus, Phone, CheckCircle2, ArrowLeft,
 } from "lucide-react";
 
-type Tab = "inbox" | "conversations" | "leads";
+type Tab = "inbox" | "conversations";
 
 export default function AdminCommunicationsPage() {
   const queryClient = useQueryClient();
@@ -34,17 +34,18 @@ export default function AdminCommunicationsPage() {
   const [replyTo, setReplyTo] = useState("");
   const [replySubject, setReplySubject] = useState("");
   const [sendingReply, setSendingReply] = useState(false);
-  const [expandedLead, setExpandedLead] = useState<string | null>(null);
   const pageSize = 20;
 
   const { data, isLoading, refetch: refetchInbox } = useQuery({
     queryKey: ["admin-communications-inbox", page],
     queryFn: () => listUnassignedCommunications(page * pageSize, pageSize),
+    refetchInterval: 30000,
   });
 
   const { data: conversationsData, isLoading: isLoadingConversations } = useQuery({
     queryKey: ["admin-communications-conversations", page],
     queryFn: () => listAllConversations(page * pageSize, pageSize),
+    refetchInterval: 30000,
   });
 
   const { data: repairsData } = useQuery({
@@ -87,7 +88,7 @@ export default function AdminCommunicationsPage() {
     mutationFn: (leadId: string) => convertLead(leadId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-leads"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-repairs"] });
     },
   });
 
@@ -95,7 +96,6 @@ export default function AdminCommunicationsPage() {
     mutationFn: ({ leadId, status }: { leadId: string; status: string }) => updateLeadStatus(leadId, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-leads"] });
     },
   });
 
@@ -112,6 +112,13 @@ export default function AdminCommunicationsPage() {
       setReplySubject("");
       setActiveConversation(null);
       queryClient.invalidateQueries({ queryKey: ["admin-communications-conversations"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to send reply: ${message || "Unknown error"}`);
     },
   });
 
@@ -151,20 +158,6 @@ export default function AdminCommunicationsPage() {
           )}
         >
           <MessageSquare className="h-4 w-4" /> Conversations
-        </button>
-        <button
-          onClick={() => { setTab("leads"); setActiveConversation(null); }}
-          className={cn(
-            "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "leads" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
-          )}
-        >
-          <UserPlus className="h-4 w-4" /> Contact Forms
-          {data && data.data.filter((d: UnassignedCommunication) => d.type === "lead").length > 0 && (
-            <span className="ml-1 rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
-              {data.data.filter((d: UnassignedCommunication) => d.type === "lead").length}
-            </span>
-          )}
         </button>
       </div>
 
@@ -265,7 +258,7 @@ export default function AdminCommunicationsPage() {
                           </button>
                         </div>
                       ) : (
-                        <div className="mt-2 flex items-center gap-2">
+                        <div className="mt-2 flex items-center gap-2 flex-wrap">
                           {item.type === "lead" ? (
                             <>
                               <button
@@ -283,6 +276,14 @@ export default function AdminCommunicationsPage() {
                               >
                                 <CheckCircle2 className="h-3 w-3" />
                                 Mark Contacted
+                              </button>
+                              <button
+                                onClick={() => updateLeadMutation.mutate({ leadId: item.id, status: "closed" })}
+                                disabled={updateLeadMutation.isPending}
+                                className="flex items-center gap-1.5 rounded-lg border border-red-600/30 bg-red-600/10 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-600/20 transition"
+                              >
+                                <X className="h-3 w-3" />
+                                Close
                               </button>
                             </>
                           ) : (
@@ -559,101 +560,6 @@ export default function AdminCommunicationsPage() {
                   ))}
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* LEADS TAB */}
-      {tab === "leads" && (
-        <div className="rounded-lg border border-warm-800 bg-warm-900">
-          <div className="border-b border-warm-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-warm-50">Contact Form Submissions</h2>
-            <p className="mt-1 text-sm text-warm-400">Website contact form enquiries that need follow-up</p>
-          </div>
-
-          <div className="divide-y divide-warm-800">
-            {isLoading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="animate-pulse px-5 py-4">
-                  <div className="h-4 w-32 rounded bg-warm-800" />
-                  <div className="mt-2 h-3 w-48 rounded bg-warm-800" />
-                </div>
-              ))
-            ) : !(data?.data?.filter((d: UnassignedCommunication) => d.type === "lead").length ?? 0) ? (
-              <div className="px-5 py-24 text-center">
-                <FileText className="mx-auto h-12 w-12 text-warm-600" />
-                <p className="mt-4 text-warm-400">No contact form submissions</p>
-                <p className="mt-1 text-xs text-warm-500">Submissions from the website will appear here</p>
-              </div>
-            ) : (
-              data?.data?.filter((d: UnassignedCommunication) => d.type === "lead")?.map((lead: UnassignedCommunication) => (
-                <div key={lead.id} className="px-5 py-4">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-0.5 rounded-full p-2 bg-green-500/10 text-green-400">
-                      <UserPlus className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-warm-50">{lead.from}</span>
-                        <span className="text-[10px] text-warm-500 uppercase tracking-wider">
-                          {formatDateTime(lead.created_at)}
-                        </span>
-                      </div>
-                      <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-warm-400">
-                        <span className="flex items-center gap-1"><Phone className="h-3 w-3" /> {lead.phone}</span>
-                        {lead.email && <span className="flex items-center gap-1"><Mail className="h-3 w-3" /> {lead.email}</span>}
-                        {lead.device_type && <span>{lead.device_type} {lead.device_model}</span>}
-                        <span className="rounded bg-warm-700 px-1.5 py-0.5 text-[10px] uppercase">
-                          Prefers: {lead.preferred_contact_method}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-sm text-warm-300">{lead.subject?.replace("Enquiry: ", "")}</p>
-
-                      {expandedLead === lead.id ? (
-                        <div className="mt-3 space-y-3">
-                          <div className="rounded-lg bg-warm-800 p-3">
-                            <p className="text-xs text-warm-500 mb-1">Issue Description</p>
-                            <p className="text-sm text-warm-200 whitespace-pre-wrap">{lead.body}</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => convertLeadMutation.mutate(lead.id)}
-                              disabled={convertLeadMutation.isPending}
-                              className="flex items-center gap-1.5 rounded-lg bg-green-600/20 border border-green-600/30 px-4 py-2 text-sm font-medium text-green-400 hover:bg-green-600/30 transition"
-                            >
-                              <UserPlus className="h-3.5 w-3.5" />
-                              Convert to Repair Ticket
-                            </button>
-                            <button
-                              onClick={() => updateLeadMutation.mutate({ leadId: lead.id, status: "contacted" })}
-                              disabled={updateLeadMutation.isPending}
-                              className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-warm-300 hover:border-copper-500 hover:text-copper-500 transition"
-                            >
-                              <CheckCircle2 className="h-3.5 w-3.5" />
-                              Mark Contacted
-                            </button>
-                            <button
-                              onClick={() => updateLeadMutation.mutate({ leadId: lead.id, status: "closed" })}
-                              disabled={updateLeadMutation.isPending}
-                              className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-warm-400 hover:border-red-500/50 hover:text-red-400 transition"
-                            >
-                              Close
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setExpandedLead(lead.id)}
-                          className="mt-2 flex items-center gap-1.5 text-xs font-medium text-copper-600 hover:text-warm-300"
-                        >
-                          View details &rarr;
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
             )}
           </div>
         </div>
