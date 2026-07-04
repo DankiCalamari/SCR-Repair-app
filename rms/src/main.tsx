@@ -41,12 +41,10 @@ class ErrorBoundary extends React.Component {
 function RouterInitializer() {
   const [checking, setChecking] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
-  const [hasToken, setHasToken] = useState(false);
   const setUser = useAuthStore((s) => s.setUser);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    setHasToken(!!token);
 
     // Initialize auth if token exists
     if (token) {
@@ -103,12 +101,7 @@ function RouterInitializer() {
     );
   }
 
-  // When setup is needed and no token, redirect to setup
-  if (needsSetup && !hasToken) {
-    return <Navigate to="/setup" replace />;
-  }
-
-  // Otherwise render the app normally (which has its own routing)
+  // Otherwise render the app normally
   return <App />;
 }
 
