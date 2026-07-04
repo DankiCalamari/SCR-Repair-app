@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCustomer, updateCustomer, getCustomerDevices, getCustomerRepairs } from "../../api/customers";
+import { createDevice } from "../../api/devices";
 import { listSmsMessages, sendSms, getSmsTemplates, sendSmsTemplate } from "../../api/sms";
 import { listEmails } from "../../api/email";
 import { getStatusLabel, getStatusColor, formatDate, formatDateTime, formatPhone, cn } from "../../lib/utils";
 import type { CustomerWithRepairs, Device, Repair } from "../../types";
 import {
-  ArrowLeft, User, Phone, Mail, MapPin, Smartphone, Wrench, Edit3, MessageSquare, Send, ChevronDown, FileText
+  ArrowLeft, User, Phone, Mail, MapPin, Smartphone, Wrench, Edit3, MessageSquare, Send, ChevronDown, FileText, Plus
 } from "lucide-react";
 
 export default function AdminCustomerDetailPage() {
@@ -20,6 +21,16 @@ export default function AdminCustomerDetailPage() {
   const [editEmail, setEditEmail] = useState("");
   const [editAddress, setEditAddress] = useState("");
   const [editNotes, setEditNotes] = useState("");
+  const [showAddDevice, setShowAddDevice] = useState(false);
+  const [newDeviceType, setNewDeviceType] = useState("");
+  const [newDeviceBrand, setNewDeviceBrand] = useState("");
+  const [newDeviceModel, setNewDeviceModel] = useState("");
+  const [newDeviceImei, setNewDeviceImei] = useState("");
+  const [newDeviceSerial, setNewDeviceSerial] = useState("");
+  const [newDeviceColour, setNewDeviceColour] = useState("");
+  const [newDevicePasscode, setNewDevicePasscode] = useState("");
+  const [newDeviceAccessories, setNewDeviceAccessories] = useState("");
+  const [newDeviceDamage, setNewDeviceDamage] = useState("");
   const [smsBody, setSmsBody] = useState("");
   const [simNumber, setSimNumber] = useState<number>(1);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
@@ -95,6 +106,41 @@ export default function AdminCustomerDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["admin-customer-sms", id] });
       queryClient.invalidateQueries({ queryKey: ["admin-communications-inbox"] });
       setSelectedTemplateId("");
+    },
+  });
+
+  const addDeviceMutation = useMutation({
+    mutationFn: () => createDevice({
+      customer_id: id!,
+      device_type: newDeviceType,
+      brand: newDeviceBrand,
+      model: newDeviceModel,
+      imei: newDeviceImei || null,
+      serial_number: newDeviceSerial || null,
+      colour: newDeviceColour || null,
+      passcode: newDevicePasscode || null,
+      accessories: newDeviceAccessories || null,
+      existing_damage: newDeviceDamage || null,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-customer-devices", id] });
+      queryClient.invalidateQueries({ queryKey: ["admin-customer", id] });
+      setShowAddDevice(false);
+      setNewDeviceType("");
+      setNewDeviceBrand("");
+      setNewDeviceModel("");
+      setNewDeviceImei("");
+      setNewDeviceSerial("");
+      setNewDeviceColour("");
+      setNewDevicePasscode("");
+      setNewDeviceAccessories("");
+      setNewDeviceDamage("");
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to add device: ${message || "Unknown error"}`);
     },
   });
 
@@ -349,7 +395,139 @@ export default function AdminCustomerDetailPage() {
       {/* Devices Tab */}
       {activeTab === "devices" && (
         <div className="space-y-4">
-          {deviceList.length === 0 ? (
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-warm-50">Devices</h2>
+            <button
+              onClick={() => setShowAddDevice(true)}
+              className="flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-medium text-warm-950 transition-all duration-200 hover:bg-copper-600"
+            >
+              <Plus className="h-4 w-4" /> Add Device
+            </button>
+          </div>
+
+          {showAddDevice && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+              <div className="w-full max-w-md rounded-lg border border-warm-700 bg-warm-900 shadow-xl">
+                <div className="border-b border-warm-700 px-6 py-4">
+                  <h3 className="font-heading text-lg font-semibold text-warm-50">Add New Device</h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-warm-300 mb-1">Device Type *</label>
+                    <select
+                      value={newDeviceType}
+                      onChange={(e) => setNewDeviceType(e.target.value)}
+                      className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                    >
+                      <option value="">Select type</option>
+                      <option value="iPhone">iPhone</option>
+                      <option value="Android">Android</option>
+                      <option value="Tablet">Tablet</option>
+                      <option value="Computer">Computer</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-warm-300 mb-1">Brand *</label>
+                    <input
+                      type="text"
+                      value={newDeviceBrand}
+                      onChange={(e) => setNewDeviceBrand(e.target.value)}
+                      className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      placeholder="e.g., Apple"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-warm-300 mb-1">Model *</label>
+                    <input
+                      type="text"
+                      value={newDeviceModel}
+                      onChange={(e) => setNewDeviceModel(e.target.value)}
+                      className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      placeholder="e.g., iPhone 14 Pro"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-warm-300 mb-1">IMEI</label>
+                      <input
+                        type="text"
+                        value={newDeviceImei}
+                        onChange={(e) => setNewDeviceImei(e.target.value)}
+                        className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-warm-300 mb-1">Serial Number</label>
+                      <input
+                        type="text"
+                        value={newDeviceSerial}
+                        onChange={(e) => setNewDeviceSerial(e.target.value)}
+                        className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-warm-300 mb-1">Colour</label>
+                      <input
+                        type="text"
+                        value={newDeviceColour}
+                        onChange={(e) => setNewDeviceColour(e.target.value)}
+                        className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-warm-300 mb-1">Passcode</label>
+                      <input
+                        type="text"
+                        value={newDevicePasscode}
+                        onChange={(e) => setNewDevicePasscode(e.target.value)}
+                        className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-warm-300 mb-1">Accessories</label>
+                    <input
+                      type="text"
+                      value={newDeviceAccessories}
+                      onChange={(e) => setNewDeviceAccessories(e.target.value)}
+                      className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      placeholder="Charger, case, etc."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-warm-300 mb-1">Existing Damage</label>
+                    <input
+                      type="text"
+                      value={newDeviceDamage}
+                      onChange={(e) => setNewDeviceDamage(e.target.value)}
+                      className="w-full rounded-lg border border-warm-600 bg-warm-800 px-3 py-2 text-warm-100"
+                      placeholder="Any existing damage..."
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 border-t border-warm-700 px-6 py-4">
+                  <button
+                    onClick={() => setShowAddDevice(false)}
+                    className="rounded-lg border border-warm-600 px-4 py-2 text-sm text-warm-300 hover:bg-warm-800"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => addDeviceMutation.mutate()}
+                    disabled={addDeviceMutation.isPending || !newDeviceType || !newDeviceBrand || !newDeviceModel}
+                    className="rounded-lg bg-copper-500 px-4 py-2 text-sm font-medium text-warm-950 disabled:opacity-50"
+                  >
+                    {addDeviceMutation.isPending ? "Adding..." : "Add Device"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {deviceList.length === 0 && !showAddDevice ? (
             <div className="rounded-lg border border-warm-800 bg-warm-900 p-8 text-center">
               <Smartphone className="mx-auto h-12 w-12 text-warm-600" />
               <h3 className="mt-4 text-lg font-semibold text-warm-50">No devices</h3>

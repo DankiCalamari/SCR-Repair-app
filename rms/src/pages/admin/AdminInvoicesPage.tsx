@@ -26,7 +26,16 @@ export default function AdminInvoicesPage() {
   const paidMutation = useMutation({
     mutationFn: ({ id, amount }: { id: string; amount: number }) =>
       markInvoicePaid(id, { paid_amount: amount }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-invoices"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-invoices"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-repairs"] });
+    },
+    onError: (error: unknown) => {
+      const message = error && typeof error === "object" && "response" in error
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail
+        : String(error);
+      alert(`Failed to mark invoice as paid: ${message || "Unknown error"}`);
+    },
   });
 
   const sendMutation = useMutation({
