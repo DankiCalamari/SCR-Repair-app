@@ -1,137 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { useAuthStore } from "./store/auth-store";
-import * as authApi from "./api/auth";
 import "./index.css";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-});
-
-// Simple error boundary for debugging
-class ErrorBoundary extends React.Component {
-  state = { hasError: false, error: null as Error | null };
-  
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-  
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{ padding: "20px", backgroundColor: "#fee", minHeight: "100vh" }}>
-          <h1 style={{ color: "red" }}>Something went wrong</h1>
-          <pre style={{ color: "red" }}>{this.state.error?.message}</pre>
-        </div>
-      );
+// Unregister any existing service workers to prevent stale cache issues
+if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
     }
-    return this.props.children;
-  }
+  });
 }
 
-function RouterInitializer() {
-  const [checking, setChecking] = useState(true);
-  const [needsSetup, setNeedsSetup] = useState(false);
-  const [hasToken, setHasToken] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const setUser = useAuthStore((s) => s.setUser);
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    setHasToken(!!token);
-
-    // Initialize auth if token exists
-    if (token) {
-      authApi.getMe()
-        .then((user) => {
-          setUser(user);
-        })
-        .catch(() => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          useAuthStore.setState({
-            user: null,
-            accessToken: null,
-            refreshToken: null,
-            isAuthenticated: false,
-            isAdmin: false,
-            isStaff: false,
-            isCustomer: false,
-          });
-        });
-    }
-
-    // Check setup status
-    authApi.checkSetupStatus()
-      .then((status) => {
-        setNeedsSetup(status.needs_setup);
-      })
-      .catch((e: unknown) => {
-        console.error("Setup status check failed:", e);
-        setNeedsSetup(false);
-      })
-      .finally(() => setChecking(false));
-  }, [setUser]);
-
-  if (checking) {
-    return (
-      <div style={{ 
-        display: "flex", 
-        minHeight: "100vh", 
-        alignItems: "center", 
-        justifyContent: "center",
-        backgroundColor: "#fefaf6"
-      }}>
-        <div style={{ 
-          width: "2rem", 
-          height: "2rem", 
-          border: "4px solid #e06645",
-          borderTopColor: "transparent",
-          borderRadius: "50%",
-          animation: "spin 1s linear infinite"
-        }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div style={{ padding: "20px", color: "red" }}>{error}</div>;
-  }
-
-  // When setup is needed and no token, redirect to setup
-  if (needsSetup && !hasToken) {
-    return <Navigate to="/setup" replace />;
-  }
-
-  // Otherwise render the app normally (which has its own routing)
-  return <App />;
-}
+console.log("main.tsx loaded");
 
 try {
-  ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <ErrorBoundary>
+  const rootElement = document.getElementById("root");
+  console.log("Root element:", rootElement);
+  
+  if (!rootElement) {
+    document.body.innerHTML = "<div style='padding:20px;color:red;'>ERROR: No root element found!</div>";
+  } else {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
         <BrowserRouter basename="/app">
-          <QueryClientProvider client={queryClient}>
-            <RouterInitializer />
-          </QueryClientProvider>
+          <App />
         </BrowserRouter>
-      </ErrorBoundary>
-    </React.StrictMode>
-  );
+      </React.StrictMode>
+    );
+    console.log("App rendered successfully");
+  }
 } catch (e) {
-  console.error("Failed to render app:", e);
-  document.getElementById("root")!.innerHTML = 
-    "<div style='padding:20px;background:#fee;color:red;min-height:100vh'>" +
-    "<h1>Render Error</h1><pre>" + (e as Error).message + "</pre></div>";
+  console.error("Render error:", e);
+  document.body.innerHTML = 
+    "<div style='padding:20px;background:#fee;color:red;min-height:100vh;'><h1>Render Error</h1><pre>" + (e as Error).message + "</pre></div>";
 }
