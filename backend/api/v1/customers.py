@@ -13,6 +13,7 @@ from schemas.customer import (
     CustomerUpdate,
     CustomerWithRepairs,
 )
+from schemas.device import DeviceResponse
 from schemas.repair import RepairResponse
 from services.customer_service import (
     create_customer as create_customer_service,
@@ -51,7 +52,7 @@ async def create_customer(
     current_user: User = Depends(require_staff),
 ):
     customer = await create_customer_service(data, db)
-    return customer
+    return CustomerResponse.model_validate(customer)
 
 
 @router.get("/{customer_id}", response_model=CustomerWithRepairs)
@@ -76,10 +77,19 @@ async def get_customer(
 
     repairs = await get_customer_repairs_service(db, customer_id)
 
-    response_data = CustomerWithRepairs.model_validate(customer)
-    response_data.devices = [Device.model_validate(d) for d in devices]
-    response_data.repairs = [RepairResponse.model_validate(r) for r in repairs]
-    return response_data
+    return CustomerWithRepairs(
+        id=customer.id,
+        user_id=customer.user_id,
+        name=customer.name,
+        phone=customer.phone,
+        email=customer.email,
+        address=customer.address,
+        notes=customer.notes,
+        created_at=customer.created_at,
+        updated_at=customer.updated_at,
+        devices=[DeviceResponse.model_validate(d) for d in devices],
+        repairs=[RepairResponse.model_validate(r) for r in repairs],
+    )
 
 
 @router.put("/{customer_id}", response_model=CustomerResponse)
@@ -90,7 +100,7 @@ async def update_customer(
     current_user: User = Depends(require_staff),
 ):
     customer = await update_customer_service(customer_id, data, db)
-    return customer
+    return CustomerResponse.model_validate(customer)
 
 
 @router.delete("/{customer_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -118,7 +128,7 @@ async def get_customer_repairs(
             )
 
     repairs = await get_customer_repairs_service(db, customer_id)
-    return repairs
+    return [RepairResponse.model_validate(r) for r in repairs]
 
 
 @router.get("/{customer_id}/timeline")
@@ -159,4 +169,4 @@ async def get_customer_devices(
         select(Device).where(Device.customer_id == customer.id)
     )
     devices = list(result.scalars().all())
-    return {"data": devices}
+    return [DeviceResponse.model_validate(d) for d in devices]

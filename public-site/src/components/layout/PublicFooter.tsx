@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Wrench, MapPin, Phone } from "lucide-react";
+import { Wrench, MapPin, Phone, LogIn } from "lucide-react";
 import { useSettingsContext } from "../../context/settings-context";
 
 const serviceLinks = [
@@ -103,6 +103,14 @@ export default function PublicFooter() {
             </Link>
             <span className="text-copper-300">|</span>
             <span className="text-warm-500">ABN: {settings.abn || "12 345 678 901"}</span>
+            <span className="text-copper-300">|</span>
+            <Link 
+              to="/app/login" 
+              className="flex items-center gap-1 text-warm-500 hover:text-copper-600 transition-colors underline-offset-2 hover:underline"
+            >
+              <LogIn className="h-3 w-3" />
+              Staff Login
+            </Link>
           </div>
         </div>
       </div>

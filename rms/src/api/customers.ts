@@ -53,5 +53,5 @@ export async function getCustomerTimeline(id: string): Promise<PaginatedResponse
 
 export async function getCustomerDevices(id: string): Promise<Device[]> {
   const { data } = await apiClient.get(`/customers/${id}/devices`);
-  return data.data || data;
+  return data;
 }
