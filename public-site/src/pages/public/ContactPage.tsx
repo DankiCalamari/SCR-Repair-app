@@ -3,6 +3,7 @@ import { Wrench, Clock, MapPin, Phone, Mail, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DEVICE_TYPES, EMAIL_REGEX, AUSTRALIAN_PHONE_REGEX } from "../../lib/constants";
 import { cn } from "../../lib/utils";
+import { useSettingsContext } from "../../context/settings-context";
 
 interface FormData {
   name: string;
@@ -35,6 +36,9 @@ export default function ContactPage() {
   useEffect(() => {
     document.title = "Contact Us | Sunset Country Repairs";
   }, []);
+
+  const { settings } = useSettingsContext();
+  const businessPhone = settings.business_phone || "03 5023 0000";
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -338,7 +342,7 @@ export default function ContactPage() {
                 <p className="text-sm text-warm-600">
                   Chat directly about your repair. We're happy to give you a rough estimate over the phone.
                 </p>
-                <p className="mt-2 text-copper-700 font-medium">03 5023 0000</p>
+                <p className="mt-2 text-copper-700 font-medium">{businessPhone}</p>
               </div>
 
               <div className="rounded-lg border-2 border-copper-200 bg-white p-6">

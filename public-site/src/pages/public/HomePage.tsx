@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Wrench, Clock, MapPin, Shield, Phone, Users, Award } from "lucide-react";
+import { useSettingsContext } from "../../context/settings-context";
 
 const services = [
   {
@@ -58,6 +59,9 @@ export default function HomePage() {
     document.title = "Sunset Country Repairs | Electronics Repair Mildura";
   }, []);
 
+  const { settings } = useSettingsContext();
+  const businessPhone = settings.business_phone || "03 5023 0000";
+
   return (
     <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero Section - Handwritten style */}
@@ -84,7 +88,7 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 rounded-lg bg-copper-600 px-6 py-3 text-sm font-semibold text-white hover:bg-copper-700 transition-all hover:shadow-lg"
             >
               <Phone className="h-4 w-4" />
-              Call Now - 03 5023 0000
+              Call Now - {businessPhone}
             </Link>
             <Link
               to="/services"

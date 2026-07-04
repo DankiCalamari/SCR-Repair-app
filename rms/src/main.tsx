@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
+import SetupPage from "./pages/auth/SetupPage";
 import { useAuthStore } from "./store/auth-store";
 import * as authApi from "./api/auth";
 import "./index.css";
@@ -101,7 +102,17 @@ function RouterInitializer() {
     );
   }
 
-  // Otherwise render the app normally
+  // If setup is needed, render a minimal router just for setup page
+  if (needsSetup) {
+    return (
+      <Routes>
+        <Route path="/setup" element={<SetupPage />} />
+        <Route path="*" element={<Navigate to="/setup" replace />} />
+      </Routes>
+    );
+  }
+
+  // Otherwise render the full app
   return <App />;
 }
 
