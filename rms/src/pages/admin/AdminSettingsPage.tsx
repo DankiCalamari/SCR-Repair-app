@@ -300,8 +300,8 @@ export default function AdminSettingsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-surface-100">Settings</h1>
-        <p className="mt-1 text-surface-400">Manage your application settings</p>
+        <h1 className="font-heading text-3xl font-bold text-warm-50">Settings</h1>
+        <p className="mt-1 text-warm-400">Manage your application settings</p>
       </div>
 
       {saved && (
@@ -318,7 +318,7 @@ export default function AdminSettingsPage() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
@@ -330,8 +330,8 @@ export default function AdminSettingsPage() {
                   onClick={() => setActiveSection(section.id)}
                   className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-medium transition ${
                     activeSection === section.id
-                      ? "bg-accent-500/10 text-accent-500"
-                      : "text-surface-400 hover:bg-surface-900 hover:text-surface-100"
+                      ? "bg-copper-500/10 text-copper-500"
+                      : "text-warm-400 hover:bg-warm-900 hover:text-warm-50"
                   }`}
                 >
                   <section.icon className="h-4 w-4" />
@@ -342,32 +342,32 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="lg:col-span-3">
-            <div className="rounded-lg border border-surface-800 bg-surface-900 p-6">
+            <div className="rounded-lg border border-warm-800 bg-warm-900 p-6">
               {activeSection === "business" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">Business Information</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">Business Information</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Business Name</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Business Name</label>
                       <input type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)}
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Email</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Email</label>
                         <input type="email" value={businessEmail} onChange={(e) => setBusinessEmail(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Phone</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Phone</label>
                         <input type="tel" value={businessPhone} onChange={(e) => setBusinessPhone(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">ABN</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">ABN</label>
                       <input type="text" value={abn} onChange={(e) => setAbn(e.target.value)} placeholder="e.g. 12 345 678 901"
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                     </div>
                   </div>
                 </div>
@@ -375,41 +375,41 @@ export default function AdminSettingsPage() {
 
               {activeSection === "branding" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">Branding</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">Branding</h2>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Primary Color</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Primary Color</label>
                         <div className="flex items-center gap-3">
                           <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)}
-                            className="h-10 w-10 cursor-pointer rounded border border-surface-700 bg-transparent" />
+                            className="h-10 w-10 cursor-pointer rounded border border-warm-700 bg-transparent" />
                           <input type="text" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)}
-                            className="flex-1 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                            className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                         </div>
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Accent Color</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Accent Color</label>
                         <div className="flex items-center gap-3">
                           <input type="color" value={accentColor} onChange={(e) => setAccentColor(e.target.value)}
-                            className="h-10 w-10 cursor-pointer rounded border border-surface-700 bg-transparent" />
+                            className="h-10 w-10 cursor-pointer rounded border border-warm-700 bg-transparent" />
                           <input type="text" value={accentColor} onChange={(e) => setAccentColor(e.target.value)}
-                            className="flex-1 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                            className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                         </div>
                       </div>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Logo</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Logo</label>
                       <div className="flex items-center gap-4">
                         {(logoPreview || logoUrl) && (
                           <img
                             src={logoPreview || logoUrl}
                             alt="Logo preview"
-                            className="h-12 w-12 rounded-lg border border-surface-700 bg-surface-800 object-contain p-1"
+                            className="h-12 w-12 rounded-lg border border-warm-700 bg-warm-800 object-contain p-1"
                           />
                         )}
-                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-surface-300 transition hover:border-accent-500 hover:text-surface-100">
+                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-sm text-warm-300 transition hover:border-copper-500 hover:text-warm-50">
                           {logoUploading ? (
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
                           ) : (
                             <Image className="h-4 w-4" />
                           )}
@@ -422,21 +422,21 @@ export default function AdminSettingsPage() {
                           />
                         </label>
                       </div>
-                      <p className="mt-1 text-xs text-surface-500">PNG, JPG, SVG or WebP. Max 5MB.</p>
+                      <p className="mt-1 text-xs text-warm-500">PNG, JPG, SVG or WebP. Max 5MB.</p>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Admin Logo</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Admin Logo</label>
                       <div className="flex items-center gap-4">
                         {(adminLogoPreview || adminLogoUrl) && (
                           <img
                             src={adminLogoPreview || adminLogoUrl}
                             alt="Admin logo preview"
-                            className="h-12 w-12 rounded-lg border border-surface-700 bg-surface-800 object-contain p-1"
+                            className="h-12 w-12 rounded-lg border border-warm-700 bg-warm-800 object-contain p-1"
                           />
                         )}
-                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-surface-300 transition hover:border-accent-500 hover:text-surface-100">
+                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-sm text-warm-300 transition hover:border-copper-500 hover:text-warm-50">
                           {adminLogoUploading ? (
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
                           ) : (
                             <Image className="h-4 w-4" />
                           )}
@@ -449,21 +449,21 @@ export default function AdminSettingsPage() {
                           />
                         </label>
                       </div>
-                      <p className="mt-1 text-xs text-surface-500">Shown in the admin sidebar. PNG, JPG, SVG or WebP. Max 5MB.</p>
+                      <p className="mt-1 text-xs text-warm-500">Shown in the admin sidebar. PNG, JPG, SVG or WebP. Max 5MB.</p>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Favicon</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Favicon</label>
                       <div className="flex items-center gap-4">
                         {(faviconPreview || faviconUrl) && (
                           <img
                             src={faviconPreview || faviconUrl}
                             alt="Favicon preview"
-                            className="h-8 w-8 rounded border border-surface-700 bg-surface-800 object-contain p-0.5"
+                            className="h-8 w-8 rounded border border-warm-700 bg-warm-800 object-contain p-0.5"
                           />
                         )}
-                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-surface-300 transition hover:border-accent-500 hover:text-surface-100">
+                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-sm text-warm-300 transition hover:border-copper-500 hover:text-warm-50">
                           {faviconUploading ? (
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
                           ) : (
                             <Image className="h-4 w-4" />
                           )}
@@ -476,21 +476,21 @@ export default function AdminSettingsPage() {
                           />
                         </label>
                       </div>
-                      <p className="mt-1 text-xs text-surface-500">PNG, ICO, SVG or JPG. Max 2MB.</p>
+                      <p className="mt-1 text-xs text-warm-500">PNG, ICO, SVG or JPG. Max 2MB.</p>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Email Signature</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Email Signature</label>
                       <div className="flex items-start gap-4">
-                        <label className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2 text-sm text-surface-300 hover:bg-surface-700 transition-colors">
+                        <label className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2 text-sm text-warm-300 hover:bg-warm-700 transition-colors">
                           <Image className="h-4 w-4" />
                           {emailSigUploading ? "Uploading..." : "Upload Signature Image"}
                           <input type="file" accept=".png,.jpg,.jpeg,.svg,.webp" onChange={handleEmailSigUpload} className="hidden" />
                         </label>
                         {emailSigPreview && (
-                          <img src={emailSigPreview} alt="Email signature preview" className="h-16 w-auto rounded border border-surface-700 object-contain" />
+                          <img src={emailSigPreview} alt="Email signature preview" className="h-16 w-auto rounded border border-warm-700 object-contain" />
                         )}
                       </div>
-                      <p className="mt-1 text-xs text-surface-500">PNG, JPG, SVG or WebP. Max 5MB. This image will be appended to all outgoing emails.</p>
+                      <p className="mt-1 text-xs text-warm-500">PNG, JPG, SVG or WebP. Max 5MB. This image will be appended to all outgoing emails.</p>
                       {emailSignature && (
                         <button type="button" onClick={() => { setEmailSignature(""); setEmailSigPreview(null); }}
                           className="mt-1 text-xs text-red-400 hover:text-red-300">Remove signature</button>
@@ -502,54 +502,54 @@ export default function AdminSettingsPage() {
 
               {activeSection === "email" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">SMTP (Outgoing Email)</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">SMTP (Outgoing Email)</h2>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Host</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Host</label>
                         <input type="text" value={smtpHost} onChange={(e) => setSmtpHost(e.target.value)} placeholder="smtp.gmail.com"
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Port</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Port</label>
                         <input type="text" value={smtpPort} onChange={(e) => setSmtpPort(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Username</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Username</label>
                         <input type="text" value={smtpUser} onChange={(e) => setSmtpUser(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Password</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Password</label>
                         <input type="password" value={smtpPassword} onChange={(e) => setSmtpPassword(e.target.value)} placeholder="••••••••"
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">From Name</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">From Name</label>
                         <input type="text" value={smtpFromName} onChange={(e) => setSmtpFromName(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">From Email</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">From Email</label>
                         <input type="email" value={smtpFromEmail} onChange={(e) => setSmtpFromEmail(e.target.value)} placeholder="repairs@example.com"
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between rounded-lg border border-surface-700 bg-surface-800 p-4">
+                    <div className="flex items-center justify-between rounded-lg border border-warm-700 bg-warm-800 p-4">
                       <div>
-                        <p className="text-sm font-medium text-surface-100">Use TLS</p>
-                        <p className="text-xs text-surface-400">Enable TLS encryption for SMTP connection</p>
+                        <p className="text-sm font-medium text-warm-50">Use TLS</p>
+                        <p className="text-xs text-warm-400">Enable TLS encryption for SMTP connection</p>
                       </div>
                       <button
                         onClick={() => setSmtpUseTls(!smtpUseTls)}
-                        className={`relative h-6 w-11 rounded-full transition ${smtpUseTls ? "bg-accent-500" : "bg-surface-700"}`}
+                        className={`relative h-6 w-11 rounded-full transition ${smtpUseTls ? "bg-copper-500" : "bg-warm-700"}`}
                       >
-                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${smtpUseTls ? "left-5.5" : "left-0.5"}`} />
+                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${smtpUseTls ? "left-[22px]" : "left-0.5"}`} />
                       </button>
                     </div>
                   </div>
@@ -558,30 +558,30 @@ export default function AdminSettingsPage() {
 
               {activeSection === "email-incoming" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">IMAP (Incoming Email)</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">IMAP (Incoming Email)</h2>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Host</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Host</label>
                         <input type="text" value={imapHost} onChange={(e) => setImapHost(e.target.value)} placeholder="imap.gmail.com"
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Port</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Port</label>
                         <input type="text" value={imapPort} onChange={(e) => setImapPort(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Username</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Username</label>
                         <input type="text" value={imapUser} onChange={(e) => setImapUser(e.target.value)}
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-surface-300">Password</label>
+                        <label className="mb-1.5 block text-sm font-medium text-warm-300">Password</label>
                         <input type="password" value={imapPassword} onChange={(e) => setImapPassword(e.target.value)} placeholder="••••••••"
-                          className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                          className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                       </div>
                     </div>
                   </div>
@@ -590,57 +590,57 @@ export default function AdminSettingsPage() {
 
               {activeSection === "sms" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">SMS Gateway Configuration</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">SMS Gateway Configuration</h2>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between rounded-lg border border-surface-700 bg-surface-800 p-4">
+                    <div className="flex items-center justify-between rounded-lg border border-warm-700 bg-warm-800 p-4">
                       <div>
-                        <p className="text-sm font-medium text-surface-100">SMS Service Active</p>
-                        <p className="text-xs text-surface-400">Enable or disable all outgoing SMS functionality</p>
+                        <p className="text-sm font-medium text-warm-50">SMS Service Active</p>
+                        <p className="text-xs text-warm-400">Enable or disable all outgoing SMS functionality</p>
                       </div>
                       <button
                         onClick={() => setSmsIsActive(!smsIsActive)}
-                        className={`relative h-6 w-11 rounded-full transition ${smsIsActive ? "bg-accent-500" : "bg-surface-700"}`}
+                        className={`relative h-6 w-11 rounded-full transition ${smsIsActive ? "bg-copper-500" : "bg-warm-700"}`}
                       >
-                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${smsIsActive ? "left-5.5" : "left-0.5"}`} />
+                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${smsIsActive ? "left-[22px]" : "left-0.5"}`} />
                       </button>
                     </div>
 
-                    <div className="rounded-lg border border-accent-500/20 bg-accent-500/5 p-5">
+                    <div className="rounded-lg border border-copper-500/20 bg-copper-500/5 p-5">
                       <div className="flex items-start gap-4">
-                        <div className="rounded-full bg-accent-500/10 p-2.5 text-accent-500">
+                        <div className="rounded-full bg-copper-500/10 p-2.5 text-copper-500">
                           <Smartphone className="h-6 w-6" />
                         </div>
                         <div>
-                          <p className="font-semibold text-surface-100">Dedicated SMS Gateway</p>
-                          <p className="mt-1 text-sm text-surface-400">
+                          <p className="font-semibold text-warm-50">Dedicated SMS Gateway</p>
+                          <p className="mt-1 text-sm text-warm-400">
                             The application is currently configured to use a dedicated Android device as your SMS gateway.
                           </p>
                           <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 text-xs sm:grid-cols-2">
-                            <div className="flex justify-between border-b border-surface-800 pb-1.5"><span className="text-surface-500">Provider</span><span className="text-surface-200">SMS Gate Cloud</span></div>
-                            <div className="flex justify-between border-b border-surface-800 pb-1.5"><span className="text-surface-500">Username</span><span className="text-surface-200">8ACQBH</span></div>
-                            <div className="flex justify-between border-b border-surface-800 pb-1.5"><span className="text-surface-500">Device ID</span><span className="font-mono text-surface-200">B8Xolb9...</span></div>
-                            <div className="flex justify-between border-b border-surface-800 pb-1.5"><span className="text-surface-500">Auth Mode</span><span className="text-surface-200">Basic Auth</span></div>
+                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Provider</span><span className="text-warm-200">SMS Gate Cloud</span></div>
+                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Username</span><span className="text-warm-200">8ACQBH</span></div>
+                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Device ID</span><span className="font-mono text-warm-200">B8Xolb9...</span></div>
+                            <div className="flex justify-between border-b border-warm-800 pb-1.5"><span className="text-warm-500">Auth Mode</span><span className="text-warm-200">Basic Auth</span></div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-surface-800">
-                      <h3 className="mb-3 text-sm font-semibold text-surface-100 uppercase tracking-wider">Incoming Webhooks</h3>
+                    <div className="pt-4 border-t border-warm-800">
+                      <h3 className="mb-3 text-sm font-semibold text-warm-50 uppercase tracking-wider">Incoming Webhooks</h3>
                       <div className="space-y-4">
                         <div>
-                          <label className="mb-1.5 block text-sm font-medium text-surface-300">Webhook URL</label>
+                          <label className="mb-1.5 block text-sm font-medium text-warm-300">Webhook URL</label>
                           <div className="flex gap-2">
                             <input type="text" readOnly value={smsSettings?.webhook_url || ""}
-                              className="flex-1 rounded-lg border border-surface-700 bg-surface-950 px-4 py-2.5 text-surface-400 text-sm focus:outline-none" />
+                              className="flex-1 rounded-lg border border-warm-700 bg-warm-950 px-4 py-2.5 text-warm-400 text-sm focus:outline-none" />
                             <button
                               onClick={copyWebhookUrl}
-                              className="flex items-center gap-2 rounded-lg border border-surface-700 bg-surface-800 px-4 py-2 text-surface-100 hover:bg-surface-700 transition"
+                              className="flex items-center gap-2 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2 text-warm-50 hover:bg-warm-700 transition"
                             >
                               {copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
                             </button>
                           </div>
-                          <p className="mt-1.5 text-xs text-surface-500">Copy this URL to your SMS Gate app settings to receive incoming messages.</p>
+                          <p className="mt-1.5 text-xs text-warm-500">Copy this URL to your SMS Gate app settings to receive incoming messages.</p>
                         </div>
                       </div>
                     </div>
@@ -650,23 +650,23 @@ export default function AdminSettingsPage() {
 
               {activeSection === "security" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">Security Settings</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">Security Settings</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Session Timeout (minutes)</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Session Timeout (minutes)</label>
                       <input type="number" value={sessionTimeout} onChange={(e) => setSessionTimeout(e.target.value)}
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 focus:border-accent-500 focus:outline-none" />
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none" />
                     </div>
-                    <div className="flex items-center justify-between rounded-lg border border-surface-700 bg-surface-800 p-4">
+                    <div className="flex items-center justify-between rounded-lg border border-warm-700 bg-warm-800 p-4">
                       <div>
-                        <p className="text-sm font-medium text-surface-100">Require Email Verification</p>
-                        <p className="text-xs text-surface-400">New users must verify their email before accessing the portal</p>
+                        <p className="text-sm font-medium text-warm-50">Require Email Verification</p>
+                        <p className="text-xs text-warm-400">New users must verify their email before accessing the portal</p>
                       </div>
                       <button
                         onClick={() => setRequireEmailVerify(!requireEmailVerify)}
-                        className={`relative h-6 w-11 rounded-full transition ${requireEmailVerify ? "bg-accent-500" : "bg-surface-700"}`}
+                        className={`relative h-6 w-11 rounded-full transition ${requireEmailVerify ? "bg-copper-500" : "bg-warm-700"}`}
                       >
-                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${requireEmailVerify ? "left-5.5" : "left-0.5"}`} />
+                        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${requireEmailVerify ? "left-[22px]" : "left-0.5"}`} />
                       </button>
                     </div>
                   </div>
@@ -675,33 +675,33 @@ export default function AdminSettingsPage() {
 
               {activeSection === "sso" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">SSO Configuration (Authentik)</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">SSO Configuration (Authentik)</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Authentik URL</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Authentik URL</label>
                       <input type="url" value={authentikUrl} onChange={(e) => setAuthentikUrl(e.target.value)}
                         placeholder="https://auth.example.com"
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
-                      <p className="mt-1 text-xs text-surface-500">Your Authentik server URL</p>
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
+                      <p className="mt-1 text-xs text-warm-500">Your Authentik server URL</p>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Client ID</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Client ID</label>
                       <input type="text" value={authentikClientId} onChange={(e) => setAuthentikClientId(e.target.value)}
                         placeholder="OAuth client ID from Authentik"
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Client Secret</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Client Secret</label>
                       <input type="password" value={authentikClientSecret} onChange={(e) => setAuthentikClientSecret(e.target.value)}
                         placeholder="OAuth client secret from Authentik"
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-surface-300">Redirect URI</label>
+                      <label className="mb-1.5 block text-sm font-medium text-warm-300">Redirect URI</label>
                       <input type="url" value={authentikRedirectUri} onChange={(e) => setAuthentikRedirectUri(e.target.value)}
                         placeholder="https://yourdomain.com/api/v1/auth/sso/callback"
-                        className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
-                      <p className="mt-1 text-xs text-surface-500">Must match the callback URL configured in Authentik</p>
+                        className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
+                      <p className="mt-1 text-xs text-warm-500">Must match the callback URL configured in Authentik</p>
                     </div>
                   </div>
                 </div>
@@ -709,7 +709,7 @@ export default function AdminSettingsPage() {
 
               {activeSection === "notifications" && (
                 <div>
-                  <h2 className="mb-6 font-heading text-xl font-semibold text-surface-100">Notification Preferences</h2>
+                  <h2 className="mb-6 font-heading text-xl font-semibold text-warm-50">Notification Preferences</h2>
                   <div className="space-y-3">
                     {[
                       { label: "New Lead", desc: "Get notified when a new lead is submitted", state: notifyNewLead, setter: setNotifyNewLead },
@@ -717,16 +717,16 @@ export default function AdminSettingsPage() {
                       { label: "Repair Complete", desc: "Get notified when a repair is completed", state: notifyRepairComplete, setter: setNotifyRepairComplete },
                       { label: "Warranty Claim", desc: "Get notified when a warranty claim is filed", state: notifyWarrantyClaim, setter: setNotifyWarrantyClaim },
                     ].map((item) => (
-                      <div key={item.label} className="flex items-center justify-between rounded-lg border border-surface-700 bg-surface-800 p-4">
+                      <div key={item.label} className="flex items-center justify-between rounded-lg border border-warm-700 bg-warm-800 p-4">
                         <div>
-                          <p className="text-sm font-medium text-surface-100">{item.label}</p>
-                          <p className="text-xs text-surface-400">{item.desc}</p>
+                          <p className="text-sm font-medium text-warm-50">{item.label}</p>
+                          <p className="text-xs text-warm-400">{item.desc}</p>
                         </div>
                         <button
                           onClick={() => item.setter(!item.state)}
-                          className={`relative h-6 w-11 rounded-full transition ${item.state ? "bg-accent-500" : "bg-surface-700"}`}
+                          className={`relative h-6 w-11 rounded-full transition ${item.state ? "bg-copper-500" : "bg-warm-700"}`}
                         >
-                          <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${item.state ? "left-5.5" : "left-0.5"}`} />
+                          <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${item.state ? "left-[22px]" : "left-0.5"}`} />
                         </button>
                       </div>
                     ))}
@@ -738,7 +738,7 @@ export default function AdminSettingsPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 font-semibold text-surface-950 hover:bg-accent-400 disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-warm-950 hover:bg-copper-600 disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Changes"}
                 </button>

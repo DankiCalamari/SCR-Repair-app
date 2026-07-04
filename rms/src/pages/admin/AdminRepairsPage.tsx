@@ -157,15 +157,10 @@ export default function AdminRepairsPage() {
                         <Link
                           to={`/admin/repairs/${repair.id}`}
                           className="flex h-8 w-8 items-center justify-center rounded-lg text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
+                          title="View repair details"
                         >
                           <Eye className="h-4 w-4" />
                         </Link>
-                        <button 
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-warm-400 transition-colors hover:bg-warm-800 hover:text-warm-100"
-                          title="Edit repair"
-                        >
-                          <Edit3 className="h-4 w-4" />
-                        </button>
                         <button
                           onClick={() => { if (confirm("Delete this repair?")) deleteMutation.mutate(repair.id); }}
                           className="flex h-8 w-8 items-center justify-center rounded-lg text-warm-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
