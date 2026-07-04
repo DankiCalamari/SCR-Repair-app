@@ -1,32 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { listRepairs, updateRepairStatus, deleteRepair } from "../../api/repairs";
 import { getStatusLabel, getStatusColor, formatDate, formatCurrency, cn } from "../../lib/utils";
 import type { Repair, RepairStatus } from "../../types";
 import {
-  Plus, Search, Filter, Trash2, Edit3, ChevronLeft, ChevronRight, Eye, Wrench as WrenchIcon
+  Plus, Search, Filter, Trash2, ChevronLeft, ChevronRight, Eye, Wrench as WrenchIcon, Archive
 } from "lucide-react";
 import NewRepairModal from "../../components/admin/NewRepairModal";
 
-const STATUSES: RepairStatus[] = [
+const ACTIVE_STATUSES: RepairStatus[] = [
   "lead", "device_received", "diagnosing", "waiting_for_customer",
   "waiting_for_parts", "in_progress", "repaired", "ready_for_collection",
-  "completed", "cancelled",
 ];
+
+const COMPLETED_STATUSES: RepairStatus[] = ["completed", "cancelled"];
+
+type Tab = "active" | "completed";
 
 export default function AdminRepairsPage() {
   const queryClient = useQueryClient();
-  const [page, setPage] = useState(0);
+  const [tab, setTab] = useState<Tab>("active");
+  const [activePage, setActivePage] = useState(0);
+  const [completedPage, setCompletedPage] = useState(0);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [showNewRepair, setShowNewRepair] = useState(false);
   const pageSize = 20;
 
+  // Reset pages when tab changes
+  useEffect(() => {
+    if (tab === "active") setCompletedPage(0);
+  }, [tab]);
+
+  const currentPage = tab === "active" ? activePage : completedPage;
+  const currentPageSkip = useMemo(() => currentPage * pageSize, [currentPage, pageSize]);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["admin-repairs", page, statusFilter, search],
-    queryFn: () => listRepairs(page * pageSize, pageSize, statusFilter || undefined, search || undefined),
+    queryKey: ["admin-repairs", currentPageSkip, tab, statusFilter, search],
+    queryFn: () => listRepairs(
+      currentPageSkip,
+      pageSize,
+      tab === "active" ? (statusFilter || undefined) : "completed",
+      search || undefined
+    ),
   });
 
   const statusMutation = useMutation({
@@ -42,6 +60,26 @@ export default function AdminRepairsPage() {
 
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
 
+  // Reset to page 0 when filters change
+  const handleSearch = () => {
+    setSearch(searchInput);
+    setActivePage(0);
+    setCompletedPage(0);
+  };
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatusFilter(value);
+    setActivePage(0);
+    setCompletedPage(0);
+  };
+
+  // Tab change handler
+  const handleTabChange = (newTab: Tab) => {
+    setTab(newTab);
+    setActivePage(0);
+    setCompletedPage(0);
+  };
+
   return (
     <>
     <div className="min-h-screen bg-warm-950">
@@ -50,13 +88,37 @@ export default function AdminRepairsPage() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="font-heading text-3xl font-bold text-warm-50">Repairs</h1>
-            <p className="mt-1 text-warm-400">{data?.total ?? 0} total repairs in system</p>
+            <p className="mt-1 text-warm-400">{data?.total ?? 0} {tab === "active" ? "active" : "completed"} repairs in system</p>
           </div>
           <button
             onClick={() => setShowNewRepair(true)}
             className="flex items-center gap-2 rounded-lg bg-copper-500 px-5 py-2.5 font-semibold text-warm-950 transition-all duration-200 hover:bg-copper-600 hover:shadow-lg"
           >
             <Plus className="h-5 w-5" /> New Repair
+          </button>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="mb-6 flex gap-1 overflow-x-auto border-b border-warm-800 pb-px">
+          <button
+            key="active"
+            onClick={() => handleTabChange("active")}
+            className={cn(
+              "flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-medium transition",
+              tab === "active" ? "border-b-2 border-copper-500 text-copper-500" : "text-warm-400 hover:text-warm-50"
+            )}
+          >
+            <WrenchIcon className="h-4 w-4" /> Active Repairs
+          </button>
+          <button
+            key="completed"
+            onClick={() => handleTabChange("completed")}
+            className={cn(
+              "flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-medium transition",
+              tab === "completed" ? "border-b-2 border-copper-500 text-copper-500" : "text-warm-400 hover:text-warm-50"
+            )}
+          >
+            <Archive className="h-4 w-4" /> Completed / Cancelled
           </button>
         </div>
 
@@ -69,23 +131,25 @@ export default function AdminRepairsPage() {
               placeholder="Search by ticket, description, customer..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") { setSearch(searchInput); setPage(0); } }}
+              onKeyDown={(e) => { if (e.key === "Enter") { handleSearch(); } }}
               className="w-full rounded-lg border border-warm-700 bg-warm-900/80 py-2.5 pl-11 pr-4 text-warm-100 placeholder-warm-500 transition-all focus:border-copper-500 focus:outline-none focus:ring-2 focus:ring-copper-500/20"
             />
           </div>
-          <div className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-warm-500" />
-            <select
-              value={statusFilter}
-              onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
-              className="rounded-lg border border-warm-700 bg-warm-900/80 px-4 py-2.5 text-warm-100 transition-all focus:border-copper-500 focus:outline-none"
-            >
-              <option value="">All Statuses</option>
-              {STATUSES.map((s) => (
-                <option key={s} value={s}>{getStatusLabel(s)}</option>
-              ))}
-            </select>
-          </div>
+          {tab === "active" && (
+            <div className="flex items-center gap-2">
+              <Filter className="h-5 w-5 text-warm-500" />
+              <select
+                value={statusFilter}
+                onChange={(e) => handleStatusFilterChange(e.target.value)}
+                className="rounded-lg border border-warm-700 bg-warm-900/80 px-4 py-2.5 text-warm-100 transition-all focus:border-copper-500 focus:outline-none"
+              >
+                <option value="">All Active Statuses</option>
+                {ACTIVE_STATUSES.map((s) => (
+                  <option key={s} value={s}>{getStatusLabel(s)}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         {/* Table */}
@@ -138,7 +202,10 @@ export default function AdminRepairsPage() {
                           getStatusColor(repair.status)
                         )}
                       >
-                        {STATUSES.map((s) => (
+                        {(tab === "active" ? ACTIVE_STATUSES : COMPLETED_STATUSES).map((s) => (
+                          <option key={s} value={s}>{getStatusLabel(s)}</option>
+                        ))}
+                        {tab === "active" && COMPLETED_STATUSES.map((s) => (
                           <option key={s} value={s}>{getStatusLabel(s)}</option>
                         ))}
                       </select>
@@ -181,19 +248,19 @@ export default function AdminRepairsPage() {
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <p className="text-sm text-warm-400">
-              Page {page + 1} of {totalPages}
+              Page {currentPage + 1} of {totalPages}
             </p>
             <div className="flex gap-2">
               <button
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
+                onClick={() => tab === "active" ? setActivePage((p) => Math.max(0, p - 1)) : setCompletedPage((p) => Math.max(0, p - 1))}
+                disabled={currentPage === 0}
                 className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-warm-200 transition-colors hover:bg-warm-800 disabled:opacity-50 disabled:hover:bg-transparent"
               >
                 <ChevronLeft className="h-4 w-4" /> Previous
               </button>
               <button
-                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                disabled={page >= totalPages - 1}
+                onClick={() => tab === "active" ? setActivePage((p) => Math.min(totalPages - 1, p + 1)) : setCompletedPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={currentPage >= totalPages - 1}
                 className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-warm-200 transition-colors hover:bg-warm-800 disabled:opacity-50 disabled:hover:bg-transparent"
               >
                 Next <ChevronRight className="h-4 w-4" />

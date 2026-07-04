@@ -62,6 +62,16 @@ SMS_TEMPLATES = [
         "body": "Hi {{customer_name}}, we've ordered the parts needed for your {{device_type}} repair. We'll update you once they arrive. – Sunset Country Repairs",
         "variables": ["customer_name", "device_type"],
     },
+    {
+        "name": "Appointment Reminder",
+        "body": "Hi {{customer_name}}, this is a reminder for your repair appointment tomorrow. Ticket {{ticket_number}} – {{device_type}}. Please arrive by {{appointment_time}}. – Sunset Country Repairs",
+        "variables": ["customer_name", "ticket_number", "device_type", "appointment_time"],
+    },
+    {
+        "name": "Cancelled – Reason Request",
+        "body": "Hi {{customer_name}}, we noticed your repair ticket {{ticket_number}} was cancelled. Was there an issue with our service? We'd love your feedback. – Sunset Country Repairs",
+        "variables": ["customer_name", "ticket_number"],
+    },
 ]
 
 EMAIL_TEMPLATES = [
@@ -120,6 +130,27 @@ EMAIL_TEMPLATES = [
         "body": "Hi {{customer_name}},\n\nThanks for contacting Sunset Country Repairs about your {{device_type}}.\n\nWe'll review your enquiry and get back to you within 24 hours.\n\nIn the meantime, feel free to call us on {{business_phone}} if you need urgent assistance.\n\nRegards,\nSunset Country Repairs",
         "body_html": "<p>Hi {{customer_name}},</p><p>Thanks for contacting Sunset Country Repairs about your <strong>{{device_type}}</strong>.</p><p>We'll review your enquiry and get back to you within 24 hours.</p><p>In the meantime, feel free to call us on <strong>{{business_phone}}</strong> if you need urgent assistance.</p><p>Regards,<br>Sunset Country Repairs</p>",
         "variables": ["customer_name", "device_type", "business_phone"],
+    },
+    {
+        "name": "Welcome New Customer",
+        "subject": "Welcome to Sunset Country Repairs!",
+        "body": "Hi {{customer_name}},\n\nThanks for choosing Sunset Country Repairs! We're a local repair shop specialising in phone, tablet, and computer repairs.\n\nYou can track your repair status online using your ticket number. Simply visit our website and enter {{ticket_number}}.\n\nIf you have any questions, call us on {{business_phone}}.\n\nBest regards,\nThe Sunset Country Repairs Team",
+        "body_html": "<p>Hi {{customer_name}},</p><p>Thanks for choosing Sunset Country Repairs! We're a local repair shop specialising in phone, tablet, and computer repairs.</p><p>You can track your repair status online using your ticket number. Simply visit our website and enter <strong>{{ticket_number}}</strong>.</p><p>If you have any questions, call us on <strong>{{business_phone}}</strong>.</p><p>Best regards,<br>The Sunset Country Repairs Team</p>",
+        "variables": ["customer_name", "ticket_number", "business_phone"],
+    },
+    {
+        "name": "Appointment Confirmation",
+        "subject": "Appointment Confirmed – {{ticket_number}}",
+        "body": "Hi {{customer_name}},\n\nYour repair appointment has been confirmed!\n\nDate: {{appointment_date}}\nTime: {{appointment_time}}\nTicket: {{ticket_number}}\nDevice: {{device_type}} ({{device_model}})\n\nPlease arrive 5 minutes early and bring a valid ID.\n\nIf you need to reschedule, please call us on {{business_phone}}.\n\nRegards,\nSunset Country Repairs",
+        "body_html": "<p>Hi {{customer_name}},</p><p>Your repair appointment has been confirmed!</p><table style='margin: 16px 0'><tr><td>Date</td><td>{{appointment_date}}</td></tr><tr><td>Time</td><td>{{appointment_time}}</td></tr><tr><td>Ticket</td><td>{{ticket_number}}</td></tr><tr><td>Device</td><td>{{device_type}} ({{device_model}})</td></tr></table><p>Please arrive 5 minutes early and bring a valid ID.</p><p>If you need to reschedule, please call us on <strong>{{business_phone}}</strong>.</p><p>Regards,<br>Sunset Country Repairs</p>",
+        "variables": ["customer_name", "ticket_number", "device_type", "device_model", "appointment_date", "appointment_time", "business_phone"],
+    },
+    {
+        "name": "Warranty Expiry Reminder",
+        "subject": "Warranty expiring soon – {{ticket_number}}",
+        "body": "Hi {{customer_name}},\n\nYour warranty for {{device_type}} (ticket {{ticket_number}}) expires on {{warranty_expiry}}.\n\nIf you've noticed any issues or have concerns, please contact us before the expiry date.\n\nRegards,\nSunset Country Repairs",
+        "body_html": "<p>Hi {{customer_name}},</p><p>Your warranty for <strong>{{device_type}}</strong> (ticket <strong>{{ticket_number}}</strong>) expires on <strong>{{warranty_expiry}}</strong>.</p><p>If you've noticed any issues or have concerns, please contact us before the expiry date.</p><p>Regards,<br>Sunset Country Repairs</p>",
+        "variables": ["customer_name", "ticket_number", "device_type", "warranty_expiry"],
     },
 ]
 

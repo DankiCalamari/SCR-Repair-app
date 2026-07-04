@@ -50,7 +50,11 @@ async def list_repairs(
 
     filters = []
     if status:
-        filters.append(Repair.status == status)
+        if status == "completed":
+            # Special handling: "completed" filter includes both completed and cancelled
+            filters.append(Repair.status.in_([RepairStatus.COMPLETED, RepairStatus.CANCELLED]))
+        else:
+            filters.append(Repair.status == status)
     if search:
         search_term = f"%{search}%"
         filters.append(
