@@ -5,6 +5,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import { useAuthStore } from "./store/auth-store";
 
 const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
@@ -30,8 +31,8 @@ const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
 const AdminCommunicationsPage = lazy(() => import("./pages/admin/AdminCommunicationsPage"));
 
 function CustomerRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = true;
-  const isCustomer = true;
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isCustomer = useAuthStore((s) => s.isCustomer);
   if (!isAuthenticated || !isCustomer) {
     return <Navigate to="/login" replace />;
   }
@@ -39,8 +40,8 @@ function CustomerRoute({ children }: { children: React.ReactNode }) {
 }
 
 function StaffRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = true;
-  const isStaff = true;
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isStaff = useAuthStore((s) => s.isStaff);
   if (!isAuthenticated || !isStaff) {
     return <Navigate to="/login" replace />;
   }
@@ -48,8 +49,8 @@ function StaffRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = true;
-  const isAdmin = true;
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useAuthStore((s) => s.isAdmin);
   if (!isAuthenticated || !isAdmin) {
     return <Navigate to="/login" replace />;
   }
@@ -57,35 +58,21 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 }
 
 function PortalLayout({ children }: { children: React.ReactNode }) {
-  return <div style={{ minHeight: "100vh", backgroundColor: "#fefaf6", color: "#292524" }}>{children}</div>;
+  return <div className="min-h-screen bg-warm-50 text-warm-900">{children}</div>;
 }
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#292524", color: "#fefaf6" }}>
-      <main style={{ flex: 1, overflowY: "auto" }}>{children}</main>
+    <div className="flex min-h-screen bg-warm-900 text-warm-50">
+      <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
   );
 }
 
 function PageLoader() {
   return (
-    <div style={{ 
-      display: "flex", 
-      minHeight: "100vh", 
-      alignItems: "center", 
-      justifyContent: "center",
-      backgroundColor: "#fefaf6"
-    }}>
-      <div style={{ 
-        width: "1.75rem", 
-        height: "1.75rem", 
-        border: "2px solid #e06645",
-        borderTopColor: "transparent",
-        borderRadius: "50%",
-        animation: "spin 1s linear infinite"
-      }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    <div className="flex min-h-screen items-center justify-center bg-warm-50">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
     </div>
   );
 }
