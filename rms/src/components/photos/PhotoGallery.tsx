@@ -71,7 +71,7 @@ export default function PhotoGallery({
                   onClick={() => setFilter(cf.value)}
                   className={`text-xs px-2 py-1 rounded-full border transition-colors ${
                     filter === cf.value
-                      ? "bg-accent-500 text-white border-accent-500"
+                      ? "bg-copper-500 text-white border-copper-500"
                       : "bg-white text-warm-400 border-warm-200 hover:border-warm-400"
                   }`}
                 >
@@ -173,3 +173,4 @@ export default function PhotoGallery({
     </div>
   );
 }
+

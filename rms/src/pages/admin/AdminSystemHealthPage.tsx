@@ -43,8 +43,8 @@ export default function AdminSystemHealthPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-surface-100">System Health</h1>
-          <p className="mt-1 text-surface-400">Monitor system status and performance</p>
+          <h1 className="font-heading text-3xl font-bold text-warm-50">System Health</h1>
+          <p className="mt-1 text-warm-400">Monitor system status and performance</p>
         </div>
 
         {/* Health Checks */}
@@ -52,15 +52,15 @@ export default function AdminSystemHealthPage() {
           {healthChecks.map((check) => {
             const StatusIcon = statusIcons[check.status];
             return (
-              <div key={check.name} className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+              <div key={check.name} className="rounded-lg border border-warm-800 bg-warm-900 p-5">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className={cn("rounded-full p-2.5", statusColors[check.status])}>
                       <check.icon className={cn("h-5 w-5", statusColors[check.status].split(" ")[0])} />
                     </div>
                     <div>
-                      <p className="font-medium text-surface-100">{check.name}</p>
-                      <p className="text-sm text-surface-400">{check.message}</p>
+                      <p className="font-medium text-warm-50">{check.name}</p>
+                      <p className="text-sm text-warm-400">{check.message}</p>
                     </div>
                   </div>
                   <StatusIcon className={cn("h-5 w-5", statusColors[check.status].split(" ")[0])} />
@@ -72,71 +72,72 @@ export default function AdminSystemHealthPage() {
 
         {/* System Metrics */}
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+          <div className="rounded-lg border border-warm-800 bg-warm-900 p-5">
             <div className="flex items-center gap-3 mb-4">
-              <Cpu className="h-5 w-5 text-accent-500" />
-              <h3 className="font-heading text-lg font-semibold text-surface-100">System Stats</h3>
+              <Cpu className="h-5 w-5 text-copper-500" />
+              <h3 className="font-heading text-lg font-semibold text-warm-50">System Stats</h3>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-surface-400">Total Repairs</span>
-                <span className="text-surface-100 font-medium">{stats?.total_repairs ?? "—"}</span>
+                <span className="text-warm-400">Total Repairs</span>
+                <span className="text-warm-50 font-medium">{stats?.total_repairs ?? "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Active Repairs</span>
-                <span className="text-surface-100 font-medium">{stats?.active_repairs ?? "—"}</span>
+                <span className="text-warm-400">Active Repairs</span>
+                <span className="text-warm-50 font-medium">{stats?.active_repairs ?? "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Completed Repairs</span>
-                <span className="text-surface-100 font-medium">{stats?.completed_repairs ?? "—"}</span>
+                <span className="text-warm-400">Completed Repairs</span>
+                <span className="text-warm-50 font-medium">{stats?.completed_repairs ?? "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Pending Quotes</span>
-                <span className="text-surface-100 font-medium">{stats?.pending_quotes ?? "—"}</span>
+                <span className="text-warm-400">Pending Quotes</span>
+                <span className="text-warm-50 font-medium">{stats?.pending_quotes ?? "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Overdue Invoices</span>
-                <span className="text-surface-100 font-medium">{stats?.overdue_invoices ?? "—"}</span>
+                <span className="text-warm-400">Overdue Invoices</span>
+                <span className="text-warm-50 font-medium">{stats?.overdue_invoices ?? "—"}</span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+          <div className="rounded-lg border border-warm-800 bg-warm-900 p-5">
             <div className="flex items-center gap-3 mb-4">
-              <MemoryStick className="h-5 w-5 text-accent-500" />
-              <h3 className="font-heading text-lg font-semibold text-surface-100">Financial Summary</h3>
+              <MemoryStick className="h-5 w-5 text-copper-500" />
+              <h3 className="font-heading text-lg font-semibold text-warm-50">Financial Summary</h3>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-surface-400">Total Revenue</span>
-                <span className="text-surface-100 font-medium">{stats?.total_revenue != null ? formatCurrency(stats.total_revenue) : "—"}</span>
+                <span className="text-warm-400">Total Revenue</span>
+                <span className="text-warm-50 font-medium">{stats?.total_revenue != null ? formatCurrency(stats.total_revenue) : "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Outstanding Balance</span>
-                <span className="text-surface-100 font-medium">{stats?.outstanding_balance != null ? formatCurrency(stats.outstanding_balance) : "—"}</span>
+                <span className="text-warm-400">Outstanding Balance</span>
+                <span className="text-warm-50 font-medium">{stats?.outstanding_balance != null ? formatCurrency(stats.outstanding_balance) : "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">New Leads</span>
-                <span className="text-surface-100 font-medium">{stats?.new_leads ?? "—"}</span>
+                <span className="text-warm-400">New Leads</span>
+                <span className="text-warm-50 font-medium">{stats?.new_leads ?? "—"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-surface-400">Warranty Claims</span>
-                <span className="text-surface-100 font-medium">{stats?.warranty_claims ?? "—"}</span>
+                <span className="text-warm-400">Warranty Claims</span>
+                <span className="text-warm-50 font-medium">{stats?.warranty_claims ?? "—"}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="rounded-lg border border-surface-800 bg-surface-900">
-          <div className="border-b border-surface-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-surface-100">Recent Activity</h2>
+        <div className="rounded-lg border border-warm-800 bg-warm-900">
+          <div className="border-b border-warm-800 px-5 py-4">
+            <h2 className="font-heading text-lg font-semibold text-warm-50">Recent Activity</h2>
           </div>
-          <div className="p-5 text-center text-surface-400">
-            <Activity className="mx-auto h-8 w-8 text-surface-600 mb-2" />
+          <div className="p-5 text-center text-warm-400">
+            <Activity className="mx-auto h-8 w-8 text-warm-600 mb-2" />
             <p>Activity log will appear here</p>
           </div>
         </div>
     </div>
   );
 }
+

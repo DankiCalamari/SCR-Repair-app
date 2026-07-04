@@ -127,24 +127,24 @@ export default function NewRepairModal({ open, onClose }: Props) {
     <Modal open={open} onClose={resetAndClose} title="New Repair" maxWidth="max-w-xl">
       {/* Step indicator */}
       <div className="mb-6 flex items-center gap-2 text-sm">
-        <span className={`font-medium ${step === "customer" ? "text-accent-500" : "text-surface-400"}`}>Customer</span>
-        <ChevronRight className="h-3 w-3 text-surface-600" />
-        <span className={`font-medium ${step === "device" ? "text-accent-500" : "text-surface-400"}`}>Device</span>
-        <ChevronRight className="h-3 w-3 text-surface-600" />
-        <span className={`font-medium ${step === "issue" ? "text-accent-500" : "text-surface-400"}`}>Issue</span>
+        <span className={`font-medium ${step === "customer" ? "text-copper-500" : "text-warm-400"}`}>Customer</span>
+        <ChevronRight className="h-3 w-3 text-warm-600" />
+        <span className={`font-medium ${step === "device" ? "text-copper-500" : "text-warm-400"}`}>Device</span>
+        <ChevronRight className="h-3 w-3 text-warm-600" />
+        <span className={`font-medium ${step === "issue" ? "text-copper-500" : "text-warm-400"}`}>Issue</span>
       </div>
 
       {/* Step 1: Select Customer */}
       {step === "customer" && (
         <div>
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-surface-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-warm-400" />
             <input
               type="text"
               placeholder="Search customers by name, email, phone..."
               value={customerSearch}
               onChange={(e) => setCustomerSearch(e.target.value)}
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 py-2.5 pl-10 pr-4 text-surface-100 placeholder-surface-400 focus:border-accent-500 focus:outline-none"
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 py-2.5 pl-10 pr-4 text-warm-50 placeholder-warm-400 focus:border-copper-500 focus:outline-none"
               autoFocus
             />
           </div>
@@ -153,19 +153,19 @@ export default function NewRepairModal({ open, onClose }: Props) {
               <button
                 key={c.id}
                 onClick={() => handleSelectCustomer(c)}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-surface-700"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-warm-700"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-500/10 text-sm font-bold text-accent-500">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-copper-500/10 text-sm font-bold text-copper-500">
                   {c.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-surface-100">{c.name}</p>
-                  <p className="text-xs text-surface-400">{c.phone} {c.email ? `• ${c.email}` : ""}</p>
+                  <p className="text-sm font-medium text-warm-50">{c.name}</p>
+                  <p className="text-xs text-warm-400">{c.phone} {c.email ? `• ${c.email}` : ""}</p>
                 </div>
               </button>
             ))}
             {customers.length === 0 && (
-              <p className="py-8 text-center text-sm text-surface-400">
+              <p className="py-8 text-center text-sm text-warm-400">
                 {customerSearch ? "No customers found" : "Type to search customers"}
               </p>
             )}
@@ -176,49 +176,49 @@ export default function NewRepairModal({ open, onClose }: Props) {
       {/* Step 2: Select or Create Device */}
       {step === "device" && selectedCustomer && (
         <div>
-          <p className="mb-4 text-sm text-surface-400">
-            Customer: <span className="font-medium text-surface-100">{selectedCustomer.name}</span>
+          <p className="mb-4 text-sm text-warm-400">
+            Customer: <span className="font-medium text-warm-50">{selectedCustomer.name}</span>
           </p>
 
           {!creatingDevice ? (
             <>
-              <p className="mb-2 text-sm font-medium text-surface-300">Select a device:</p>
+              <p className="mb-2 text-sm font-medium text-warm-300">Select a device:</p>
               <div className="max-h-48 space-y-1 overflow-y-auto">
                 {devices.map((d) => (
                   <button
                     key={d.id}
                     onClick={() => handleSelectDevice(d)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-surface-700"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-warm-700"
                   >
-                    <Smartphone className="h-4 w-4 text-surface-400" />
+                    <Smartphone className="h-4 w-4 text-warm-400" />
                     <div>
-                      <p className="text-sm font-medium text-surface-100">{d.brand} {d.model}</p>
-                      <p className="text-xs text-surface-400">{d.device_type} {d.colour ? `• ${d.colour}` : ""}</p>
+                      <p className="text-sm font-medium text-warm-50">{d.brand} {d.model}</p>
+                      <p className="text-xs text-warm-400">{d.device_type} {d.colour ? `• ${d.colour}` : ""}</p>
                     </div>
                   </button>
                 ))}
                 {devices.length === 0 && (
-                  <p className="py-4 text-center text-sm text-surface-400">No devices on file for this customer</p>
+                  <p className="py-4 text-center text-sm text-warm-400">No devices on file for this customer</p>
                 )}
               </div>
               <button
                 onClick={() => setCreatingDevice(true)}
-                className="mt-4 w-full rounded-lg border border-dashed border-surface-600 py-3 text-sm font-medium text-surface-400 transition hover:border-accent-500/50 hover:text-accent-500"
+                className="mt-4 w-full rounded-lg border border-dashed border-warm-600 py-3 text-sm font-medium text-warm-400 transition hover:border-copper-500/50 hover:text-copper-500"
               >
                 + Add New Device
               </button>
             </>
           ) : (
             <>
-              <p className="mb-4 text-sm font-medium text-surface-300">Add a new device:</p>
+              <p className="mb-4 text-sm font-medium text-warm-300">Add a new device:</p>
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">Type *</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">Type *</label>
                     <select
                       value={deviceType}
                       onChange={(e) => setDeviceType(e.target.value)}
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
                     >
                       {["Smartphone", "Tablet", "Laptop", "Desktop PC", "Gaming Console", "Smart Watch", "Headphones/Earbuds", "Speaker", "Camera", "Drone", "Other"].map((t) => (
                         <option key={t} value={t}>{t}</option>
@@ -226,98 +226,98 @@ export default function NewRepairModal({ open, onClose }: Props) {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">Brand *</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">Brand *</label>
                     <input
                       type="text"
                       value={brand}
                       onChange={(e) => setBrand(e.target.value)}
                       placeholder="e.g. Apple"
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-surface-400">Model *</label>
+                  <label className="mb-1 block text-xs font-medium text-warm-400">Model *</label>
                   <input
                     type="text"
                     value={model}
                     onChange={(e) => setModel(e.target.value)}
                     placeholder="e.g. iPhone 15 Pro"
-                    className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                    className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">IMEI</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">IMEI</label>
                     <input
                       type="text"
                       value={imei}
                       onChange={(e) => setImei(e.target.value)}
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">Serial Number</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">Serial Number</label>
                     <input
                       type="text"
                       value={serialNumber}
                       onChange={(e) => setSerialNumber(e.target.value)}
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">Colour</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">Colour</label>
                     <input
                       type="text"
                       value={colour}
                       onChange={(e) => setColour(e.target.value)}
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-surface-400">Passcode</label>
+                    <label className="mb-1 block text-xs font-medium text-warm-400">Passcode</label>
                     <input
                       type="text"
                       value={passcode}
                       onChange={(e) => setPasscode(e.target.value)}
-                      className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                      className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-surface-400">Accessories</label>
+                  <label className="mb-1 block text-xs font-medium text-warm-400">Accessories</label>
                   <input
                     type="text"
                     value={accessories}
                     onChange={(e) => setAccessories(e.target.value)}
                     placeholder="e.g. charger, case"
-                    className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                    className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-surface-400">Existing Damage</label>
+                  <label className="mb-1 block text-xs font-medium text-warm-400">Existing Damage</label>
                   <textarea
                     value={existingDamage}
                     onChange={(e) => setExistingDamage(e.target.value)}
                     rows={2}
                     placeholder="Note any pre-existing damage..."
-                    className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                    className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                   />
                 </div>
               </div>
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={() => setCreatingDevice(false)}
-                  className="flex-1 rounded-lg border border-surface-600 py-2.5 text-sm font-medium text-surface-300 hover:bg-surface-700"
+                  className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleCreateDevice}
                   disabled={!brand || !model || createDeviceMutation.isPending}
-                  className="flex-1 rounded-lg bg-accent-500 py-2.5 text-sm font-semibold text-surface-100 hover:bg-accent-400 disabled:opacity-50"
+                  className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50"
                 >
                   {createDeviceMutation.isPending ? "Saving..." : "Save Device"}
                 </button>
@@ -330,32 +330,32 @@ export default function NewRepairModal({ open, onClose }: Props) {
       {/* Step 3: Issue Description */}
       {step === "issue" && selectedCustomer && selectedDevice && (
         <div>
-          <div className="mb-4 space-y-1 text-sm text-surface-400">
-            <p>Customer: <span className="font-medium text-surface-100">{selectedCustomer.name}</span></p>
-            <p>Device: <span className="font-medium text-surface-100">{selectedDevice.brand} {selectedDevice.model}</span></p>
+          <div className="mb-4 space-y-1 text-sm text-warm-400">
+            <p>Customer: <span className="font-medium text-warm-50">{selectedCustomer.name}</span></p>
+            <p>Device: <span className="font-medium text-warm-50">{selectedDevice.brand} {selectedDevice.model}</span></p>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-surface-300">Issue Description *</label>
+            <label className="mb-1.5 block text-sm font-medium text-warm-300">Issue Description *</label>
             <textarea
               value={issueDescription}
               onChange={(e) => setIssueDescription(e.target.value)}
               rows={4}
               placeholder="Describe the issue the customer is reporting..."
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 px-4 py-2.5 text-surface-100 placeholder-surface-400 focus:border-accent-500 focus:outline-none"
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-4 py-2.5 text-warm-50 placeholder-warm-400 focus:border-copper-500 focus:outline-none"
               autoFocus
             />
           </div>
           <div className="mt-4 flex gap-3">
             <button
               onClick={() => setStep("device")}
-              className="flex-1 rounded-lg border border-surface-600 py-2.5 text-sm font-medium text-surface-300 hover:bg-surface-700"
+              className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700"
             >
               Back
             </button>
             <button
               onClick={handleCreateRepair}
               disabled={!issueDescription.trim() || createRepairMutation.isPending}
-              className="flex-1 rounded-lg bg-accent-500 py-2.5 text-sm font-semibold text-surface-100 hover:bg-accent-400 disabled:opacity-50"
+              className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50"
             >
               {createRepairMutation.isPending ? "Creating..." : "Create Repair"}
             </button>
@@ -365,3 +365,4 @@ export default function NewRepairModal({ open, onClose }: Props) {
     </Modal>
   );
 }
+

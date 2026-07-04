@@ -140,7 +140,7 @@ export default function PhotoUploader({
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
           dragOver
-            ? "border-accent-500 bg-accent-50"
+            ? "border-copper-500 bg-accent-50"
             : "border-warm-300 hover:border-warm-400"
         }`}
         onDragOver={handleDragOver}
@@ -256,7 +256,7 @@ export default function PhotoUploader({
         <button
           onClick={handleUpload}
           disabled={uploading}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500 text-white rounded-md text-sm font-medium hover:bg-accent-600 disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-copper-500 text-white rounded-md text-sm font-medium hover:bg-accent-600 disabled:opacity-50"
         >
           {uploading ? (
             <Loader2 size={16} className="animate-spin" />
@@ -269,3 +269,4 @@ export default function PhotoUploader({
     </div>
   );
 }
+

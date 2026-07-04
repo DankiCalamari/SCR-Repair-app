@@ -41,12 +41,12 @@ export default function Modal({ open, onClose, title, children, maxWidth = "max-
         if (e.target === overlayRef.current) onClose();
       }}
     >
-      <div className={`w-full ${maxWidth} rounded-xl border border-surface-700 bg-surface-800 shadow-xl`}>
-        <div className="flex items-center justify-between border-b border-surface-700 px-6 py-4">
-          <h2 className="font-heading text-lg font-semibold text-surface-100">{title}</h2>
+      <div className={`w-full ${maxWidth} rounded-xl border border-warm-700 bg-warm-800 shadow-xl`}>
+        <div className="flex items-center justify-between border-b border-warm-700 px-6 py-4">
+          <h2 className="font-heading text-lg font-semibold text-warm-50">{title}</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-surface-400 transition hover:bg-surface-700 hover:text-surface-100"
+            className="rounded p-1 text-warm-400 transition hover:bg-warm-700 hover:text-warm-50"
           >
             <X className="h-5 w-5" />
           </button>
@@ -56,3 +56,4 @@ export default function Modal({ open, onClose, title, children, maxWidth = "max-
     </div>
   );
 }
+

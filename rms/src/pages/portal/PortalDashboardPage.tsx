@@ -29,7 +29,7 @@ function RepairCard({ repair }: { repair: Repair }) {
           Updated {formatDate(repair.updated_at)}
         </span>
         {isActive && (
-          <span className="flex items-center gap-1 text-accent-500">
+          <span className="flex items-center gap-1 text-copper-500">
             <Wrench className="h-3.5 w-3.5" />
             Active
           </span>
@@ -74,7 +74,7 @@ export default function PortalDashboardPage() {
           <div className="rounded-lg border border-warm-200 bg-white p-5">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-accent-50 p-2.5">
-                <Wrench className="h-5 w-5 text-accent-500" />
+                <Wrench className="h-5 w-5 text-copper-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-warm-900">{activeRepairs.length}</p>
@@ -124,7 +124,7 @@ export default function PortalDashboardPage() {
               </p>
               <Link
                 to="/contact"
-                className="mt-4 inline-block rounded-lg bg-accent-500 px-6 py-2 font-semibold text-white hover:bg-accent-600"
+                className="mt-4 inline-block rounded-lg bg-copper-500 px-6 py-2 font-semibold text-white hover:bg-accent-600"
               >
                 Contact Us
               </Link>
@@ -162,3 +162,4 @@ export default function PortalDashboardPage() {
     </div>
   );
 }
+

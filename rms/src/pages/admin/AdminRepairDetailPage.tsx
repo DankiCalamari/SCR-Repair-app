@@ -52,62 +52,62 @@ function CreateQuoteModal({ repairId, customerName, onClose, onSuccess }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-20">
-      <div className="w-full max-w-lg rounded-lg border border-surface-700 bg-surface-800 shadow-xl">
-        <div className="flex items-center justify-between border-b border-surface-700 px-6 py-4">
-          <h2 className="font-heading text-lg font-semibold text-surface-100">New Quote</h2>
-          <button onClick={onClose} className="rounded p-1 text-surface-400 hover:bg-surface-700 hover:text-surface-100">
+      <div className="w-full max-w-lg rounded-lg border border-warm-700 bg-warm-800 shadow-xl">
+        <div className="flex items-center justify-between border-b border-warm-700 px-6 py-4">
+          <h2 className="font-heading text-lg font-semibold text-warm-50">New Quote</h2>
+          <button onClick={onClose} className="rounded p-1 text-warm-400 hover:bg-warm-700 hover:text-warm-50">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
-          <p className="text-sm text-surface-400">Customer: <span className="text-surface-100">{customerName}</span></p>
+          <p className="text-sm text-warm-400">Customer: <span className="text-warm-50">{customerName}</span></p>
           <div>
-            <label className="mb-2 block text-xs font-medium text-surface-400">Line Items</label>
+            <label className="mb-2 block text-xs font-medium text-warm-400">Line Items</label>
             <div className="space-y-2">
               {items.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-2">
                   <input type="text" placeholder="Description" value={item.description}
                     onChange={(e) => updateItem(idx, "description", e.target.value)}
-                    className="flex-1 rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                    className="flex-1 rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                   <select value={item.item_type} onChange={(e) => updateItem(idx, "item_type", e.target.value)}
-                    className="w-20 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-xs text-surface-100 focus:border-accent-500 focus:outline-none">
+                    className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-xs text-warm-50 focus:border-copper-500 focus:outline-none">
                     <option value="labour">Labour</option>
                     <option value="parts">Parts</option>
                     <option value="other">Other</option>
                   </select>
                   <input type="number" min="1" placeholder="Qty" value={item.quantity}
                     onChange={(e) => updateItem(idx, "quantity", parseInt(e.target.value) || 1)}
-                    className="w-14 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+                    className="w-14 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
                   <input type="number" min="0" step="0.01" placeholder="Price" value={item.unit_price || ""}
                     onChange={(e) => updateItem(idx, "unit_price", parseFloat(e.target.value) || 0)}
-                    className="w-20 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+                    className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
                   <button onClick={() => removeItem(idx)} disabled={items.length <= 1}
-                    className="mt-1 rounded p-1 text-surface-500 hover:text-red-400 disabled:opacity-30">
+                    className="mt-1 rounded p-1 text-warm-500 hover:text-red-400 disabled:opacity-30">
                     <X className="h-4 w-4" />
                   </button>
                 </div>
               ))}
             </div>
-            <button onClick={addItem} className="mt-2 text-xs text-accent-500 hover:text-accent-400">+ Add Line Item</button>
+            <button onClick={addItem} className="mt-2 text-xs text-copper-500 hover:text-copper-600">+ Add Line Item</button>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-surface-400">Description / Notes</label>
+            <label className="mb-1 block text-xs font-medium text-warm-400">Description / Notes</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2}
               placeholder="Quote description..."
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-surface-400">Valid Until</label>
+            <label className="mb-1 block text-xs font-medium text-warm-400">Valid Until</label>
             <input type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)}
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
           </div>
-          <div className="rounded-lg border border-surface-600 bg-surface-700 p-3">
-            <div className="flex justify-between text-sm"><span className="text-surface-400">Subtotal</span><span className="text-surface-100">${subtotal.toFixed(2)}</span></div>
-            <div className="flex justify-between text-sm"><span className="text-surface-400">GST (10%)</span><span className="text-surface-100">${gst.toFixed(2)}</span></div>
-            <div className="mt-1 flex justify-between border-t border-surface-600 pt-1"><span className="font-medium text-surface-300">Total</span><span className="font-semibold text-accent-500">${total.toFixed(2)}</span></div>
+          <div className="rounded-lg border border-warm-600 bg-warm-700 p-3">
+            <div className="flex justify-between text-sm"><span className="text-warm-400">Subtotal</span><span className="text-warm-50">${subtotal.toFixed(2)}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-warm-400">GST (10%)</span><span className="text-warm-50">${gst.toFixed(2)}</span></div>
+            <div className="mt-1 flex justify-between border-t border-warm-600 pt-1"><span className="font-medium text-warm-300">Total</span><span className="font-semibold text-copper-500">${total.toFixed(2)}</span></div>
           </div>
           <div className="flex gap-3">
-            <button onClick={onClose} className="flex-1 rounded-lg border border-surface-600 py-2.5 text-sm font-medium text-surface-300 hover:bg-surface-700">Cancel</button>
+            <button onClick={onClose} className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700">Cancel</button>
             <button onClick={() => mutation.mutate({
               repair_id: repairId, description: description || null, valid_until: validUntil || null,
               items: items.filter(i => i.description.trim()).map((item, idx) => ({
@@ -115,7 +115,7 @@ function CreateQuoteModal({ repairId, customerName, onClose, onSuccess }: {
                 total: parseFloat((item.quantity * item.unit_price).toFixed(2)), item_type: item.item_type, sort_order: idx,
               })),
             })} disabled={mutation.isPending || !items.some(i => i.description.trim())}
-              className="flex-1 rounded-lg bg-accent-500 py-2.5 text-sm font-semibold text-surface-100 hover:bg-accent-400 disabled:opacity-50">
+              className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50">
               {mutation.isPending ? "Creating..." : "Create Quote"}
             </button>
           </div>
@@ -153,61 +153,61 @@ function CreateInvoiceModal({ repairId, customerName, onClose, onSuccess }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-20">
-      <div className="w-full max-w-lg rounded-lg border border-surface-700 bg-surface-800 shadow-xl">
-        <div className="flex items-center justify-between border-b border-surface-700 px-6 py-4">
-          <h2 className="font-heading text-lg font-semibold text-surface-100">New Invoice</h2>
-          <button onClick={onClose} className="rounded p-1 text-surface-400 hover:bg-surface-700 hover:text-surface-100">
+      <div className="w-full max-w-lg rounded-lg border border-warm-700 bg-warm-800 shadow-xl">
+        <div className="flex items-center justify-between border-b border-warm-700 px-6 py-4">
+          <h2 className="font-heading text-lg font-semibold text-warm-50">New Invoice</h2>
+          <button onClick={onClose} className="rounded p-1 text-warm-400 hover:bg-warm-700 hover:text-warm-50">
             <X className="h-5 w-5" />
           </button>
         </div>
         <div className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
-          <p className="text-sm text-surface-400">Customer: <span className="text-surface-100">{customerName}</span></p>
+          <p className="text-sm text-warm-400">Customer: <span className="text-warm-50">{customerName}</span></p>
           <div>
-            <label className="mb-2 block text-xs font-medium text-surface-400">Line Items</label>
+            <label className="mb-2 block text-xs font-medium text-warm-400">Line Items</label>
             <div className="space-y-2">
               {items.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-2">
                   <input type="text" placeholder="Description" value={item.description}
                     onChange={(e) => updateItem(idx, "description", e.target.value)}
-                    className="flex-1 rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+                    className="flex-1 rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
                   <select value={item.item_type} onChange={(e) => updateItem(idx, "item_type", e.target.value)}
-                    className="w-20 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-xs text-surface-100 focus:border-accent-500 focus:outline-none">
+                    className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-xs text-warm-50 focus:border-copper-500 focus:outline-none">
                     <option value="labour">Labour</option>
                     <option value="parts">Parts</option>
                     <option value="other">Other</option>
                   </select>
                   <input type="number" min="1" placeholder="Qty" value={item.quantity}
                     onChange={(e) => updateItem(idx, "quantity", parseInt(e.target.value) || 1)}
-                    className="w-14 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+                    className="w-14 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
                   <input type="number" min="0" step="0.01" placeholder="Price" value={item.unit_price || ""}
                     onChange={(e) => updateItem(idx, "unit_price", parseFloat(e.target.value) || 0)}
-                    className="w-20 rounded-lg border border-surface-600 bg-surface-700 px-2 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+                    className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
                   <button onClick={() => removeItem(idx)} disabled={items.length <= 1}
-                    className="mt-1 rounded p-1 text-surface-500 hover:text-red-400 disabled:opacity-30">
+                    className="mt-1 rounded p-1 text-warm-500 hover:text-red-400 disabled:opacity-30">
                     <X className="h-4 w-4" />
                   </button>
                 </div>
               ))}
             </div>
-            <button onClick={addItem} className="mt-2 text-xs text-accent-500 hover:text-accent-400">+ Add Line Item</button>
+            <button onClick={addItem} className="mt-2 text-xs text-copper-500 hover:text-copper-600">+ Add Line Item</button>
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-surface-400">Due Date</label>
+            <label className="mb-1 block text-xs font-medium text-warm-400">Due Date</label>
             <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none" />
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none" />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-medium text-surface-400">Notes</label>
+            <label className="mb-1 block text-xs font-medium text-warm-400">Notes</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2}
-              className="w-full rounded-lg border border-surface-600 bg-surface-700 px-3 py-2 text-sm text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none" />
+              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none" />
           </div>
-          <div className="rounded-lg border border-surface-600 bg-surface-700 p-3">
-            <div className="flex justify-between text-sm"><span className="text-surface-400">Subtotal</span><span className="text-surface-100">${subtotal.toFixed(2)}</span></div>
-            <div className="flex justify-between text-sm"><span className="text-surface-400">GST (10%)</span><span className="text-surface-100">${gst.toFixed(2)}</span></div>
-            <div className="mt-1 flex justify-between border-t border-surface-600 pt-1"><span className="font-medium text-surface-300">Total</span><span className="font-semibold text-accent-500">${total.toFixed(2)}</span></div>
+          <div className="rounded-lg border border-warm-600 bg-warm-700 p-3">
+            <div className="flex justify-between text-sm"><span className="text-warm-400">Subtotal</span><span className="text-warm-50">${subtotal.toFixed(2)}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-warm-400">GST (10%)</span><span className="text-warm-50">${gst.toFixed(2)}</span></div>
+            <div className="mt-1 flex justify-between border-t border-warm-600 pt-1"><span className="font-medium text-warm-300">Total</span><span className="font-semibold text-copper-500">${total.toFixed(2)}</span></div>
           </div>
           <div className="flex gap-3">
-            <button onClick={onClose} className="flex-1 rounded-lg border border-surface-600 py-2.5 text-sm font-medium text-surface-300 hover:bg-surface-700">Cancel</button>
+            <button onClick={onClose} className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700">Cancel</button>
             <button onClick={() => mutation.mutate({
               repair_id: repairId, subtotal: parseFloat(subtotal.toFixed(2)), notes: notes || null, due_date: dueDate || null,
               items: items.filter(i => i.description.trim()).map((item, idx) => ({
@@ -215,7 +215,7 @@ function CreateInvoiceModal({ repairId, customerName, onClose, onSuccess }: {
                 total: parseFloat((item.quantity * item.unit_price).toFixed(2)), item_type: item.item_type, sort_order: idx,
               })),
             })} disabled={mutation.isPending || !items.some(i => i.description.trim())}
-              className="flex-1 rounded-lg bg-accent-500 py-2.5 text-sm font-semibold text-surface-100 hover:bg-accent-400 disabled:opacity-50">
+              className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50">
               {mutation.isPending ? "Creating..." : "Create Invoice"}
             </button>
           </div>
@@ -382,18 +382,18 @@ export default function AdminRepairDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-900">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+      <div className="flex min-h-screen items-center justify-center bg-warm-900">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
       </div>
     );
   }
 
   if (!repair) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-900">
+      <div className="flex min-h-screen items-center justify-center bg-warm-900">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-surface-100">Repair not found</h2>
-          <Link to="/admin/repairs" className="mt-4 inline-block text-accent-500 hover:text-accent-400">Back to Repairs</Link>
+          <h2 className="text-xl font-semibold text-warm-50">Repair not found</h2>
+          <Link to="/admin/repairs" className="mt-4 inline-block text-copper-500 hover:text-copper-600">Back to Repairs</Link>
         </div>
       </div>
     );
@@ -434,36 +434,36 @@ export default function AdminRepairDetailPage() {
     <div className="mx-auto max-w-7xl px-4 py-8">
       {/* Header */}
       <div className="mb-6">
-        <Link to="/admin/repairs" className="mb-4 inline-flex items-center gap-2 text-sm text-surface-400 hover:text-surface-100">
+        <Link to="/admin/repairs" className="mb-4 inline-flex items-center gap-2 text-sm text-warm-400 hover:text-warm-50">
           <ArrowLeft className="h-4 w-4" /> Back to Repairs
         </Link>
         <div className="flex flex-wrap items-center gap-4">
-          <h1 className="font-heading text-3xl font-bold text-surface-100">{repair.ticket_number}</h1>
+          <h1 className="font-heading text-3xl font-bold text-warm-50">{repair.ticket_number}</h1>
           <select value={repair.status} onChange={(e) => statusMutation.mutate({ status: e.target.value })}
             disabled={statusMutation.isPending}
             className={cn("rounded-full border px-4 py-1.5 text-sm font-medium focus:outline-none", getStatusColor(repair.status))}>
             {ALL_STATUSES.map((s) => <option key={s} value={s}>{getStatusLabel(s)}</option>)}
           </select>
         </div>
-        <p className="mt-2 text-surface-400">Submitted {formatDate(repair.created_at)}</p>
+        <p className="mt-2 text-warm-400">Submitted {formatDate(repair.created_at)}</p>
       </div>
 
       {/* Customer info bar */}
       {repair.customer && (
-        <div className="mb-6 flex flex-wrap items-center gap-4 rounded-lg border border-surface-700 bg-surface-800 px-5 py-3">
-          <div><p className="text-xs text-surface-400">Customer</p><p className="font-medium text-surface-100">{repair.customer.name}</p></div>
-          <div><p className="text-xs text-surface-400">Email</p><p className="text-surface-300">{repair.customer.email || "—"}</p></div>
-          <div><p className="text-xs text-surface-400">Phone</p><p className="text-surface-300">{repair.customer.phone}</p></div>
-          <Link to={`/admin/customers/${repair.customer.id}`} className="ml-auto text-sm text-accent-500 hover:text-accent-400">View Customer →</Link>
+        <div className="mb-6 flex flex-wrap items-center gap-4 rounded-lg border border-warm-700 bg-warm-800 px-5 py-3">
+          <div><p className="text-xs text-warm-400">Customer</p><p className="font-medium text-warm-50">{repair.customer.name}</p></div>
+          <div><p className="text-xs text-warm-400">Email</p><p className="text-warm-300">{repair.customer.email || "—"}</p></div>
+          <div><p className="text-xs text-warm-400">Phone</p><p className="text-warm-300">{repair.customer.phone}</p></div>
+          <Link to={`/admin/customers/${repair.customer.id}`} className="ml-auto text-sm text-copper-500 hover:text-copper-600">View Customer →</Link>
         </div>
       )}
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-surface-700 pb-px">
+      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-warm-700 pb-px">
         {tabs.map((tab) => (
           <button key={tab.key} onClick={() => setActiveTab(tab.key)}
             className={cn("flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-medium transition",
-              activeTab === tab.key ? "border-b-2 border-accent-500 text-accent-500" : "text-surface-400 hover:text-surface-100")}>
+              activeTab === tab.key ? "border-b-2 border-copper-500 text-copper-500" : "text-warm-400 hover:text-warm-50")}>
             <tab.icon className="h-4 w-4" />{tab.label}
           </button>
         ))}
@@ -472,31 +472,31 @@ export default function AdminRepairDetailPage() {
       {/* Overview Tab */}
       {activeTab === "overview" && (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="rounded-lg border border-surface-700 bg-surface-800 p-6">
-            <h3 className="mb-4 font-heading text-lg font-semibold text-surface-100">Device Information</h3>
+          <div className="rounded-lg border border-warm-700 bg-warm-800 p-6">
+            <h3 className="mb-4 font-heading text-lg font-semibold text-warm-50">Device Information</h3>
             {repair.device ? (
               <div className="space-y-3">
-                <div className="flex justify-between"><span className="text-surface-400">Type</span><span className="text-surface-100">{repair.device.device_type}</span></div>
-                <div className="flex justify-between"><span className="text-surface-400">Brand</span><span className="text-surface-100">{repair.device.brand}</span></div>
-                <div className="flex justify-between"><span className="text-surface-400">Model</span><span className="text-surface-100">{repair.device.model}</span></div>
-                <div className="flex justify-between"><span className="text-surface-400">Colour</span><span className="text-surface-100">{repair.device.colour || "N/A"}</span></div>
-                <div className="flex justify-between"><span className="text-surface-400">IMEI</span><span className="text-surface-100">{repair.device.imei || "N/A"}</span></div>
-                <div className="flex justify-between"><span className="text-surface-400">Serial</span><span className="text-surface-100">{repair.device.serial_number || "N/A"}</span></div>
-                {repair.device.accessories && <div className="flex justify-between"><span className="text-surface-400">Accessories</span><span className="text-surface-100">{repair.device.accessories}</span></div>}
-                {repair.device.existing_damage && <div className="flex justify-between"><span className="text-surface-400">Existing Damage</span><span className="text-surface-100">{repair.device.existing_damage}</span></div>}
+                <div className="flex justify-between"><span className="text-warm-400">Type</span><span className="text-warm-50">{repair.device.device_type}</span></div>
+                <div className="flex justify-between"><span className="text-warm-400">Brand</span><span className="text-warm-50">{repair.device.brand}</span></div>
+                <div className="flex justify-between"><span className="text-warm-400">Model</span><span className="text-warm-50">{repair.device.model}</span></div>
+                <div className="flex justify-between"><span className="text-warm-400">Colour</span><span className="text-warm-50">{repair.device.colour || "N/A"}</span></div>
+                <div className="flex justify-between"><span className="text-warm-400">IMEI</span><span className="text-warm-50">{repair.device.imei || "N/A"}</span></div>
+                <div className="flex justify-between"><span className="text-warm-400">Serial</span><span className="text-warm-50">{repair.device.serial_number || "N/A"}</span></div>
+                {repair.device.accessories && <div className="flex justify-between"><span className="text-warm-400">Accessories</span><span className="text-warm-50">{repair.device.accessories}</span></div>}
+                {repair.device.existing_damage && <div className="flex justify-between"><span className="text-warm-400">Existing Damage</span><span className="text-warm-50">{repair.device.existing_damage}</span></div>}
               </div>
-            ) : (<p className="text-surface-400">No device linked.</p>)}
+            ) : (<p className="text-warm-400">No device linked.</p>)}
           </div>
-          <div className="rounded-lg border border-surface-700 bg-surface-800 p-6">
-            <h3 className="mb-4 font-heading text-lg font-semibold text-surface-100">Issue Details</h3>
-            <p className="text-surface-300">{repair.issue_description}</p>
-            {repair.diagnosis && <div className="mt-4"><h4 className="text-sm font-medium text-surface-400">Diagnosis</h4><p className="mt-1 text-surface-300">{repair.diagnosis}</p></div>}
-            {repair.repair_notes && <div className="mt-4"><h4 className="text-sm font-medium text-surface-400">Repair Notes</h4><p className="mt-1 text-surface-300">{repair.repair_notes}</p></div>}
+          <div className="rounded-lg border border-warm-700 bg-warm-800 p-6">
+            <h3 className="mb-4 font-heading text-lg font-semibold text-warm-50">Issue Details</h3>
+            <p className="text-warm-300">{repair.issue_description}</p>
+            {repair.diagnosis && <div className="mt-4"><h4 className="text-sm font-medium text-warm-400">Diagnosis</h4><p className="mt-1 text-warm-300">{repair.diagnosis}</p></div>}
+            {repair.repair_notes && <div className="mt-4"><h4 className="text-sm font-medium text-warm-400">Repair Notes</h4><p className="mt-1 text-warm-300">{repair.repair_notes}</p></div>}
             <div className="mt-4 grid grid-cols-2 gap-4">
-              {repair.labour_cost && <div><p className="text-xs text-surface-400">Labour</p><p className="text-surface-100">{formatCurrency(Number(repair.labour_cost))}</p></div>}
-              {repair.parts_cost && <div><p className="text-xs text-surface-400">Parts</p><p className="text-surface-100">{formatCurrency(Number(repair.parts_cost))}</p></div>}
-              {repair.estimated_completion && <div><p className="text-xs text-surface-400">Est. Completion</p><p className="text-surface-100">{repair.estimated_completion}</p></div>}
-              {repair.completed_date && <div><p className="text-xs text-surface-400">Completed</p><p className="text-surface-100">{formatDate(repair.completed_date)}</p></div>}
+              {repair.labour_cost && <div><p className="text-xs text-warm-400">Labour</p><p className="text-warm-50">{formatCurrency(Number(repair.labour_cost))}</p></div>}
+              {repair.parts_cost && <div><p className="text-xs text-warm-400">Parts</p><p className="text-warm-50">{formatCurrency(Number(repair.parts_cost))}</p></div>}
+              {repair.estimated_completion && <div><p className="text-xs text-warm-400">Est. Completion</p><p className="text-warm-50">{repair.estimated_completion}</p></div>}
+              {repair.completed_date && <div><p className="text-xs text-warm-400">Completed</p><p className="text-warm-50">{formatDate(repair.completed_date)}</p></div>}
             </div>
           </div>
         </div>
@@ -504,25 +504,25 @@ export default function AdminRepairDetailPage() {
 
       {/* Timeline Tab */}
       {activeTab === "timeline" && (
-        <div className="rounded-lg border border-surface-700 bg-surface-800 p-6">
-          <h3 className="mb-6 font-heading text-lg font-semibold text-surface-100">Repair Timeline</h3>
+        <div className="rounded-lg border border-warm-700 bg-warm-800 p-6">
+          <h3 className="mb-6 font-heading text-lg font-semibold text-warm-50">Repair Timeline</h3>
           {timelineEntries.length === 0 ? (
-            <p className="text-surface-400">No timeline entries yet.</p>
+            <p className="text-warm-400">No timeline entries yet.</p>
           ) : (
             <div className="ml-1 space-y-0">
               {timelineEntries.map((entry: any, i: number) => (
                 <div key={i} className="flex gap-4">
                   <div className="flex flex-col items-center">
-                    <div className={cn("h-3 w-3 rounded-full ring-4", entry.type === "sms" ? "bg-surface-400 ring-surface-400/20" : "bg-accent-500 ring-accent-500/20")} />
-                    {i < timelineEntries.length - 1 && <div className="w-0.5 flex-1 bg-surface-700" />}
+                    <div className={cn("h-3 w-3 rounded-full ring-4", entry.type === "sms" ? "bg-warm-400 ring-warm-400/20" : "bg-copper-500 ring-copper-500/20")} />
+                    {i < timelineEntries.length - 1 && <div className="w-0.5 flex-1 bg-warm-700" />}
                   </div>
                   <div className="pb-6">
-                    <p className="text-sm font-medium text-surface-100">
+                    <p className="text-sm font-medium text-warm-50">
                       {entry.type === "sms" ? (entry.direction === "outbound" ? "SMS Sent" : "SMS Received") : getStatusLabel(entry.status || entry.to_status)}
                     </p>
-                    <p className="text-xs text-surface-400">{formatDateTime(entry.timestamp || entry.created_at)}</p>
-                    {entry.body && <p className="mt-1 text-sm text-surface-300 italic">"{entry.body}"</p>}
-                    {entry.notes && <p className="mt-1 text-sm text-surface-300">{entry.notes}</p>}
+                    <p className="text-xs text-warm-400">{formatDateTime(entry.timestamp || entry.created_at)}</p>
+                    {entry.body && <p className="mt-1 text-sm text-warm-300 italic">"{entry.body}"</p>}
+                    {entry.notes && <p className="mt-1 text-sm text-warm-300">{entry.notes}</p>}
                   </div>
                 </div>
               ))}
@@ -535,67 +535,67 @@ export default function AdminRepairDetailPage() {
       {activeTab === "communication" && (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1 space-y-6">
-            <div className="rounded-lg border border-surface-700 bg-surface-800 p-5">
-              <h3 className="mb-4 font-heading text-lg font-semibold text-surface-100">Send Template</h3>
+            <div className="rounded-lg border border-warm-700 bg-warm-800 p-5">
+              <h3 className="mb-4 font-heading text-lg font-semibold text-warm-50">Send Template</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-surface-400">Select Template</label>
+                  <label className="mb-1.5 block text-xs font-medium text-warm-400">Select Template</label>
                   <div className="relative">
                     <select value={selectedTemplateId} onChange={(e) => setSelectedTemplateId(e.target.value)}
-                      className="w-full appearance-none rounded-lg border border-surface-600 bg-surface-700 px-4 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none">
+                      className="w-full appearance-none rounded-lg border border-warm-600 bg-warm-700 px-4 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none">
                       <option value="">Choose a template...</option>
                       {templates?.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                     </select>
-                    <ChevronDown className="pointer-events-none absolute right-3 top-2.5 h-4 w-4 text-surface-400" />
+                    <ChevronDown className="pointer-events-none absolute right-3 top-2.5 h-4 w-4 text-warm-400" />
                   </div>
                 </div>
                 <button onClick={() => templateSmsMutation.mutate(selectedTemplateId)}
                   disabled={templateSmsMutation.isPending || !selectedTemplateId}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent-500 py-2.5 font-bold text-surface-100 transition hover:bg-accent-400 disabled:opacity-50">
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-copper-500 py-2.5 font-bold text-warm-50 transition hover:bg-copper-600 disabled:opacity-50">
                   <Send className="h-4 w-4" /> Send Template
                 </button>
               </div>
             </div>
-            <div className="rounded-lg border border-surface-700 bg-surface-800 p-5">
-              <h3 className="mb-4 font-heading text-lg font-semibold text-surface-100">Custom Message</h3>
+            <div className="rounded-lg border border-warm-700 bg-warm-800 p-5">
+              <h3 className="mb-4 font-heading text-lg font-semibold text-warm-50">Custom Message</h3>
               <div className="space-y-4">
                 <textarea placeholder="Type your message..." value={smsBody} onChange={(e) => setSmsBody(e.target.value)} rows={4}
-                  className="w-full rounded-lg border border-surface-600 bg-surface-700 px-4 py-2.5 text-surface-100 placeholder-surface-400 focus:border-accent-500 focus:outline-none resize-none" />
+                  className="w-full rounded-lg border border-warm-600 bg-warm-700 px-4 py-2.5 text-warm-50 placeholder-warm-400 focus:border-copper-500 focus:outline-none resize-none" />
                 <div className="grid grid-cols-2 gap-2">
                   {[1, 2].map(num => (
                     <button key={num} onClick={() => setSimNumber(num)}
                       className={cn("rounded py-1.5 text-xs font-medium border transition",
-                        simNumber === num ? "border-accent-500 bg-accent-500/10 text-accent-500" : "border-surface-600 bg-surface-700 text-surface-400")}>
+                        simNumber === num ? "border-copper-500 bg-copper-500/10 text-copper-500" : "border-warm-600 bg-warm-700 text-warm-400")}>
                       SIM {num}
                     </button>
                   ))}
                 </div>
                 <button onClick={() => smsMutation.mutate()} disabled={smsMutation.isPending || !smsBody}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent-500 py-2.5 font-bold text-surface-100 transition hover:bg-accent-400 disabled:opacity-50">
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-copper-500 py-2.5 font-bold text-warm-50 transition hover:bg-copper-600 disabled:opacity-50">
                   <Send className="h-4 w-4" /> Send SMS
                 </button>
               </div>
             </div>
           </div>
           <div className="lg:col-span-2">
-            <div className="rounded-lg border border-surface-700 bg-surface-800">
-              <div className="border-b border-surface-700 px-5 py-4"><h3 className="font-heading text-lg font-semibold text-surface-100">SMS History</h3></div>
-              <div className="divide-y divide-surface-700">
+            <div className="rounded-lg border border-warm-700 bg-warm-800">
+              <div className="border-b border-warm-700 px-5 py-4"><h3 className="font-heading text-lg font-semibold text-warm-50">SMS History</h3></div>
+              <div className="divide-y divide-warm-700">
                 {!smsMessages?.data?.length ? (
-                  <div className="px-5 py-12 text-center text-surface-400">No SMS history.</div>
+                  <div className="px-5 py-12 text-center text-warm-400">No SMS history.</div>
                 ) : (
                   smsMessages.data.map((msg: any) => (
                     <div key={msg.id} className="px-5 py-4 transition hover:bg-surface-750">
                       <div className="flex items-center justify-between">
                         <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
-                          msg.direction === "outbound" ? "bg-accent-500/10 text-accent-500" : "bg-surface-500/10 text-surface-300")}>{msg.direction}</span>
-                        <span className="text-[10px] text-surface-500 uppercase">{formatDateTime(msg.created_at)}</span>
+                          msg.direction === "outbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-500/10 text-warm-300")}>{msg.direction}</span>
+                        <span className="text-[10px] text-warm-500 uppercase">{formatDateTime(msg.created_at)}</span>
                       </div>
-                      <p className="mt-1 text-sm text-surface-300">{msg.body}</p>
+                      <p className="mt-1 text-sm text-warm-300">{msg.body}</p>
                       <div className="mt-2 flex items-center gap-2">
                         <span className={cn("text-[10px] font-medium uppercase",
                           msg.status === "delivered" ? "text-green-400" : msg.status === "failed" ? "text-red-400" : "text-yellow-400")}>{msg.status}</span>
-                        {msg.sim_number && <span className="text-[10px] text-surface-500">• SIM {msg.sim_number}</span>}
+                        {msg.sim_number && <span className="text-[10px] text-warm-500">• SIM {msg.sim_number}</span>}
                       </div>
                     </div>
                   ))
@@ -610,42 +610,42 @@ export default function AdminRepairDetailPage() {
       {activeTab === "quotes" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-surface-100">{quotes.length} Quote{quotes.length !== 1 ? "s" : ""}</h2>
+            <h2 className="text-lg font-semibold text-warm-50">{quotes.length} Quote{quotes.length !== 1 ? "s" : ""}</h2>
             <button onClick={() => setShowCreateQuote(true)}
-              className="flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-surface-100 hover:bg-accent-400">
+              className="flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-semibold text-warm-50 hover:bg-copper-600">
               <Plus className="h-4 w-4" /> New Quote
             </button>
           </div>
           {quotes.length === 0 ? (
-            <div className="rounded-lg border border-surface-700 bg-surface-800 p-8 text-center">
-              <FileText className="mx-auto h-12 w-12 text-surface-600" />
-              <h3 className="mt-4 text-lg font-semibold text-surface-100">No quotes yet</h3>
-              <p className="mt-2 text-surface-400">Create a quote for this repair to get started.</p>
+            <div className="rounded-lg border border-warm-700 bg-warm-800 p-8 text-center">
+              <FileText className="mx-auto h-12 w-12 text-warm-600" />
+              <h3 className="mt-4 text-lg font-semibold text-warm-50">No quotes yet</h3>
+              <p className="mt-2 text-warm-400">Create a quote for this repair to get started.</p>
               <button onClick={() => setShowCreateQuote(true)}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-surface-100 hover:bg-accent-400">
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-semibold text-warm-50 hover:bg-copper-600">
                 <Plus className="h-4 w-4" /> New Quote
               </button>
             </div>
           ) : (
             quotes.map((quote) => (
-              <div key={quote.id} className="rounded-lg border border-surface-700 bg-surface-800 p-6">
+              <div key={quote.id} className="rounded-lg border border-warm-700 bg-warm-800 p-6">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="font-heading text-lg font-semibold text-surface-100">{quote.quote_number}</p>
-                    <p className="text-sm text-surface-400">Issued {formatDate(quote.created_at)}</p>
+                    <p className="font-heading text-lg font-semibold text-warm-50">{quote.quote_number}</p>
+                    <p className="text-sm text-warm-400">Issued {formatDate(quote.created_at)}</p>
                   </div>
                   <span className={cn("rounded-full border px-3 py-1 text-xs font-medium", getStatusColor(quote.status))}>
                     {getStatusLabel(quote.status)}
                   </span>
                 </div>
-                {quote.description && <p className="mt-3 text-sm text-surface-300">{quote.description}</p>}
+                {quote.description && <p className="mt-3 text-sm text-warm-300">{quote.description}</p>}
 
                 {/* Line items table */}
                 {quote.items && quote.items.length > 0 ? (
                   <div className="mt-4 overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-surface-700 text-left text-xs text-surface-400">
+                        <tr className="border-b border-warm-700 text-left text-xs text-warm-400">
                           <th className="pb-2 font-medium">Description</th>
                           <th className="pb-2 font-medium">Type</th>
                           <th className="pb-2 text-right font-medium">Qty</th>
@@ -653,47 +653,47 @@ export default function AdminRepairDetailPage() {
                           <th className="pb-2 text-right font-medium">Total</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-surface-700/50">
+                      <tbody className="divide-y divide-warm-700/50">
                         {quote.items.map((item) => (
                           <tr key={item.id}>
-                            <td className="py-1.5 text-surface-100">{item.description}</td>
-                            <td className="py-1.5 text-surface-400 capitalize">{item.item_type}</td>
-                            <td className="py-1.5 text-right text-surface-300">{item.quantity}</td>
-                            <td className="py-1.5 text-right text-surface-300">{formatCurrency(item.unit_price)}</td>
-                            <td className="py-1.5 text-right text-surface-100">{formatCurrency(item.total)}</td>
+                            <td className="py-1.5 text-warm-50">{item.description}</td>
+                            <td className="py-1.5 text-warm-400 capitalize">{item.item_type}</td>
+                            <td className="py-1.5 text-right text-warm-300">{item.quantity}</td>
+                            <td className="py-1.5 text-right text-warm-300">{formatCurrency(item.unit_price)}</td>
+                            <td className="py-1.5 text-right text-warm-50">{formatCurrency(item.total)}</td>
                           </tr>
                         ))}
                       </tbody>
                       <tfoot>
-                        <tr className="border-t border-surface-600">
-                          <td colSpan={4} className="pt-2 text-right text-xs text-surface-400">Subtotal</td>
-                          <td className="pt-2 text-right text-surface-100">{formatCurrency(quote.items.reduce((s, i) => s + i.total, 0))}</td>
+                        <tr className="border-t border-warm-600">
+                          <td colSpan={4} className="pt-2 text-right text-xs text-warm-400">Subtotal</td>
+                          <td className="pt-2 text-right text-warm-50">{formatCurrency(quote.items.reduce((s, i) => s + i.total, 0))}</td>
                         </tr>
                         <tr>
-                          <td colSpan={4} className="pt-1 text-right text-xs text-surface-400">GST (10%)</td>
-                          <td className="pt-1 text-right text-surface-100">{formatCurrency(quote.gst_amount)}</td>
+                          <td colSpan={4} className="pt-1 text-right text-xs text-warm-400">GST (10%)</td>
+                          <td className="pt-1 text-right text-warm-50">{formatCurrency(quote.gst_amount)}</td>
                         </tr>
                         <tr>
-                          <td colSpan={4} className="pt-1 text-right text-sm font-medium text-surface-300">Total</td>
-                          <td className="pt-1 text-right font-semibold text-accent-500">{formatCurrency(quote.total_amount)}</td>
+                          <td colSpan={4} className="pt-1 text-right text-sm font-medium text-warm-300">Total</td>
+                          <td className="pt-1 text-right font-semibold text-copper-500">{formatCurrency(quote.total_amount)}</td>
                         </tr>
                       </tfoot>
                     </table>
                   </div>
                 ) : (
                   <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    <div><p className="text-xs text-surface-400">Labour</p><p className="text-surface-100">{formatCurrency(quote.labour_cost)}</p></div>
-                    <div><p className="text-xs text-surface-400">Parts</p><p className="text-surface-100">{formatCurrency(quote.parts_cost)}</p></div>
-                    <div><p className="text-xs text-surface-400">GST</p><p className="text-surface-100">{formatCurrency(quote.gst_amount)}</p></div>
-                    <div><p className="text-xs text-surface-400">Total</p><p className="font-semibold text-accent-500">{formatCurrency(quote.total_amount)}</p></div>
+                    <div><p className="text-xs text-warm-400">Labour</p><p className="text-warm-50">{formatCurrency(quote.labour_cost)}</p></div>
+                    <div><p className="text-xs text-warm-400">Parts</p><p className="text-warm-50">{formatCurrency(quote.parts_cost)}</p></div>
+                    <div><p className="text-xs text-warm-400">GST</p><p className="text-warm-50">{formatCurrency(quote.gst_amount)}</p></div>
+                    <div><p className="text-xs text-warm-400">Total</p><p className="font-semibold text-copper-500">{formatCurrency(quote.total_amount)}</p></div>
                   </div>
                 )}
-                {quote.valid_until && <p className="mt-2 text-xs text-surface-400">Valid until: {formatDate(quote.valid_until)}</p>}
+                {quote.valid_until && <p className="mt-2 text-xs text-warm-400">Valid until: {formatDate(quote.valid_until)}</p>}
 
                 {/* Action buttons */}
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <label
-                    className="flex items-center gap-1.5 rounded-lg border border-surface-600 px-3 py-1.5 text-xs text-surface-100 hover:bg-surface-700 cursor-pointer"
+                    className="flex items-center gap-1.5 rounded-lg border border-warm-600 px-3 py-1.5 text-xs text-warm-50 hover:bg-warm-700 cursor-pointer"
                   >
                     <Upload className="h-3.5 w-3.5" /> Upload PDF
                     <input type="file" accept=".pdf" className="hidden"
@@ -708,7 +708,7 @@ export default function AdminRepairDetailPage() {
                   {(quote.status === "draft" || quote.status === "sent") && (
                     <button onClick={() => sendQuoteMutation.mutate(quote.id)}
                       disabled={sendQuoteMutation.isPending}
-                      className="flex items-center gap-1.5 rounded-lg border border-surface-600 px-3 py-1.5 text-xs text-accent-500 hover:bg-surface-700">
+                      className="flex items-center gap-1.5 rounded-lg border border-warm-600 px-3 py-1.5 text-xs text-copper-500 hover:bg-warm-700">
                       <Send className="h-3.5 w-3.5" /> Send
                     </button>
                   )}
@@ -722,7 +722,7 @@ export default function AdminRepairDetailPage() {
                         }
                       }}
                       defaultValue=""
-                      className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-surface-300 focus:border-accent-500 focus:outline-none">
+                      className="rounded-lg border border-warm-600 bg-warm-700 px-2 py-1.5 text-xs text-warm-300 focus:border-copper-500 focus:outline-none">
                       <option value="" disabled>Email template...</option>
                       {emailTemplates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                     </select>
@@ -753,47 +753,47 @@ export default function AdminRepairDetailPage() {
       {activeTab === "invoices" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-surface-100">{invoices.length} Invoice{invoices.length !== 1 ? "s" : ""}</h2>
+            <h2 className="text-lg font-semibold text-warm-50">{invoices.length} Invoice{invoices.length !== 1 ? "s" : ""}</h2>
             <button onClick={() => setShowCreateInvoice(true)}
-              className="flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-surface-100 hover:bg-accent-400">
+              className="flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-semibold text-warm-50 hover:bg-copper-600">
               <Plus className="h-4 w-4" /> New Invoice
             </button>
           </div>
           {invoices.length === 0 ? (
-            <div className="rounded-lg border border-surface-700 bg-surface-800 p-8 text-center">
-              <FileDown className="mx-auto h-12 w-12 text-surface-600" />
-              <h3 className="mt-4 text-lg font-semibold text-surface-100">No invoices yet</h3>
-              <p className="mt-2 text-surface-400">Create an invoice for this repair to get started.</p>
+            <div className="rounded-lg border border-warm-700 bg-warm-800 p-8 text-center">
+              <FileDown className="mx-auto h-12 w-12 text-warm-600" />
+              <h3 className="mt-4 text-lg font-semibold text-warm-50">No invoices yet</h3>
+              <p className="mt-2 text-warm-400">Create an invoice for this repair to get started.</p>
               <button onClick={() => setShowCreateInvoice(true)}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-surface-100 hover:bg-accent-400">
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-semibold text-warm-50 hover:bg-copper-600">
                 <Plus className="h-4 w-4" /> New Invoice
               </button>
             </div>
           ) : (
             invoices.map((invoice) => (
-              <div key={invoice.id} className="rounded-lg border border-surface-700 bg-surface-800 p-6">
+              <div key={invoice.id} className="rounded-lg border border-warm-700 bg-warm-800 p-6">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="font-heading text-lg font-semibold text-surface-100">{invoice.invoice_number}</p>
-                    <p className="text-sm text-surface-400">Issued {formatDate(invoice.created_at)}</p>
+                    <p className="font-heading text-lg font-semibold text-warm-50">{invoice.invoice_number}</p>
+                    <p className="text-sm text-warm-400">Issued {formatDate(invoice.created_at)}</p>
                   </div>
                   <span className={cn("rounded-full border px-3 py-1 text-xs font-medium", getStatusColor(invoice.status))}>
                     {getStatusLabel(invoice.status)}
                   </span>
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-4">
-                  <div><p className="text-xs text-surface-400">Subtotal</p><p className="text-surface-100">{formatCurrency(invoice.subtotal)}</p></div>
-                  <div><p className="text-xs text-surface-400">GST</p><p className="text-surface-100">{formatCurrency(invoice.gst_amount)}</p></div>
-                  <div><p className="text-xs text-surface-400">Total</p><p className="font-semibold text-accent-500">{formatCurrency(invoice.total_amount)}</p></div>
+                  <div><p className="text-xs text-warm-400">Subtotal</p><p className="text-warm-50">{formatCurrency(invoice.subtotal)}</p></div>
+                  <div><p className="text-xs text-warm-400">GST</p><p className="text-warm-50">{formatCurrency(invoice.gst_amount)}</p></div>
+                  <div><p className="text-xs text-warm-400">Total</p><p className="font-semibold text-copper-500">{formatCurrency(invoice.total_amount)}</p></div>
                 </div>
-                {invoice.due_date && <p className="mt-3 text-sm text-surface-400">Due: {formatDate(invoice.due_date)}</p>}
-                {invoice.notes && <p className="mt-2 text-sm text-surface-300">{invoice.notes}</p>}
+                {invoice.due_date && <p className="mt-3 text-sm text-warm-400">Due: {formatDate(invoice.due_date)}</p>}
+                {invoice.notes && <p className="mt-2 text-sm text-warm-300">{invoice.notes}</p>}
                 {invoice.status === "paid" && <p className="mt-2 text-sm text-green-400">Paid on {formatDate(invoice.paid_date)} — {formatCurrency(invoice.paid_amount || 0)}</p>}
 
                 {/* Action buttons */}
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <label
-                    className="flex items-center gap-1.5 rounded-lg border border-surface-600 px-3 py-1.5 text-xs text-surface-100 hover:bg-surface-700 cursor-pointer"
+                    className="flex items-center gap-1.5 rounded-lg border border-warm-600 px-3 py-1.5 text-xs text-warm-50 hover:bg-warm-700 cursor-pointer"
                   >
                     <Upload className="h-3.5 w-3.5" /> Upload PDF
                     <input type="file" accept=".pdf" className="hidden"
@@ -808,7 +808,7 @@ export default function AdminRepairDetailPage() {
                   {(invoice.status === "draft" || invoice.status === "sent") && (
                     <button onClick={() => sendInvoiceMutation.mutate(invoice.id)}
                       disabled={sendInvoiceMutation.isPending}
-                      className="flex items-center gap-1.5 rounded-lg border border-surface-600 px-3 py-1.5 text-xs text-accent-500 hover:bg-surface-700">
+                      className="flex items-center gap-1.5 rounded-lg border border-warm-600 px-3 py-1.5 text-xs text-copper-500 hover:bg-warm-700">
                       <Send className="h-3.5 w-3.5" /> Send
                     </button>
                   )}
@@ -822,7 +822,7 @@ export default function AdminRepairDetailPage() {
                         }
                       }}
                       defaultValue=""
-                      className="rounded-lg border border-surface-600 bg-surface-700 px-2 py-1.5 text-xs text-surface-300 focus:border-accent-500 focus:outline-none">
+                      className="rounded-lg border border-warm-600 bg-warm-700 px-2 py-1.5 text-xs text-warm-300 focus:border-copper-500 focus:outline-none">
                       <option value="" disabled>Email template...</option>
                       {emailTemplates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                     </select>
@@ -846,8 +846,8 @@ export default function AdminRepairDetailPage() {
       {activeTab === "documents" && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-surface-100">{docs.length} Document{docs.length !== 1 ? "s" : ""}</h2>
-            <label className="flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-surface-100 hover:bg-accent-400 cursor-pointer">
+            <h2 className="text-lg font-semibold text-warm-50">{docs.length} Document{docs.length !== 1 ? "s" : ""}</h2>
+            <label className="flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2 text-sm font-semibold text-warm-50 hover:bg-copper-600 cursor-pointer">
               <Upload className="h-4 w-4" /> Upload Document
               <input type="file" className="hidden"
                 onChange={(e) => {
@@ -859,20 +859,20 @@ export default function AdminRepairDetailPage() {
             </label>
           </div>
           {docs.length === 0 ? (
-            <div className="rounded-lg border border-surface-700 bg-surface-800 p-8 text-center">
-              <Image className="mx-auto h-12 w-12 text-surface-600" />
-              <h3 className="mt-4 text-lg font-semibold text-surface-100">No documents yet</h3>
-              <p className="mt-2 text-surface-400">Upload documents such as quotes, invoices, or receipts.</p>
+            <div className="rounded-lg border border-warm-700 bg-warm-800 p-8 text-center">
+              <Image className="mx-auto h-12 w-12 text-warm-600" />
+              <h3 className="mt-4 text-lg font-semibold text-warm-50">No documents yet</h3>
+              <p className="mt-2 text-warm-400">Upload documents such as quotes, invoices, or receipts.</p>
             </div>
           ) : (
             docs.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between rounded-lg border border-surface-700 bg-surface-800 p-4">
+              <div key={doc.id} className="flex items-center justify-between rounded-lg border border-warm-700 bg-warm-800 p-4">
                 <div>
-                  <p className="font-medium text-surface-100">{doc.document_type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</p>
-                  <p className="text-sm text-surface-400">{formatDate(doc.created_at)}</p>
+                  <p className="font-medium text-warm-50">{doc.document_type.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</p>
+                  <p className="text-sm text-warm-400">{formatDate(doc.created_at)}</p>
                 </div>
                 <button onClick={() => handleDownloadDocument(doc.id, doc.filename)}
-                  className="flex items-center gap-2 rounded-lg border border-surface-600 px-4 py-2 text-sm text-surface-100 hover:bg-surface-700">
+                  className="flex items-center gap-2 rounded-lg border border-warm-600 px-4 py-2 text-sm text-warm-50 hover:bg-warm-700">
                   <Download className="h-4 w-4" /> Download
                 </button>
               </div>
@@ -921,3 +921,4 @@ export default function AdminRepairDetailPage() {
     </div>
   );
 }
+

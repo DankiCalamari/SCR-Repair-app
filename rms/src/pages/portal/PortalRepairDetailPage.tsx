@@ -18,7 +18,7 @@ function TimelineEntry({ entry, isLast }: { entry: { timestamp: string; status: 
   return (
     <div className="flex gap-4">
       <div className="flex flex-col items-center">
-        <div className="h-3 w-3 rounded-full bg-accent-500 ring-4 ring-accent-500/20" />
+        <div className="h-3 w-3 rounded-full bg-copper-500 ring-4 ring-copper-500/20" />
         {!isLast && <div className="w-0.5 flex-1 bg-warm-200" />}
       </div>
       <div className="pb-6">
@@ -69,7 +69,7 @@ export default function PortalRepairDetailPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-copper-500 border-t-transparent" />
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function PortalRepairDetailPage() {
       <div className="flex min-h-screen items-center justify-center bg-warm-50">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-warm-900">Repair not found</h2>
-          <Link to="/portal" className="mt-4 inline-block text-accent-500 hover:text-accent-600">Back to Dashboard</Link>
+          <Link to="/portal" className="mt-4 inline-block text-copper-500 hover:text-accent-600">Back to Dashboard</Link>
         </div>
       </div>
     );
@@ -144,7 +144,7 @@ export default function PortalRepairDetailPage() {
               className={cn(
                 "flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-medium transition",
                 activeTab === tab.key
-                  ? "border-b-2 border-accent-500 text-accent-500"
+                  ? "border-b-2 border-copper-500 text-copper-500"
                   : "text-warm-500 hover:text-warm-900"
               )}
             >
@@ -238,7 +238,7 @@ export default function PortalRepairDetailPage() {
                     <div><p className="text-xs text-warm-500">Labour</p><p className="text-warm-900">{formatCurrency(quote.labour_cost)}</p></div>
                     <div><p className="text-xs text-warm-500">Parts</p><p className="text-warm-900">{formatCurrency(quote.parts_cost)}</p></div>
                     <div><p className="text-xs text-warm-500">GST</p><p className="text-warm-900">{formatCurrency(quote.gst_amount)}</p></div>
-                    <div><p className="text-xs text-warm-500">Total</p><p className="font-semibold text-accent-500">{formatCurrency(quote.total_amount)}</p></div>
+                    <div><p className="text-xs text-warm-500">Total</p><p className="font-semibold text-copper-500">{formatCurrency(quote.total_amount)}</p></div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-3">
                     {(quote.status === "sent" || quote.status === "draft") && (
@@ -249,7 +249,7 @@ export default function PortalRepairDetailPage() {
                             placeholder="Type your name as signature"
                             value={signature}
                             onChange={(e) => setSignature(e.target.value)}
-                            className="rounded-lg border border-warm-300 bg-warm-100 px-3 py-2 text-sm text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none"
+                            className="rounded-lg border border-warm-300 bg-warm-100 px-3 py-2 text-sm text-warm-900 placeholder-warm-400 focus:border-copper-500 focus:outline-none"
                           />
                           <button
                             onClick={() => approveMutation.mutate({ quoteId: quote.id, digitalSignature: signature })}
@@ -298,7 +298,7 @@ export default function PortalRepairDetailPage() {
                   <div className="mt-4 grid grid-cols-3 gap-4">
                     <div><p className="text-xs text-warm-500">Subtotal</p><p className="text-warm-900">{formatCurrency(invoice.subtotal)}</p></div>
                     <div><p className="text-xs text-warm-500">GST</p><p className="text-warm-900">{formatCurrency(invoice.gst_amount)}</p></div>
-                    <div><p className="text-xs text-warm-500">Total</p><p className="font-semibold text-accent-500">{formatCurrency(invoice.total_amount)}</p></div>
+                    <div><p className="text-xs text-warm-500">Total</p><p className="font-semibold text-copper-500">{formatCurrency(invoice.total_amount)}</p></div>
                   </div>
                   {invoice.due_date && (
                     <p className="mt-3 text-sm text-warm-500">Due: {formatDate(invoice.due_date)}</p>
@@ -367,3 +367,4 @@ export default function PortalRepairDetailPage() {
     </div>
   );
 }
+

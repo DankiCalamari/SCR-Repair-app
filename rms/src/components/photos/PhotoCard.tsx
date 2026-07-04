@@ -136,3 +136,4 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
     </div>
   );
 }
+

@@ -59,7 +59,7 @@ export default function PortalProfilePage() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-copper-500 focus:outline-none focus:ring-1 focus:ring-copper-500"
               />
             </div>
             <div>
@@ -78,12 +78,12 @@ export default function PortalProfilePage() {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-copper-500 focus:outline-none focus:ring-1 focus:ring-copper-500"
               />
             </div>
             <button
               type="submit"
-              className="rounded-lg bg-accent-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
+              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
             >
               Update Profile
             </button>
@@ -99,7 +99,7 @@ export default function PortalProfilePage() {
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-copper-500 focus:outline-none focus:ring-1 focus:ring-copper-500"
               />
             </div>
             <div>
@@ -108,7 +108,7 @@ export default function PortalProfilePage() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-copper-500 focus:outline-none focus:ring-1 focus:ring-copper-500"
               />
             </div>
             <div>
@@ -117,12 +117,12 @@ export default function PortalProfilePage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+                className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 focus:border-copper-500 focus:outline-none focus:ring-1 focus:ring-copper-500"
               />
             </div>
             <button
               type="submit"
-              className="rounded-lg bg-accent-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
+              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
             >
               Change Password
             </button>
@@ -132,3 +132,4 @@ export default function PortalProfilePage() {
     </div>
   );
 }
+

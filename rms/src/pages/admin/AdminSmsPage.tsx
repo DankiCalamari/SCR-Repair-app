@@ -85,13 +85,13 @@ export default function AdminSmsPage() {
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-surface-100">SMS Dashboard</h1>
-          <p className="mt-1 text-surface-400">Gateway health and message management</p>
+          <h1 className="font-heading text-3xl font-bold text-warm-50">SMS Dashboard</h1>
+          <p className="mt-1 text-warm-400">Gateway health and message management</p>
         </div>
         <button
           onClick={() => queryClient.invalidateQueries({ queryKey: ["sms-gateway-status"] })}
           disabled={isFetchingStatus}
-          className="flex items-center gap-2 rounded-lg border border-surface-700 bg-surface-900 px-4 py-2 text-sm text-surface-100 hover:bg-surface-800 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg border border-warm-700 bg-warm-900 px-4 py-2 text-sm text-warm-50 hover:bg-warm-800 disabled:opacity-50"
         >
           <RefreshCw className={cn("h-4 w-4", isFetchingStatus && "animate-spin")} />
           Refresh Status
@@ -100,9 +100,9 @@ export default function AdminSmsPage() {
 
       {/* Health Monitor */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+        <div className="rounded-lg border border-warm-800 bg-warm-900 p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-surface-400">Gateway Status</p>
+            <p className="text-sm text-warm-400">Gateway Status</p>
             {gatewayStatus?.connected ? (
               <Wifi className="h-5 w-5 text-green-400" />
             ) : (
@@ -114,36 +114,36 @@ export default function AdminSmsPage() {
               {gatewayStatus?.connected ? (gatewayStatus.status || "Online") : "Offline"}
             </p>
             {gatewayStatus?.last_seen && (
-              <p className="mt-1 text-xs text-surface-500">
+              <p className="mt-1 text-xs text-warm-500">
                 Last seen: {formatDateTime(gatewayStatus.last_seen)}
               </p>
             )}
           </div>
         </div>
 
-        <div className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+        <div className="rounded-lg border border-warm-800 bg-warm-900 p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-surface-400">Device Battery</p>
+            <p className="text-sm text-warm-400">Device Battery</p>
             {getBatteryIcon(gatewayStatus?.battery_level ?? 0, gatewayStatus?.is_charging ?? false)}
           </div>
           <div className="mt-2">
-            <p className="text-2xl font-bold text-surface-100">
+            <p className="text-2xl font-bold text-warm-50">
               {gatewayStatus?.battery_level != null ? `${gatewayStatus.battery_level}%` : "N/A"}
             </p>
-            <p className="mt-1 text-xs text-surface-500">
+            <p className="mt-1 text-xs text-warm-500">
               {gatewayStatus?.is_charging ? "Charging" : "Unplugged"}
             </p>
           </div>
         </div>
 
         {gatewayStatus?.sim_cards?.map((sim) => (
-          <div key={sim.number} className="rounded-lg border border-surface-800 bg-surface-900 p-5">
+          <div key={sim.number} className="rounded-lg border border-warm-800 bg-warm-900 p-5">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-surface-400">SIM Slot {sim.number}</p>
-              <Smartphone className={cn("h-5 w-5", sim.status === "active" ? "text-green-400" : "text-surface-500")} />
+              <p className="text-sm text-warm-400">SIM Slot {sim.number}</p>
+              <Smartphone className={cn("h-5 w-5", sim.status === "active" ? "text-green-400" : "text-warm-500")} />
             </div>
             <div className="mt-2">
-              <p className="text-lg font-bold text-surface-100 truncate">
+              <p className="text-lg font-bold text-warm-50 truncate">
                 {sim.operator || "No SIM"}
               </p>
               <p className={cn("mt-1 text-xs font-medium uppercase", sim.status === "active" ? "text-green-400" : "text-red-400")}>
@@ -154,9 +154,9 @@ export default function AdminSmsPage() {
         ))}
 
         {!gatewayStatus?.sim_cards?.length && (
-          <div className="rounded-lg border border-surface-800 bg-surface-900 p-5 opacity-50">
-            <p className="text-sm text-surface-400">SIM Cards</p>
-            <p className="mt-2 text-lg font-bold text-surface-500">No SIM data</p>
+          <div className="rounded-lg border border-warm-800 bg-warm-900 p-5 opacity-50">
+            <p className="text-sm text-warm-400">SIM Cards</p>
+            <p className="mt-2 text-lg font-bold text-warm-500">No SIM data</p>
           </div>
         )}
       </div>
@@ -171,12 +171,12 @@ export default function AdminSmsPage() {
       )}
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 rounded-lg border border-surface-800 bg-surface-900 p-1 w-fit">
+      <div className="mb-6 flex gap-1 rounded-lg border border-warm-800 bg-warm-900 p-1 w-fit">
         <button
           onClick={() => setTab("messages")}
           className={cn(
             "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "messages" ? "bg-accent-500 text-surface-950" : "text-surface-400 hover:text-surface-100"
+            tab === "messages" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
           )}
         >
           <MessageSquare className="h-4 w-4" /> Messages
@@ -185,7 +185,7 @@ export default function AdminSmsPage() {
           onClick={() => setTab("unassigned")}
           className={cn(
             "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "unassigned" ? "bg-accent-500 text-surface-950" : "text-surface-400 hover:text-surface-100"
+            tab === "unassigned" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
           )}
         >
           <Inbox className="h-4 w-4" /> Unassigned
@@ -199,7 +199,7 @@ export default function AdminSmsPage() {
           onClick={() => setTab("templates")}
           className={cn(
             "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "templates" ? "bg-accent-500 text-surface-950" : "text-surface-400 hover:text-surface-100"
+            tab === "templates" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
           )}
         >
           <FileText className="h-4 w-4" /> Templates
@@ -210,33 +210,33 @@ export default function AdminSmsPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Send SMS Panel */}
           <div className="lg:col-span-1">
-            <div className="rounded-lg border border-surface-800 bg-surface-900 p-5 sticky top-8">
-              <h2 className="mb-4 font-heading text-lg font-semibold text-surface-100">New Message</h2>
+            <div className="rounded-lg border border-warm-800 bg-warm-900 p-5 sticky top-8">
+              <h2 className="mb-4 font-heading text-lg font-semibold text-warm-50">New Message</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-surface-400">Recipient Number</label>
+                  <label className="mb-1.5 block text-xs font-medium text-warm-400">Recipient Number</label>
                   <input
                     type="tel"
                     placeholder="e.g. 0400 000 000"
                     value={toNumber}
                     onChange={(e) => setToNumber(e.target.value)}
-                    className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none"
+                    className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-surface-400">Message Content</label>
+                  <label className="mb-1.5 block text-xs font-medium text-warm-400">Message Content</label>
                   <textarea
                     placeholder="Type your message..."
                     value={messageBody}
                     onChange={(e) => setMessageBody(e.target.value)}
                     rows={4}
-                    className="w-full rounded-lg border border-surface-700 bg-surface-800 px-4 py-2.5 text-surface-100 placeholder-surface-500 focus:border-accent-500 focus:outline-none resize-none"
+                    className="w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-surface-400">Select SIM Card</label>
+                  <label className="mb-1.5 block text-xs font-medium text-warm-400">Select SIM Card</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[1, 2].map((num) => (
                       <button
@@ -246,8 +246,8 @@ export default function AdminSmsPage() {
                         className={cn(
                           "rounded-lg border py-2 text-sm font-medium transition",
                           simNumber === num
-                            ? "border-accent-500 bg-accent-500/10 text-accent-500"
-                            : "border-surface-700 bg-surface-800 text-surface-400 hover:border-surface-600"
+                            ? "border-copper-500 bg-copper-500/10 text-copper-500"
+                            : "border-warm-700 bg-warm-800 text-warm-400 hover:border-warm-600"
                         )}
                       >
                         SIM {num}
@@ -259,7 +259,7 @@ export default function AdminSmsPage() {
                 <button
                   onClick={() => sendMutation.mutate()}
                   disabled={sendMutation.isPending || !toNumber || !messageBody || !gatewayStatus?.connected}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent-500 py-3 font-bold text-surface-950 transition hover:bg-accent-400 disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-copper-500 py-3 font-bold text-warm-950 transition hover:bg-copper-600 disabled:opacity-50"
                 >
                   <Send className="h-4 w-4" />
                   {sendMutation.isPending ? "Sending..." : "Send Message"}
@@ -270,53 +270,53 @@ export default function AdminSmsPage() {
 
           {/* Message History */}
           <div className="lg:col-span-2">
-            <div className="rounded-lg border border-surface-800 bg-surface-900">
-              <div className="flex items-center justify-between border-b border-surface-800 px-5 py-4">
-                <h2 className="font-heading text-lg font-semibold text-surface-100">Recent Activity</h2>
-                <div className="flex items-center gap-2 text-xs text-surface-400">
-                  <span className="flex items-center gap-1"><div className="h-2 w-2 rounded-full bg-accent-500" /> Outbound</span>
-                  <span className="flex items-center gap-1"><div className="h-2 w-2 rounded-full bg-surface-400" /> Inbound</span>
+            <div className="rounded-lg border border-warm-800 bg-warm-900">
+              <div className="flex items-center justify-between border-b border-warm-800 px-5 py-4">
+                <h2 className="font-heading text-lg font-semibold text-warm-50">Recent Activity</h2>
+                <div className="flex items-center gap-2 text-xs text-warm-400">
+                  <span className="flex items-center gap-1"><div className="h-2 w-2 rounded-full bg-copper-500" /> Outbound</span>
+                  <span className="flex items-center gap-1"><div className="h-2 w-2 rounded-full bg-warm-400" /> Inbound</span>
                 </div>
               </div>
-              <div className="divide-y divide-surface-800">
+              <div className="divide-y divide-warm-800">
                 {isLoading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <div key={i} className="animate-pulse px-5 py-4">
-                      <div className="h-4 w-32 rounded bg-surface-800" />
-                      <div className="mt-2 h-3 w-48 rounded bg-surface-800" />
+                      <div className="h-4 w-32 rounded bg-warm-800" />
+                      <div className="mt-2 h-3 w-48 rounded bg-warm-800" />
                     </div>
                   ))
                 ) : data?.data?.length === 0 ? (
                   <div className="px-5 py-24 text-center">
-                    <MessageSquare className="mx-auto h-12 w-12 text-surface-600" />
-                    <p className="mt-4 text-surface-400">No message history found</p>
+                    <MessageSquare className="mx-auto h-12 w-12 text-warm-600" />
+                    <p className="mt-4 text-warm-400">No message history found</p>
                   </div>
                 ) : (
                   data?.data?.map((msg: SmsMessage) => (
-                    <div key={msg.id} className="group flex items-start gap-4 px-5 py-4 transition hover:bg-surface-800">
+                    <div key={msg.id} className="group flex items-start gap-4 px-5 py-4 transition hover:bg-warm-800">
                       <div className={cn(
                         "mt-0.5 rounded-full p-2 transition",
-                        msg.direction === "outbound" ? "bg-accent-500/10 text-accent-500" : "bg-surface-500/10 text-surface-300"
+                        msg.direction === "outbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-500/10 text-warm-300"
                       )}>
                         {msg.direction === "outbound" ? <Send className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-surface-100">
+                            <span className="font-semibold text-warm-50">
                               {msg.direction === "outbound" ? msg.to_number : msg.from_number}
                             </span>
                             {msg.sim_number && (
-                              <span className="rounded bg-surface-700 px-1 py-0.5 text-[10px] text-surface-300">
+                              <span className="rounded bg-warm-700 px-1 py-0.5 text-[10px] text-warm-300">
                                 SIM {msg.sim_number}
                               </span>
                             )}
                           </div>
-                          <span className="text-[10px] text-surface-500 uppercase tracking-wider">
+                          <span className="text-[10px] text-warm-500 uppercase tracking-wider">
                             {formatDateTime(msg.created_at)}
                           </span>
                         </div>
-                        <p className="mt-1 text-sm text-surface-300 line-clamp-2">{msg.body}</p>
+                        <p className="mt-1 text-sm text-warm-300 line-clamp-2">{msg.body}</p>
                         <div className="mt-2 flex items-center gap-3">
                           <span className={cn(
                             "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
@@ -339,20 +339,20 @@ export default function AdminSmsPage() {
               </div>
 
               {totalPages > 1 && (
-                <div className="flex items-center justify-between border-t border-surface-800 px-5 py-4">
-                  <p className="text-xs text-surface-400">Showing page {page + 1} of {totalPages}</p>
+                <div className="flex items-center justify-between border-t border-warm-800 px-5 py-4">
+                  <p className="text-xs text-warm-400">Showing page {page + 1} of {totalPages}</p>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setPage((p) => Math.max(0, p - 1))}
                       disabled={page === 0}
-                      className="flex items-center gap-1 rounded border border-surface-700 px-3 py-1 text-xs text-surface-100 hover:bg-surface-800 disabled:opacity-50"
+                      className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50"
                     >
                       <ChevronLeft className="h-3 w-3" /> Previous
                     </button>
                     <button
                       onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                       disabled={page >= totalPages - 1}
-                      className="flex items-center gap-1 rounded border border-surface-700 px-3 py-1 text-xs text-surface-100 hover:bg-surface-800 disabled:opacity-50"
+                      className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50"
                     >
                       Next <ChevronRight className="h-3 w-3" />
                     </button>
@@ -365,26 +365,26 @@ export default function AdminSmsPage() {
       )}
 
       {tab === "unassigned" && (
-        <div className="rounded-lg border border-surface-800 bg-surface-900">
-          <div className="border-b border-surface-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-surface-100">Unassigned Inbound SMS</h2>
-            <p className="mt-1 text-sm text-surface-400">
+        <div className="rounded-lg border border-warm-800 bg-warm-900">
+          <div className="border-b border-warm-800 px-5 py-4">
+            <h2 className="font-heading text-lg font-semibold text-warm-50">Unassigned Inbound SMS</h2>
+            <p className="mt-1 text-sm text-warm-400">
               Inbound messages that could not be automatically linked to a customer. Assign them to a repair ticket manually.
             </p>
           </div>
-          <div className="divide-y divide-surface-800">
+          <div className="divide-y divide-warm-800">
             {isLoadingUnassigned ? (
               Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="animate-pulse px-5 py-4">
-                  <div className="h-4 w-32 rounded bg-surface-800" />
-                  <div className="mt-2 h-3 w-48 rounded bg-surface-800" />
+                  <div className="h-4 w-32 rounded bg-warm-800" />
+                  <div className="mt-2 h-3 w-48 rounded bg-warm-800" />
                 </div>
               ))
             ) : unassignedData?.data?.length === 0 ? (
               <div className="px-5 py-24 text-center">
-                <Inbox className="mx-auto h-12 w-12 text-surface-600" />
-                <p className="mt-4 text-surface-400">No unassigned messages</p>
-                <p className="mt-1 text-xs text-surface-500">All inbound SMS have been linked to customers</p>
+                <Inbox className="mx-auto h-12 w-12 text-warm-600" />
+                <p className="mt-4 text-warm-400">No unassigned messages</p>
+                <p className="mt-1 text-xs text-warm-500">All inbound SMS have been linked to customers</p>
               </div>
             ) : (
               unassignedData?.data?.map((msg: SmsMessage) => (
@@ -395,19 +395,19 @@ export default function AdminSmsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-surface-100">{msg.from_number}</span>
-                        <span className="text-[10px] text-surface-500 uppercase tracking-wider">
+                        <span className="font-semibold text-warm-50">{msg.from_number}</span>
+                        <span className="text-[10px] text-warm-500 uppercase tracking-wider">
                           {formatDateTime(msg.created_at)}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-surface-300">{msg.body}</p>
+                      <p className="mt-1 text-sm text-warm-300">{msg.body}</p>
 
                       {assigningSms === msg.id ? (
                         <div className="mt-3 flex items-center gap-2">
                           <select
                             value={selectedRepair}
                             onChange={(e) => setSelectedRepair(e.target.value)}
-                            className="flex-1 rounded-lg border border-surface-700 bg-surface-800 px-3 py-2 text-sm text-surface-100 focus:border-accent-500 focus:outline-none"
+                            className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
                           >
                             <option value="">Select a repair ticket...</option>
                             {repairsData?.data?.map((r: Repair) => (
@@ -423,14 +423,14 @@ export default function AdminSmsPage() {
                               }
                             }}
                             disabled={!selectedRepair || assignMutation.isPending}
-                            className="flex items-center gap-1.5 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-surface-950 hover:bg-accent-400 disabled:opacity-50"
+                            className="flex items-center gap-1.5 rounded-lg bg-copper-500 px-4 py-2 text-sm font-medium text-warm-950 hover:bg-copper-600 disabled:opacity-50"
                           >
                             <Link2 className="h-3.5 w-3.5" />
                             {assignMutation.isPending ? "Linking..." : "Assign"}
                           </button>
                           <button
                             onClick={() => { setAssigningSms(null); setSelectedRepair(""); }}
-                            className="rounded-lg border border-surface-700 px-3 py-2 text-sm text-surface-400 hover:bg-surface-800"
+                            className="rounded-lg border border-warm-700 px-3 py-2 text-sm text-warm-400 hover:bg-warm-800"
                           >
                             Cancel
                           </button>
@@ -438,7 +438,7 @@ export default function AdminSmsPage() {
                       ) : (
                         <button
                           onClick={() => { setAssigningSms(msg.id); setSelectedRepair(""); }}
-                          className="mt-2 flex items-center gap-1.5 rounded-lg border border-surface-700 px-3 py-1.5 text-xs font-medium text-surface-300 hover:border-accent-500 hover:text-accent-500 transition"
+                          className="mt-2 flex items-center gap-1.5 rounded-lg border border-warm-700 px-3 py-1.5 text-xs font-medium text-warm-300 hover:border-copper-500 hover:text-copper-500 transition"
                         >
                           <Link2 className="h-3 w-3" />
                           Assign to repair
@@ -452,20 +452,20 @@ export default function AdminSmsPage() {
           </div>
 
           {unassignedData && Math.ceil(unassignedData.total / pageSize) > 1 && (
-            <div className="flex items-center justify-between border-t border-surface-800 px-5 py-4">
-              <p className="text-xs text-surface-400">Showing page {unassignedPage + 1} of {Math.ceil(unassignedData.total / pageSize)}</p>
+            <div className="flex items-center justify-between border-t border-warm-800 px-5 py-4">
+              <p className="text-xs text-warm-400">Showing page {unassignedPage + 1} of {Math.ceil(unassignedData.total / pageSize)}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setUnassignedPage((p) => Math.max(0, p - 1))}
                   disabled={unassignedPage === 0}
-                  className="flex items-center gap-1 rounded border border-surface-700 px-3 py-1 text-xs text-surface-100 hover:bg-surface-800 disabled:opacity-50"
+                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50"
                 >
                   <ChevronLeft className="h-3 w-3" /> Previous
                 </button>
                 <button
                   onClick={() => setUnassignedPage((p) => Math.min(Math.ceil(unassignedData.total / pageSize) - 1, p + 1))}
                   disabled={unassignedPage >= Math.ceil(unassignedData.total / pageSize) - 1}
-                  className="flex items-center gap-1 rounded border border-surface-700 px-3 py-1 text-xs text-surface-100 hover:bg-surface-800 disabled:opacity-50"
+                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50"
                 >
                   Next <ChevronRight className="h-3 w-3" />
                 </button>
@@ -476,29 +476,29 @@ export default function AdminSmsPage() {
       )}
 
       {tab === "templates" && (
-        <div className="rounded-lg border border-surface-800 bg-surface-900">
-          <div className="border-b border-surface-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-surface-100">SMS Templates</h2>
-            <p className="mt-1 text-sm text-surface-400">
+        <div className="rounded-lg border border-warm-800 bg-warm-900">
+          <div className="border-b border-warm-800 px-5 py-4">
+            <h2 className="font-heading text-lg font-semibold text-warm-50">SMS Templates</h2>
+            <p className="mt-1 text-sm text-warm-400">
               Pre-defined message templates with {"{{variable}}"} placeholders. Use them from the repair detail page.
             </p>
           </div>
-          <div className="divide-y divide-surface-800">
+          <div className="divide-y divide-warm-800">
             {!templates?.length ? (
               <div className="px-5 py-16 text-center">
-                <FileText className="mx-auto h-12 w-12 text-surface-600" />
-                <p className="mt-4 text-surface-400">No templates configured</p>
+                <FileText className="mx-auto h-12 w-12 text-warm-600" />
+                <p className="mt-4 text-warm-400">No templates configured</p>
               </div>
             ) : (
               templates.map((t) => (
                 <div key={t.id} className="flex items-center justify-between gap-4 px-5 py-4">
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-surface-100">{t.name}</p>
-                    <p className="mt-1 text-sm text-surface-300 line-clamp-2 font-mono">{t.body}</p>
+                    <p className="font-semibold text-warm-50">{t.name}</p>
+                    <p className="mt-1 text-sm text-warm-300 line-clamp-2 font-mono">{t.body}</p>
                     {t.variables?.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {t.variables.map((v) => (
-                          <span key={v} className="rounded bg-surface-700 px-1.5 py-0.5 text-[10px] font-mono text-accent-400">
+                          <span key={v} className="rounded bg-warm-700 px-1.5 py-0.5 text-[10px] font-mono text-copper-600">
                             {`{{${v}}}`}
                           </span>
                         ))}
@@ -507,7 +507,7 @@ export default function AdminSmsPage() {
                   </div>
                   <button
                     onClick={() => setPreviewTemplate(t)}
-                    className="shrink-0 rounded-lg border border-surface-700 p-2 text-surface-400 hover:border-surface-600 hover:text-surface-100 transition"
+                    className="shrink-0 rounded-lg border border-warm-700 p-2 text-warm-400 hover:border-warm-600 hover:text-warm-50 transition"
                   >
                     <Eye className="h-4 w-4" />
                   </button>
@@ -521,22 +521,22 @@ export default function AdminSmsPage() {
       {/* Template Preview Modal */}
       {previewTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setPreviewTemplate(null)}>
-          <div className="w-full max-w-lg rounded-lg border border-surface-800 bg-surface-900 p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-lg rounded-lg border border-warm-800 bg-warm-900 p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-heading text-lg font-semibold text-surface-100">{previewTemplate.name}</h3>
-              <button onClick={() => setPreviewTemplate(null)} className="text-surface-400 hover:text-surface-100">
+              <h3 className="font-heading text-lg font-semibold text-warm-50">{previewTemplate.name}</h3>
+              <button onClick={() => setPreviewTemplate(null)} className="text-warm-400 hover:text-warm-50">
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="rounded-lg bg-surface-950 p-4 mb-4">
-              <p className="text-sm text-surface-200 whitespace-pre-wrap font-mono">{previewTemplate.body}</p>
+            <div className="rounded-lg bg-warm-950 p-4 mb-4">
+              <p className="text-sm text-warm-200 whitespace-pre-wrap font-mono">{previewTemplate.body}</p>
             </div>
             {previewTemplate.variables?.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-surface-400 mb-2">Variables</p>
+                <p className="text-xs font-medium text-warm-400 mb-2">Variables</p>
                 <div className="flex flex-wrap gap-1.5">
                   {previewTemplate.variables.map((v) => (
-                    <span key={v} className="rounded bg-accent-500/10 px-2 py-1 text-xs font-mono text-accent-400">
+                    <span key={v} className="rounded bg-copper-500/10 px-2 py-1 text-xs font-mono text-copper-600">
                       {`{{${v}}}`}
                     </span>
                   ))}
@@ -549,3 +549,4 @@ export default function AdminSmsPage() {
     </div>
   );
 }
+

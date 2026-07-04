@@ -167,3 +167,4 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
     </Modal>
   );
 }
+
