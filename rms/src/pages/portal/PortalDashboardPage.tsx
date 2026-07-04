@@ -95,8 +95,8 @@ export default function PortalDashboardPage() {
           </div>
           <div className="rounded-lg border border-warm-200 bg-white p-5">
             <div className="flex items-center gap-3">
-              <div className="rounded-full bg-accent-50 p-2.5">
-                <AlertCircle className="h-5 w-5 text-accent-600" />
+              <div className="rounded-full bg-copper-50 p-2.5">
+                <AlertCircle className="h-5 w-5 text-copper-600" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-warm-900">{repairs.length}</p>
@@ -124,7 +124,7 @@ export default function PortalDashboardPage() {
               </p>
               <Link
                 to="/contact"
-                className="mt-4 inline-block rounded-lg bg-copper-500 px-6 py-2 font-semibold text-white hover:bg-accent-600"
+                className="mt-4 inline-block rounded-lg bg-copper-500 px-6 py-2 font-semibold text-white hover:bg-copper-600"
               >
                 Contact Us
               </Link>

@@ -3,10 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCustomer, updateCustomer, getCustomerDevices, getCustomerRepairs } from "../../api/customers";
 import { listSmsMessages, sendSms, getSmsTemplates, sendSmsTemplate } from "../../api/sms";
+import { listEmails } from "../../api/email";
 import { getStatusLabel, getStatusColor, formatDate, formatDateTime, formatPhone, cn } from "../../lib/utils";
 import type { CustomerWithRepairs, Device, Repair } from "../../types";
 import {
-  ArrowLeft, User, Phone, Mail, MapPin, Smartphone, Wrench, Edit3, MessageSquare, Send, ChevronDown
+  ArrowLeft, User, Phone, Mail, MapPin, Smartphone, Wrench, Edit3, MessageSquare, Send, ChevronDown, FileText
 } from "lucide-react";
 
 export default function AdminCustomerDetailPage() {
@@ -23,7 +24,7 @@ export default function AdminCustomerDetailPage() {
   const [simNumber, setSimNumber] = useState<number>(1);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
 
-  const { data: customer, isLoading } = useQuery<CustomerWithRepairs>({
+  const { data: customer, isLoading, isError } = useQuery<CustomerWithRepairs>({
     queryKey: ["admin-customer", id],
     queryFn: () => getCustomer(id!),
     enabled: !!id,
@@ -51,6 +52,12 @@ export default function AdminCustomerDetailPage() {
     queryKey: ["sms-templates"],
     queryFn: getSmsTemplates,
     enabled: activeTab === "communication",
+  });
+
+  const { data: emailMessages } = useQuery({
+    queryKey: ["admin-customer-email", id],
+    queryFn: () => listEmails(0, 50, undefined, id),
+    enabled: !!id && activeTab === "communication",
   });
 
   const updateMutation = useMutation({
@@ -115,11 +122,11 @@ export default function AdminCustomerDetailPage() {
     );
   }
 
-  if (!customer) {
+  if (isError || !customer) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-950">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-warm-50">Customer not found</h2>
+          <h2 className="text-xl font-semibold text-warm-50">{isError ? "Failed to load customer" : "Customer not found"}</h2>
           <Link to="/admin/customers" className="mt-4 inline-block text-copper-500 hover:text-copper-600">Back to Customers</Link>
         </div>
       </div>
@@ -438,12 +445,12 @@ export default function AdminCustomerDetailPage() {
               </div>
             </div>
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <div className="rounded-lg border border-warm-800 bg-warm-900">
               <div className="border-b border-warm-800 px-5 py-4">
                 <h3 className="font-heading text-lg font-semibold text-warm-50">SMS History</h3>
               </div>
-              <div className="divide-y divide-warm-800">
+              <div className="divide-y divide-warm-800 max-h-96 overflow-y-auto">
                 {!smsMessages?.data?.length ? (
                   <div className="px-5 py-12 text-center text-warm-400">No SMS history.</div>
                 ) : (
@@ -467,6 +474,41 @@ export default function AdminCustomerDetailPage() {
                           {msg.status}
                         </span>
                         {msg.sim_number && <span className="text-[10px] text-warm-500">• SIM {msg.sim_number}</span>}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-warm-800 bg-warm-900">
+              <div className="border-b border-warm-800 px-5 py-4">
+                <h3 className="font-heading text-lg font-semibold text-warm-50">Email History</h3>
+              </div>
+              <div className="divide-y divide-warm-800 max-h-96 overflow-y-auto">
+                {!emailMessages?.data?.length ? (
+                  <div className="px-5 py-12 text-center text-warm-400">No email history.</div>
+                ) : (
+                  emailMessages.data.map((email: any) => (
+                    <div key={email.id} className="px-5 py-4 transition hover:bg-warm-800">
+                      <div className="flex items-center justify-between">
+                        <span className={cn(
+                          "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
+                          email.direction === "outbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-500/10 text-warm-300"
+                        )}>
+                          {email.direction}
+                        </span>
+                        <span className="text-[10px] text-warm-500 uppercase">{formatDateTime(email.created_at)}</span>
+                      </div>
+                      <p className="mt-1 text-sm font-medium text-warm-300">{email.subject}</p>
+                      <p className="mt-1 text-sm text-warm-400 truncate">{email.body}</p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className={cn(
+                          "text-[10px] font-medium uppercase",
+                          email.status === "sent" || email.status === "received" ? "text-green-400" : email.status === "failed" ? "text-red-400" : "text-yellow-400"
+                        )}>
+                          {email.status}
+                        </span>
                       </div>
                     </div>
                   ))

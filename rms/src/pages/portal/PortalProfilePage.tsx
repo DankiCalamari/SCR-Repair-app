@@ -83,7 +83,7 @@ export default function PortalProfilePage() {
             </div>
             <button
               type="submit"
-              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
+              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-copper-600"
             >
               Update Profile
             </button>
@@ -122,7 +122,7 @@ export default function PortalProfilePage() {
             </div>
             <button
               type="submit"
-              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-accent-600"
+              className="rounded-lg bg-copper-500 px-6 py-2.5 font-semibold text-white hover:bg-copper-600"
             >
               Change Password
             </button>

@@ -79,7 +79,7 @@ export default function PortalRepairDetailPage() {
       <div className="flex min-h-screen items-center justify-center bg-warm-50">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-warm-900">Repair not found</h2>
-          <Link to="/portal" className="mt-4 inline-block text-copper-500 hover:text-accent-600">Back to Dashboard</Link>
+          <Link to="/portal" className="mt-4 inline-block text-copper-500 hover:text-copper-600">Back to Dashboard</Link>
         </div>
       </div>
     );

@@ -22,9 +22,9 @@ const categoryLabels: Record<string, string> = {
 };
 
 const categoryColors: Record<string, string> = {
-  intake: "bg-accent-100 text-accent-800",
-  damage: "bg-red-100 text-red-800",
-  diagnostic: "bg-yellow-100 text-yellow-800",
+  intake: "bg-copper-100 text-copper-800",
+  damage: "bg-rust-100 text-rust-800",
+  diagnostic: "bg-amber-100 text-amber-800",
   repair_progress: "bg-purple-100 text-purple-800",
   parts_replacement: "bg-orange-100 text-orange-800",
   completed: "bg-green-100 text-green-800",

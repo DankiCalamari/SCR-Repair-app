@@ -645,7 +645,7 @@ export default function AdminCommunicationsPage() {
                       ) : (
                         <button
                           onClick={() => setExpandedLead(lead.id)}
-                          className="mt-2 flex items-center gap-1.5 text-xs font-medium text-copper-600 hover:text-accent-300"
+                          className="mt-2 flex items-center gap-1.5 text-xs font-medium text-copper-600 hover:text-warm-300"
                         >
                           View details &rarr;
                         </button>

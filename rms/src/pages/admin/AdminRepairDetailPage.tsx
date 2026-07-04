@@ -6,7 +6,7 @@ import { createQuote, sendQuote, approveQuote, declineQuote, uploadQuotePdf } fr
 import { createInvoice, sendInvoice, markInvoicePaid, uploadInvoicePdf } from "../../api/invoices";
 import { downloadDocument, uploadDocument } from "../../api/documents";
 import { sendSms, listSmsMessages, getSmsTemplates, sendSmsTemplate } from "../../api/sms";
-import { sendEmailTemplate, getEmailTemplates } from "../../api/email";
+import { sendEmailTemplate, getEmailTemplates, listEmails } from "../../api/email";
 import { getPhotoCategoryCounts, deletePhoto } from "../../api/photos";
 import PhotoGallery from "../../components/photos/PhotoGallery";
 import PhotoUploader from "../../components/photos/PhotoUploader";
@@ -263,6 +263,12 @@ export default function AdminRepairDetailPage() {
   const { data: emailTemplates } = useQuery({
     queryKey: ["email-templates"],
     queryFn: getEmailTemplates,
+  });
+
+  const { data: emailMessages } = useQuery({
+    queryKey: ["admin-repair-email", id],
+    queryFn: () => listEmails(0, 50, id),
+    enabled: !!id && activeTab === "communication",
   });
 
   const { data: photos } = useQuery({
@@ -577,15 +583,15 @@ export default function AdminRepairDetailPage() {
               </div>
             </div>
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <div className="rounded-lg border border-warm-700 bg-warm-800">
               <div className="border-b border-warm-700 px-5 py-4"><h3 className="font-heading text-lg font-semibold text-warm-50">SMS History</h3></div>
-              <div className="divide-y divide-warm-700">
+              <div className="divide-y divide-warm-700 max-h-80 overflow-y-auto">
                 {!smsMessages?.data?.length ? (
                   <div className="px-5 py-12 text-center text-warm-400">No SMS history.</div>
                 ) : (
                   smsMessages.data.map((msg: any) => (
-                    <div key={msg.id} className="px-5 py-4 transition hover:bg-surface-750">
+                    <div key={msg.id} className="px-5 py-4 transition hover:bg-warm-800">
                       <div className="flex items-center justify-between">
                         <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
                           msg.direction === "outbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-500/10 text-warm-300")}>{msg.direction}</span>
@@ -596,6 +602,31 @@ export default function AdminRepairDetailPage() {
                         <span className={cn("text-[10px] font-medium uppercase",
                           msg.status === "delivered" ? "text-green-400" : msg.status === "failed" ? "text-red-400" : "text-yellow-400")}>{msg.status}</span>
                         {msg.sim_number && <span className="text-[10px] text-warm-500">• SIM {msg.sim_number}</span>}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-warm-700 bg-warm-800">
+              <div className="border-b border-warm-700 px-5 py-4"><h3 className="font-heading text-lg font-semibold text-warm-50">Email History</h3></div>
+              <div className="divide-y divide-warm-700 max-h-80 overflow-y-auto">
+                {!emailMessages?.data?.length ? (
+                  <div className="px-5 py-12 text-center text-warm-400">No email history.</div>
+                ) : (
+                  emailMessages.data.map((email: any) => (
+                    <div key={email.id} className="px-5 py-4 transition hover:bg-warm-800">
+                      <div className="flex items-center justify-between">
+                        <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
+                          email.direction === "outbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-500/10 text-warm-300")}>{email.direction}</span>
+                        <span className="text-[10px] text-warm-500 uppercase">{formatDateTime(email.created_at)}</span>
+                      </div>
+                      <p className="mt-1 text-sm font-medium text-warm-300">{email.subject}</p>
+                      <p className="mt-1 text-sm text-warm-400 truncate">{email.body}</p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className={cn("text-[10px] font-medium uppercase",
+                          email.status === "sent" || email.status === "received" ? "text-green-400" : email.status === "failed" ? "text-red-400" : "text-yellow-400")}>{email.status}</span>
                       </div>
                     </div>
                   ))
