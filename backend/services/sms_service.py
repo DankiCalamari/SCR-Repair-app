@@ -78,6 +78,7 @@ class SmsGateClient:
         logger.info(f"Sending SMS payload: {payload}")
 
         async with httpx.AsyncClient(timeout=30.0) as client:
+            last_error = None
             for path in endpoint_paths:
                 try:
                     response = await client.post(
@@ -89,14 +90,27 @@ class SmsGateClient:
                         },
                     )
                     if response.status_code in (200, 201, 202):
-                        return response.json()
+                        json_response = response.json()
+                        logger.info(f"SMS sent successfully via {path}: {json_response}")
+                        # Return a list format for consistency with webhook processing
+                        if isinstance(json_response, dict) and "id" in json_response:
+                            return [json_response]
+                        return json_response
                     elif response.status_code != 404:
+                        # Log non-404 errors
+                        logger.warning(f"SMS send to {path} failed: {response.status_code} {response.text}")
+                        last_error = f"HTTP {response.status_code}: {response.text}"
                         response.raise_for_status()
                 except httpx.HTTPStatusError as e:
                     if e.response.status_code == 404:
                         continue
+                    last_error = str(e)
                     raise
-            raise Exception("SMS gateway API endpoint not found - gateway may be misconfigured")
+                except Exception as e:
+                    last_error = str(e)
+                    raise
+            # All endpoints failed with 404 - this should not happen if device_id is provided manually
+            raise Exception(f"SMS gateway API endpoint not found. Manual Device ID required in SMS Settings. Last error: {last_error}")
 
     async def get_devices(self) -> list[dict]:
         """List registered devices."""
