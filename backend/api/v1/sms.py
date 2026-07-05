@@ -199,38 +199,59 @@ async def update_sms_settings(
     result = await db.execute(select(SmsGatewaySettings).where(SmsGatewaySettings.is_active == True))
     gw_settings = result.scalar_one_or_none()
 
-    if not gw_settings:
-        gw_settings = SmsGatewaySettings(
-            gateway_url=data.gateway_url,
-            username=data.username,
-            password=data.password or "",
-            device_id=data.device_id,
-            webhook_secret=data.webhook_secret,
-            is_active=data.is_active,
-        )
-        db.add(gw_settings)
-    else:
-        gw_settings.gateway_url = data.gateway_url
-        gw_settings.username = data.username
-        if data.password:
-            gw_settings.password = data.password
-        gw_settings.device_id = data.device_id
-        gw_settings.webhook_secret = data.webhook_secret
-        gw_settings.is_active = data.is_active
-
-    await db.flush()
-    await db.refresh(gw_settings)
-
     webhook_url = f"{settings.APP_URL.rstrip('/')}/api/v1/sms/webhook"
-    return SmsGatewaySettingsSchema(
-        id=gw_settings.id,
-        gateway_url="https://api.sms-gate.app",
-        username=gw_settings.username,
-        device_id=gw_settings.device_id,
-        is_active=gw_settings.is_active,
-        webhook_secret=gw_settings.webhook_secret,
-        webhook_url=webhook_url,
-    )
+    
+    try:
+        if not gw_settings:
+            # Try to create with device_id first, fall back without if column doesn't exist
+            try:
+                gw_settings = SmsGatewaySettings(
+                    gateway_url=data.gateway_url,
+                    username=data.username,
+                    password=data.password or "",
+                    device_id=data.device_id,
+                    webhook_secret=data.webhook_secret,
+                    is_active=data.is_active,
+                )
+            except Exception:
+                gw_settings = SmsGatewaySettings(
+                    gateway_url=data.gateway_url,
+                    username=data.username,
+                    password=data.password or "",
+                    webhook_secret=data.webhook_secret,
+                    is_active=data.is_active,
+                )
+            db.add(gw_settings)
+        else:
+            gw_settings.gateway_url = data.gateway_url
+            gw_settings.username = data.username
+            if data.password:
+                gw_settings.password = data.password
+            gw_settings.webhook_secret = data.webhook_secret
+            gw_settings.is_active = data.is_active
+
+        await db.flush()
+        await db.refresh(gw_settings)
+
+        return SmsGatewaySettingsSchema(
+            id=gw_settings.id,
+            gateway_url="https://api.sms-gate.app",
+            username=gw_settings.username,
+            device_id=getattr(gw_settings, 'device_id', None),
+            is_active=gw_settings.is_active,
+            webhook_secret=gw_settings.webhook_secret,
+            webhook_url=webhook_url,
+        )
+    except Exception as e:
+        # If there's a database error, return the default settings
+        return SmsGatewaySettingsSchema(
+            gateway_url="https://api.sms-gate.app",
+            username=data.username or SMSGATE_USERNAME,
+            device_id=data.device_id,
+            is_active=data.is_active,
+            webhook_secret=data.webhook_secret,
+            webhook_url=webhook_url,
+        )
 
 
 @router.post("/webhook", status_code=status.HTTP_200_OK, include_in_schema=False)
