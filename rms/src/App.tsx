@@ -36,7 +36,7 @@ function CustomerRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isCustomer = useAuthStore((s) => s.isCustomer);
   if (!isAuthenticated || !isCustomer) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/app/login" replace />;
   }
   return <>{children}</>;
 }
@@ -45,7 +45,7 @@ function StaffRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isStaff = useAuthStore((s) => s.isStaff);
   if (!isAuthenticated || !isStaff) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/app/login" replace />;
   }
   return <>{children}</>;
 }
@@ -54,7 +54,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isAdmin = useAuthStore((s) => s.isAdmin);
   if (!isAuthenticated || !isAdmin) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/app/login" replace />;
   }
   return <>{children}</>;
 }
@@ -84,18 +84,13 @@ export default function App() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        {/* Auth routes - handle both direct and nginx-rewritten paths */}
+        {/* Auth routes */}
         <Route path="/setup" element={<SetupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        {/* /app/* routes for when nginx doesn't rewrite */}
-        <Route path="/app/setup" element={<SetupPage />} />
-        <Route path="/app/login" element={<LoginPage />} />
-        <Route path="/app/register" element={<RegisterPage />} />
 
         {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/app/login" replace />} />
-        <Route path="/app" element={<Navigate to="/app/login" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Customer portal routes */}
         <Route
@@ -151,7 +146,7 @@ export default function App() {
         </Route>
 
         {/* Catch all - redirect to login */}
-        <Route path="*" element={<Navigate to="/app/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Suspense>
   );
