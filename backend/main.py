@@ -297,12 +297,25 @@ async def spa_router(full_path: str):
     if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
         raise HTTPException(status_code=404)
     
-    # Check if this is an RMS route (nginx rewrites /app/* to /*)
-    # Note: empty string "" means root path "/"
+    # Check if this is an RMS route (nginx rewrites /app/* to /* OR accessed directly as /app/*)
+    # Handle /app/* routes
+    if full_path.startswith("app/"):
+        # For app/... routes, serve RMS index.html or let static mounts handle it
+        if os.path.isdir(_RMS_DIR):
+            index = os.path.join(_RMS_DIR, "index.html")
+            if os.path.isfile(index):
+                return FileResponse(index, headers={
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Expires": "0"
+                })
+        raise HTTPException(status_code=404)
+    
+    # Handle routes that nginx rewrites (login, register, setup, portal/*, admin/*)
+    first_segment = full_path.split("/")[0] if "/" in full_path else full_path
     is_rms_route = (
-        full_path in RMS_APP_ROUTES or 
-        full_path.startswith(("portal/", "admin/")) or
-        any(full_path.startswith(f"{route}/") for route in RMS_APP_ROUTES)
+        first_segment in RMS_APP_ROUTES or 
+        full_path.startswith(("portal/", "admin/"))
     )
     
     if is_rms_route:
