@@ -147,6 +147,21 @@ async def sso_callback(code: str, state: str = None, request: Request = None, db
             is_active=True,
         )
         user = await create_user(user_create, db)
+        # Link SSO provider to the user
+        user.sso_provider = "authentik"
+        # Get the SSO user ID if available (sub claim)
+        sso_id = userinfo.get("sub")
+        if sso_id:
+            user.sso_id = str(sso_id)
+        await db.flush()
+    
+    # Update SSO linkage for existing users if not already linked
+    if user.sso_provider != "authentik":
+        user.sso_provider = "authentik"
+        sso_id = userinfo.get("sub")
+        if sso_id:
+            user.sso_id = str(sso_id)
+        await db.flush()
     
     if not user.is_active:
         raise HTTPException(
@@ -168,7 +183,7 @@ async def sso_callback(code: str, state: str = None, request: Request = None, db
     # Build redirect URL using forwarded headers
     forwarded_host = request.headers.get("X-Forwarded-Host", "")
     redirect_base = f"{forwarded_proto}://{forwarded_host}" if forwarded_host else settings.APP_URL
-    response = RedirectResponse(url=f"{redirect_base}/app/login")
+    response = RedirectResponse(url=f"{redirect_base}/login")
     
     response.set_cookie(
         key="access_token",
@@ -325,3 +340,44 @@ async def logout(current_user: User = Depends(get_current_active_user)):
 @router.get("/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_active_user)):
     return current_user
+
+
+@router.get("/sync", response_model=Token)
+async def sync_sso(request: Request, db: AsyncSession = Depends(get_db)):
+    """Sync endpoint for SSO - reads tokens from cookies and returns them."""
+    from services.auth_service import verify_token
+    
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="No access token found in cookies",
+        )
+    
+    payload = verify_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token in cookies",
+        )
+    
+    user_id = payload.get("sub")
+    if user_id is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token payload is missing subject",
+        )
+    
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+    
+    return Token(
+        access_token=token,
+        refresh_token=request.cookies.get("refresh_token", ""),
+        token_type="bearer",
+    )

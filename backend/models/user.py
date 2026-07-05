@@ -27,6 +27,9 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None), nullable=False)
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    # SSO fields - track which SSO provider created/updated this user
+    sso_provider: Mapped[str] = mapped_column(String(50), nullable=True)
+    sso_id: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
 
     customer_profile = relationship("Customer", back_populates="user", uselist=False)
     audit_logs = relationship("AuditLog", back_populates="user")

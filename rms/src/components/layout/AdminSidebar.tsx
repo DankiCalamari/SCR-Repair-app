@@ -24,6 +24,7 @@ const navItems: { to: string; label: string; icon: React.ElementType; end?: bool
 ];
 
 const adminOnlyItems: { to: string; label: string; icon: React.ElementType; end?: boolean }[] = [
+  { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

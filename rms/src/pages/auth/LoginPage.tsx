@@ -1,10 +1,11 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth-store";
 import { useSettings } from "../../hooks/use-settings";
 import { useFavicon } from "../../hooks/use-favicon";
 import { EMAIL_REGEX } from "../../lib/constants";
 import { Shield } from "lucide-react";
+import apiClient from "../../api/client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const login = useAuthStore((s) => s.login);
+  const setUser = useAuthStore((s) => s.setUser);
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const navigate = useNavigate();
@@ -23,6 +25,28 @@ export default function LoginPage() {
   const logoUrl = settings?.logo_url;
   const businessName = settings?.business_name || "Sunset Country Repairs";
   const ssoEnabled = settings?.authentik_url && settings?.authentik_client_id;
+
+  // Sync with SSO cookies on mount
+  useEffect(() => {
+    const syncSSO = async () => {
+      try {
+        const response = await apiClient.get("/auth/sync");
+        if (response.data?.access_token) {
+          localStorage.setItem("access_token", response.data.access_token);
+          if (response.data.refresh_token) {
+            localStorage.setItem("refresh_token", response.data.refresh_token);
+          }
+          const user = await apiClient.get("/auth/me");
+          setUser(user.data);
+        }
+      } catch {
+        // No SSO session, continue with normal login
+      }
+    };
+    if (!isAuthenticated) {
+      syncSSO();
+    }
+  }, [isAuthenticated, setUser]);
 
   if (isAuthenticated && user) {
     if (user.role === "admin" || user.role === "staff") {

@@ -34,6 +34,7 @@ def _user_to_dict(user: User) -> dict:
         "created_at": user.created_at,
         "updated_at": user.updated_at,
         "last_login": user.last_login,
+        "sso_provider": getattr(user, 'sso_provider', None),
     }
     return data
 
