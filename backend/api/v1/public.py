@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.deps import get_db
+from config import settings
 from models.system_setting import SystemSetting
 from models.user import User, UserRole
 
@@ -28,23 +29,53 @@ _PUBLIC_SETTING_KEYS = {
 }
 
 
+def _get_env_fallbacks():
+    """Get settings from environment variables as fallback."""
+    return {
+        "authentik_url": settings.AUTHENTIK_URL,
+        "authentik_client_id": settings.AUTHENTIK_CLIENT_ID,
+        "authentik_redirect_uri": f"{settings.APP_URL.rstrip('/')}/api/v1/auth/sso/callback",
+        "business_name": settings.BUSINESS_NAME,
+        "business_email": settings.BUSINESS_EMAIL,
+        "business_phone": settings.BUSINESS_PHONE,
+        "business_address": settings.BUSINESS_ADDRESS,
+        "abn": settings.BUSINESS_ABN,
+        "primary_color": settings.PRIMARY_COLOR,
+        "accent_color": settings.ACCENT_COLOR,
+        "logo_url": settings.LOGO_URL,
+        "admin_logo_url": settings.ADMIN_LOGO_URL,
+        "favicon_url": settings.FAVICON_URL,
+    }
+
+
 @router.get("/public/settings", response_model=dict)
 async def get_public_settings(db=Depends(get_db)):
-    """Return public-facing settings (no auth required)."""
+    """Return public-facing settings (no auth required). Falls back to .env values."""
     result = await db.execute(
         select(SystemSetting).where(SystemSetting.key.in_(_PUBLIC_SETTING_KEYS))
     )
     settings_list = list(result.scalars().all())
+    db_settings = {s.key: s.value for s in settings_list}
+    env_fallbacks = _get_env_fallbacks()
+    
+    # Merge: use database values if present, otherwise use .env fallbacks
+    merged_settings = {}
+    for key in _PUBLIC_SETTING_KEYS:
+        if key in db_settings and db_settings[key]:
+            merged_settings[key] = db_settings[key]
+        elif key in env_fallbacks and env_fallbacks[key]:
+            merged_settings[key] = env_fallbacks[key]
+    
     return {
         "data": [
             {
-                "id": str(s.id),
-                "key": s.key,
-                "value": s.value,
-                "description": s.description,
-                "updated_at": s.updated_at,
+                "id": str(hash(key)),  # Generate ID for env fallback items
+                "key": key,
+                "value": merged_settings.get(key),
+                "description": None,
+                "updated_at": None,
             }
-            for s in settings_list
+            for key in merged_settings if merged_settings[key] is not None
         ]
     }
 

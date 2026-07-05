@@ -28,6 +28,20 @@ class Settings(BaseSettings):
     AUTHENTIK_CLIENT_SECRET: Optional[str] = None
     AUTHENTIK_REDIRECT_URI: Optional[str] = None
 
+    # Business settings
+    BUSINESS_NAME: str = "Sunset Country Repairs"
+    BUSINESS_EMAIL: str = "info@sunsetcountryrepairs.com.au"
+    BUSINESS_PHONE: str = ""
+    BUSINESS_ADDRESS: str = ""
+    BUSINESS_ABN: str = ""
+
+    # UI Settings
+    PRIMARY_COLOR: str = "#f5f5f4"  # warm-50
+    ACCENT_COLOR: str = "#d97706"   # copper-600
+    LOGO_URL: str = "/app/static/logo.svg"
+    ADMIN_LOGO_URL: str = "/app/static/logo.svg"
+    FAVICON_URL: str = "/app/static/favicon.ico"
+
     SMS_GATEWAY_USERNAME: str = ""
     SMS_GATEWAY_PASSWORD: str = ""
     SMS_API_KEY: str = ""
