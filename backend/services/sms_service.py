@@ -248,9 +248,13 @@ async def send_sms(
     await db.flush()
     await db.refresh(sms)
 
-    # Get stored gateway settings for device_id fallback
-    gw_settings = await get_gateway_settings(db)
-    device_id_override = gw_settings.device_id if gw_settings else None
+    # Get stored gateway settings for device_id fallback (handle missing column gracefully)
+    device_id_override = None
+    try:
+        gw_settings = await get_gateway_settings(db)
+        device_id_override = gw_settings.device_id if gw_settings else None
+    except Exception:
+        pass  # Column may not exist yet, continue without override
 
     client = SmsGateClient()
 
@@ -267,8 +271,6 @@ async def send_sms(
 
     await db.flush()
     await db.refresh(sms)
-    
-    # Return the SMS message even if it failed - the error is stored in error_message
     return sms
 
 

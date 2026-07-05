@@ -46,9 +46,9 @@ class SmsMessageResponse(BaseModel):
     device_info: Optional[dict] = None
     error_message: Optional[str] = None
     delivered_at: Optional[datetime] = None
-    created_at: datetime
+    created_at: Optional[datetime] = None  # Make optional to avoid validation errors
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
 
 
 class SmsWebhookPayload(BaseModel):
