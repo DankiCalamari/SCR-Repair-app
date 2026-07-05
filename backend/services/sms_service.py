@@ -35,13 +35,16 @@ class SmsGateClient:
         import logging
         logger = logging.getLogger(__name__)
         
-        # Payload according to https://docs.sms-gate.app/integration/api/
-        # The gateway API requires a deviceId to route the message.
-        device = await self.get_device_state(device_id_override)
-        device_id = device.get("id") or device_id_override
+        # When device_id_override is provided, use it directly
+        device_id = device_id_override
         
+        # Otherwise try to auto-detect
         if not device_id:
-            raise Exception("No active SMS device found to send the message. Check gateway configuration.")
+            device = await self.get_device_state()
+            device_id = device.get("id")
+
+        if not device_id:
+            raise Exception("No active SMS device found to send the message. Check gateway configuration or enter Device ID manually in SMS Settings.")
 
         # Ensure phone numbers are in international format (e.g., +61...)
         formatted_numbers = []
@@ -264,6 +267,8 @@ async def send_sms(
 
     await db.flush()
     await db.refresh(sms)
+    
+    # Return the SMS message even if it failed - the error is stored in error_message
     return sms
 
 

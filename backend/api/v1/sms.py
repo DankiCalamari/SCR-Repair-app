@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -9,7 +10,7 @@ from config import settings
 from models.user import User
 from models.customer import Customer
 from models.repair import Repair
-from models.sms import SmsGatewaySettings, SmsTemplate
+from models.sms import SmsGatewaySettings, SmsTemplate, SmsStatus
 from schemas.sms import (
     SmsSendRequest,
     SmsMessageResponse,
@@ -89,6 +90,12 @@ async def send_sms_endpoint(
         user_id=current_user.id,
         sim_number=data.sim_number,
     )
+    # Raise proper error if SMS failed to send
+    if sms.status == SmsStatus.FAILED and sms.error_message:
+        raise HTTPException(
+            status_code=400,
+            detail=sms.error_message
+        )
     return sms
 
 

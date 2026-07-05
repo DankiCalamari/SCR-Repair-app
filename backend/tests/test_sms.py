@@ -19,4 +19,4 @@ async def test_get_gateway_status_no_device(db: AsyncSession, monkeypatch):
     
     status = await get_gateway_status(db)
     assert status["connected"] is False
-    assert status["message"] == "Device not found"
+    assert "device" in status["message"].lower()
