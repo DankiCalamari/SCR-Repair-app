@@ -36,7 +36,7 @@ function CustomerRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isCustomer = useAuthStore((s) => s.isCustomer);
   if (!isAuthenticated || !isCustomer) {
-    return <Navigate to="/app/login" replace />;
+    return <Navigate to="/login" replace />;
   }
   return <>{children}</>;
 }
@@ -45,7 +45,7 @@ function StaffRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isStaff = useAuthStore((s) => s.isStaff);
   if (!isAuthenticated || !isStaff) {
-    return <Navigate to="/app/login" replace />;
+    return <Navigate to="/login" replace />;
   }
   return <>{children}</>;
 }
@@ -54,7 +54,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isAdmin = useAuthStore((s) => s.isAdmin);
   if (!isAuthenticated || !isAdmin) {
-    return <Navigate to="/app/login" replace />;
+    return <Navigate to="/login" replace />;
   }
   return <>{children}</>;
 }

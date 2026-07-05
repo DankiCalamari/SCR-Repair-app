@@ -287,7 +287,7 @@ if os.path.isdir(_PUBLIC_SITE_DIR):
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
 
-# Serve RMS SPA for /app/* routes
+# Serve RMS SPA for /app/* routes and for auth routes accessed directly
 @app.get("/app/{full_path:path}", include_in_schema=False)
 async def rms_spa(full_path: str):
     """Serve the RMS SPA for any /app/* route."""
@@ -306,11 +306,29 @@ async def rms_spa(full_path: str):
     raise HTTPException(status_code=404)
 
 @app.get("/{full_path:path}", include_in_schema=False)
-async def public_spa(full_path: str):
-    """Serve the public-site SPA for any non-API, non-asset route."""
-    # Don't intercept API, uploads, asset paths, or app routes
-    if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest", "app/")):
+async def spa_router(full_path: str):
+    """Serve the appropriate SPA based on route."""
+    # Don't intercept API, uploads, asset paths
+    if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
         raise HTTPException(status_code=404)
+    
+    # Routes that should serve RMS app (auth pages)
+    rms_routes = {"login", "register", "setup"}
+    first_segment = full_path.split("/")[0] if "/" in full_path else full_path
+    
+    if full_path == "" or first_segment in rms_routes or full_path.startswith("portal/") or full_path.startswith("admin/"):
+        # Serve RMS SPA for auth routes and portal/admin
+        if os.path.isdir(_RMS_DIR):
+            index = os.path.join(_RMS_DIR, "index.html")
+            if os.path.isfile(index):
+                return FileResponse(index, headers={
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Expires": "0"
+                })
+        raise HTTPException(status_code=404)
+    
+    # Serve public-site SPA for all other routes
     if os.path.isdir(_PUBLIC_SITE_DIR):
         index = os.path.join(_PUBLIC_SITE_DIR, "index.html")
         if os.path.isfile(index):
