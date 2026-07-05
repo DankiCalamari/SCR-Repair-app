@@ -287,32 +287,25 @@ if os.path.isdir(_PUBLIC_SITE_DIR):
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
 
-@app.get("/login", include_in_schema=False)
-async def rms_login_redirect():
-    """Serve RMS SPA for /login (nginx rewrites /app/login to /login)."""
-    if os.path.isdir(_RMS_DIR):
-        index = os.path.join(_RMS_DIR, "index.html")
-        if os.path.isfile(index):
-            return FileResponse(index, headers={
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                "Pragma": "no-cache",
-                "Expires": "0"
-            })
-    raise HTTPException(status_code=404)
-
 # Routes that nginx rewrites from /app/* to /* - these need to serve RMS app
-RMS_APP_ROUTES = {"login", "register", "setup", "portal", "admin", "health"}
+RMS_APP_ROUTES = {"login", "register", "setup"}
 
 @app.get("/{full_path:path}", include_in_schema=False)
-async def public_spa(full_path: str):
-    """Serve the public-site SPA for any non-API, non-asset route, or RMS app routes."""
+async def spa_router(full_path: str):
+    """Serve the appropriate SPA based on route."""
     # Don't intercept API, uploads, asset paths, or RMS PWA assets
     if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
         raise HTTPException(status_code=404)
     
     # Check if this is an RMS route (nginx rewrites /app/* to /*)
-    first_segment = full_path.split("/")[0] if "/" in full_path else full_path
-    if first_segment in RMS_APP_ROUTES or full_path.startswith("portal/") or full_path.startswith("admin/"):
+    # Note: empty string "" means root path "/"
+    is_rms_route = (
+        full_path in RMS_APP_ROUTES or 
+        full_path.startswith(("portal/", "admin/")) or
+        any(full_path.startswith(f"{route}/") for route in RMS_APP_ROUTES)
+    )
+    
+    if is_rms_route:
         if os.path.isdir(_RMS_DIR):
             index = os.path.join(_RMS_DIR, "index.html")
             if os.path.isfile(index):
