@@ -84,13 +84,18 @@ export default function App() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        {/* Auth routes */}
+        {/* Auth routes - handle both direct and nginx-rewritten paths */}
         <Route path="/setup" element={<SetupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        {/* /app/* routes for when nginx doesn't rewrite */}
+        <Route path="/app/setup" element={<SetupPage />} />
+        <Route path="/app/login" element={<LoginPage />} />
+        <Route path="/app/register" element={<RegisterPage />} />
 
         {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/app/login" replace />} />
+        <Route path="/app" element={<Navigate to="/app/login" replace />} />
 
         {/* Customer portal routes */}
         <Route
@@ -146,7 +151,7 @@ export default function App() {
         </Route>
 
         {/* Catch all - redirect to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/app/login" replace />} />
       </Routes>
     </Suspense>
   );

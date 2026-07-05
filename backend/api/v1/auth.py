@@ -183,7 +183,7 @@ async def sso_callback(code: str, state: str = None, request: Request = None, db
     # Build redirect URL using forwarded headers
     forwarded_host = request.headers.get("X-Forwarded-Host", "")
     redirect_base = f"{forwarded_proto}://{forwarded_host}" if forwarded_host else settings.APP_URL
-    response = RedirectResponse(url=f"{redirect_base}/login")
+    response = RedirectResponse(url=f"{redirect_base}/app/login")
     
     response.set_cookie(
         key="access_token",

@@ -287,48 +287,30 @@ if os.path.isdir(_PUBLIC_SITE_DIR):
 from fastapi.responses import FileResponse
 from fastapi import HTTPException
 
-# Routes that nginx rewrites from /app/* to /* - these need to serve RMS app
-RMS_APP_ROUTES = {"login", "register", "setup"}
+# Serve RMS SPA for /app/* routes
+@app.get("/app/{full_path:path}", include_in_schema=False)
+async def rms_spa(full_path: str):
+    """Serve the RMS SPA for any /app/* route."""
+    # Don't intercept API or uploads paths
+    if full_path.startswith(("api/", "uploads/")):
+        raise HTTPException(status_code=404)
+    # Serve RMS index.html
+    if os.path.isdir(_RMS_DIR):
+        index = os.path.join(_RMS_DIR, "index.html")
+        if os.path.isfile(index):
+            return FileResponse(index, headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            })
+    raise HTTPException(status_code=404)
 
 @app.get("/{full_path:path}", include_in_schema=False)
-async def spa_router(full_path: str):
-    """Serve the appropriate SPA based on route."""
-    # Don't intercept API, uploads, asset paths, or RMS PWA assets
-    if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
+async def public_spa(full_path: str):
+    """Serve the public-site SPA for any non-API, non-asset route."""
+    # Don't intercept API, uploads, asset paths, or app routes
+    if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest", "app/")):
         raise HTTPException(status_code=404)
-    
-    # Check if this is an RMS route (nginx rewrites /app/* to /* OR accessed directly as /app/*)
-    # Handle /app/* routes
-    if full_path.startswith("app/"):
-        # For app/... routes, serve RMS index.html or let static mounts handle it
-        if os.path.isdir(_RMS_DIR):
-            index = os.path.join(_RMS_DIR, "index.html")
-            if os.path.isfile(index):
-                return FileResponse(index, headers={
-                    "Cache-Control": "no-cache, no-store, must-revalidate",
-                    "Pragma": "no-cache",
-                    "Expires": "0"
-                })
-        raise HTTPException(status_code=404)
-    
-    # Handle routes that nginx rewrites (login, register, setup, portal/*, admin/*)
-    first_segment = full_path.split("/")[0] if "/" in full_path else full_path
-    is_rms_route = (
-        first_segment in RMS_APP_ROUTES or 
-        full_path.startswith(("portal/", "admin/"))
-    )
-    
-    if is_rms_route:
-        if os.path.isdir(_RMS_DIR):
-            index = os.path.join(_RMS_DIR, "index.html")
-            if os.path.isfile(index):
-                return FileResponse(index, headers={
-                    "Cache-Control": "no-cache, no-store, must-revalidate",
-                    "Pragma": "no-cache",
-                    "Expires": "0"
-                })
-        raise HTTPException(status_code=404)
-    
     if os.path.isdir(_PUBLIC_SITE_DIR):
         index = os.path.join(_PUBLIC_SITE_DIR, "index.html")
         if os.path.isfile(index):

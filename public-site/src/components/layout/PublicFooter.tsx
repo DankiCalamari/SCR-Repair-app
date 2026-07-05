@@ -104,13 +104,13 @@ export default function PublicFooter() {
             <span className="text-copper-300">|</span>
             <span className="text-warm-500">ABN: {settings.abn || "12 345 678 901"}</span>
             <span className="text-copper-300">|</span>
-            <Link 
-              to="/app/login" 
+            <a 
+              href="/app/login" 
               className="flex items-center gap-1 text-warm-500 hover:text-copper-600 transition-colors underline-offset-2 hover:underline"
             >
               <LogIn className="h-3 w-3" />
               Staff Login
-            </Link>
+            </a>
           </div>
         </div>
       </div>
