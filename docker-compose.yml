@@ -32,7 +32,7 @@ services:
     volumes:
       - uploads:/app/uploads
     ports:
-      - "0.0.0.0:8000:8000"
+      - "80:8000"
 
 volumes:
   postgres_data:

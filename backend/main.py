@@ -255,13 +255,19 @@ _PUBLIC_SITE_DIR = os.path.join(os.path.dirname(__file__), "public-site", "dist"
 # Serve the RMS app (auth/portal/admin) at /app
 _RMS_DIR = os.path.join(os.path.dirname(__file__), "rms", "dist")
 
+# Mount public-site assets at root /assets
+if os.path.isdir(_PUBLIC_SITE_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(_PUBLIC_SITE_DIR, "assets")), name="public-assets")
+
+# Mount RMS assets at /app/assets
+if os.path.isdir(_RMS_DIR):
+    app.mount("/app/assets", StaticFiles(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
+
 class NoCacheMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
-        # Disable caching for assets and SPA index files
-        if (request.url.path.startswith("/assets/") or 
-            request.url.path.startswith("/app/assets/") or
-            request.url.path.startswith("/app/") and not request.url.path.startswith("/app/api/")):
+        # Disable caching for SPA index files
+        if request.url.path.startswith("/app/") and not request.url.path.startswith("/app/api/"):
             response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
             response.headers["Pragma"] = "no-cache"
             response.headers["Expires"] = "0"
@@ -269,19 +275,6 @@ class NoCacheMiddleware(BaseHTTPMiddleware):
 
 
 app.add_middleware(NoCacheMiddleware)
-
-# Mount RMS assets and static files at /app
-if os.path.isdir(_RMS_DIR):
-    app.mount("/app/assets", StaticFiles(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
-    # Serve root-level static files from RMS dist (logo.svg, favicon.svg, sw.js, etc.)
-    app.mount("/app/static", StaticFiles(directory=_RMS_DIR), name="rms-root")
-
-# Mount public-site assets at root /assets
-if os.path.isdir(_PUBLIC_SITE_DIR):
-    app.mount("/assets", StaticFiles(directory=os.path.join(_PUBLIC_SITE_DIR, "assets")), name="public-assets")
-    # Serve root-level static files from public-site dist (logo.svg, favicon.svg, etc.)
-    app.mount("/static", StaticFiles(directory=_PUBLIC_SITE_DIR), name="public-root")
-
 
 # ── SPA catch-all (must be registered last) ─────────────────────────────
 from fastapi.responses import FileResponse
@@ -305,18 +298,37 @@ async def rms_spa(full_path: str):
             })
     raise HTTPException(status_code=404)
 
+# Allow favicon and static files to be served directly
+@app.get("/favicon.svg", include_in_schema=False)
+async def public_favicon():
+    """Serve favicon from public-site."""
+    if os.path.isdir(_PUBLIC_SITE_DIR):
+        favicon = os.path.join(_PUBLIC_SITE_DIR, "favicon.svg")
+        if os.path.isfile(favicon):
+            return FileResponse(favicon)
+    raise HTTPException(status_code=404)
+
+@app.get("/logo.svg", include_in_schema=False)
+async def public_logo():
+    """Serve logo from public-site."""
+    if os.path.isdir(_PUBLIC_SITE_DIR):
+        logo = os.path.join(_PUBLIC_SITE_DIR, "logo.svg")
+        if os.path.isfile(logo):
+            return FileResponse(logo)
+    raise HTTPException(status_code=404)
+
 @app.get("/{full_path:path}", include_in_schema=False)
 async def spa_router(full_path: str):
     """Serve the appropriate SPA based on route."""
     # Don't intercept API, uploads, asset paths
-    if full_path.startswith(("api/", "uploads/", "assets/", "docs", "redoc", "openapi", "registerSW.js", "manifest.webmanifest")):
+    if full_path.startswith(("api/", "uploads/", "assets/")):
         raise HTTPException(status_code=404)
     
     # Routes that should serve RMS app (auth pages)
     rms_routes = {"login", "register", "setup"}
     first_segment = full_path.split("/")[0] if "/" in full_path else full_path
     
-    if full_path == "" or first_segment in rms_routes or full_path.startswith("portal/") or full_path.startswith("admin/"):
+    if first_segment in rms_routes or full_path.startswith("portal/") or full_path.startswith("admin/"):
         # Serve RMS SPA for auth routes and portal/admin
         if os.path.isdir(_RMS_DIR):
             index = os.path.join(_RMS_DIR, "index.html")
@@ -328,7 +340,7 @@ async def spa_router(full_path: str):
                 })
         raise HTTPException(status_code=404)
     
-    # Serve public-site SPA for all other routes
+    # Serve public-site SPA for all other routes (including root "/")
     if os.path.isdir(_PUBLIC_SITE_DIR):
         index = os.path.join(_PUBLIC_SITE_DIR, "index.html")
         if os.path.isfile(index):
