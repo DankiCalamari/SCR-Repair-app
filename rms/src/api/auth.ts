@@ -1,6 +1,5 @@
 import apiClient from "./client";
 import type { AuthResponse, User } from "../types";
-import { API_BASE_URL } from "../lib/constants";
 
 export async function login(email: string, password: string): Promise<AuthResponse> {
   const { data } = await apiClient.post("/auth/login", { email, password });
@@ -29,12 +28,6 @@ export async function logout(): Promise<void> {
 }
 
 export async function checkSetupStatus(): Promise<{ needs_setup: boolean; admin_exists: boolean }> {
-  const response = await fetch(`${API_BASE_URL}/public/setup-status`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to check setup status");
-  }
-  return response.json();
+  const { data } = await apiClient.get("/public/setup-status");
+  return data;
 }

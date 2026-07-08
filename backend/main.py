@@ -317,6 +317,24 @@ async def public_logo():
             return FileResponse(logo)
     raise HTTPException(status_code=404)
 
+@app.get("/app/static/favicon.svg", include_in_schema=False)
+async def rms_favicon():
+    """Serve favicon from RMS."""
+    if os.path.isdir(_RMS_DIR):
+        favicon = os.path.join(_RMS_DIR, "favicon.svg")
+        if os.path.isfile(favicon):
+            return FileResponse(favicon)
+    raise HTTPException(status_code=404)
+
+@app.get("/app/static/logo.svg", include_in_schema=False)
+async def rms_logo():
+    """Serve logo from RMS."""
+    if os.path.isdir(_RMS_DIR):
+        logo = os.path.join(_RMS_DIR, "logo.svg")
+        if os.path.isfile(logo):
+            return FileResponse(logo)
+    raise HTTPException(status_code=404)
+
 @app.get("/{full_path:path}", include_in_schema=False)
 async def spa_router(full_path: str):
     """Serve the appropriate SPA based on route."""

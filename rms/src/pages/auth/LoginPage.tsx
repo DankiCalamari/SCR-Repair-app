@@ -55,6 +55,24 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, setUser]);
 
+  // Check setup status - redirect to setup if no admin user
+  useEffect(() => {
+    const checkSetup = async () => {
+      try {
+        const response = await fetch("/api/v1/public/setup-status");
+        if (response.ok) {
+          const status = await response.json();
+          if (status.needs_setup) {
+            navigate("/setup", { replace: true });
+          }
+        }
+      } catch {
+        // Backend not available or other error, continue with login
+      }
+    };
+    checkSetup();
+  }, [navigate]);
+
   if (isAuthenticated && user) {
     if (user.role === "admin" || user.role === "staff") {
       navigate("/admin", { replace: true });

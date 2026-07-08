@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import { useAuthStore } from "./store/auth-store";
@@ -38,87 +38,13 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }> {
   }
 }
 
-// This component handles the initial setup check and renders the appropriate app
-// The App component already has /setup route defined, so we let it handle routing
-function RouterInitializer() {
-  const [checking, setChecking] = useState(true);
-  const [needsSetup, setNeedsSetup] = useState(false);
-  const setUser = useAuthStore((s) => s.setUser);
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-
-    // Initialize auth if token exists
-    if (token) {
-      authApi.getMe()
-        .then((user) => {
-          setUser(user);
-        })
-        .catch(() => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          useAuthStore.setState({
-            user: null,
-            accessToken: null,
-            refreshToken: null,
-            isAuthenticated: false,
-            isAdmin: false,
-            isStaff: false,
-            isCustomer: false,
-          });
-        });
-    }
-
-    // Check setup status
-    authApi.checkSetupStatus()
-      .then((status) => {
-        setNeedsSetup(status.needs_setup);
-      })
-      .catch((e: unknown) => {
-        console.error("Setup status check failed:", e);
-        setNeedsSetup(false);
-      })
-      .finally(() => setChecking(false));
-  }, [setUser]);
-
-  if (checking) {
-    return (
-      <div style={{ 
-        display: "flex", 
-        minHeight: "100vh", 
-        alignItems: "center", 
-        justifyContent: "center",
-        backgroundColor: "#fefaf6"
-      }}>
-        <div style={{ 
-          width: "2rem", 
-          height: "2rem", 
-          border: "4px solid #e06645",
-          borderTopColor: "transparent",
-          borderRadius: "50%",
-          animation: "spin 1s linear infinite"
-        }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
-  }
-
-  // Redirect to setup page if no admin user exists
-  if (needsSetup) {
-    return <Navigate to="/setup" replace />;
-  }
-
-  // Otherwise render the app normally - App has its own routing with /setup route
-  return <App />;
-}
-
 try {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <ErrorBoundary>
         <BrowserRouter basename="/app">
           <QueryClientProvider client={queryClient}>
-            <RouterInitializer />
+            <App />
           </QueryClientProvider>
         </BrowserRouter>
       </ErrorBoundary>
