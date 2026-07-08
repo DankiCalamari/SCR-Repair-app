@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
-import SetupPage from "./pages/auth/SetupPage";
 import { useAuthStore } from "./store/auth-store";
 import * as authApi from "./api/auth";
 import "./index.css";
@@ -19,7 +18,7 @@ const queryClient = new QueryClient({
 });
 
 // Simple error boundary for debugging
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }> {
   state = { hasError: false, error: null as Error | null };
   
   static getDerivedStateFromError(error: Error) {
@@ -102,6 +101,11 @@ function RouterInitializer() {
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
+  }
+
+  // Redirect to setup page if no admin user exists
+  if (needsSetup) {
+    return <Navigate to="/setup" replace />;
   }
 
   // Otherwise render the app normally - App has its own routing with /setup route

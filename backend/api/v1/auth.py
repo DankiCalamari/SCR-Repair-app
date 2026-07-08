@@ -32,7 +32,12 @@ router = APIRouter()
 def _get_secure_cookie(request: Request) -> bool:
     """Check if we should set secure cookies based on the request protocol."""
     forwarded_proto = request.headers.get("X-Forwarded-Proto", "").lower()
-    return forwarded_proto == "https" or settings.APP_ENV != "production"
+    # Secure cookies only needed for HTTPS
+    is_https = forwarded_proto == "https"
+    # In development mode without HTTPS, allow non-secure cookies for localhost
+    if settings.APP_ENV == "development" and not is_https:
+        return False
+    return is_https
 
 
 @router.get("/sso/login")

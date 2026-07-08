@@ -30,14 +30,21 @@ export default function LoginPage() {
   useEffect(() => {
     const syncSSO = async () => {
       try {
-        const response = await apiClient.get("/auth/sync");
-        if (response.data?.access_token) {
-          localStorage.setItem("access_token", response.data.access_token);
-          if (response.data.refresh_token) {
-            localStorage.setItem("refresh_token", response.data.refresh_token);
+        // Use fetch directly with credentials to send cookies, not apiClient which adds auth header
+        const response = await fetch("/api/v1/auth/sync", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data?.access_token) {
+            localStorage.setItem("access_token", data.access_token);
+            if (data.refresh_token) {
+              localStorage.setItem("refresh_token", data.refresh_token);
+            }
+            const userResponse = await apiClient.get("/auth/me");
+            setUser(userResponse.data);
           }
-          const user = await apiClient.get("/auth/me");
-          setUser(user.data);
         }
       } catch {
         // No SSO session, continue with normal login
