@@ -261,7 +261,16 @@ if os.path.isdir(_PUBLIC_SITE_DIR):
 
 # Mount RMS assets at /app/assets
 if os.path.isdir(_RMS_DIR):
-    app.mount("/app/assets", StaticFiles(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
+    # Custom HTML response for missing assets to prevent SPA fallback
+    from starlette.responses import Response as StarletteResponse
+    class RMSAssetsHandler(StaticFiles):
+        def not_found_response(self, name: str, scope: dict):
+            return StarletteResponse(
+                "Asset not found",
+                status_code=404,
+                media_type="text/plain"
+            )
+    app.mount("/app/assets", RMSAssetsHandler(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
 
 class NoCacheMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -287,6 +296,11 @@ async def rms_spa(full_path: str):
     # Don't intercept API or uploads paths
     if full_path.startswith(("api/", "uploads/")):
         raise HTTPException(status_code=404)
+    
+    # Don't intercept assets - let StaticFiles mount handle them
+    if full_path.startswith("assets/"):
+        raise HTTPException(status_code=404)
+    
     # Serve RMS index.html
     if os.path.isdir(_RMS_DIR):
         index = os.path.join(_RMS_DIR, "index.html")
@@ -351,6 +365,7 @@ async def spa_router(full_path: str):
         if os.path.isdir(_RMS_DIR):
             index = os.path.join(_RMS_DIR, "index.html")
             if os.path.isfile(index):
+                # Add cache-busting to prevent old asset references
                 return FileResponse(index, headers={
                     "Cache-Control": "no-cache, no-store, must-revalidate",
                     "Pragma": "no-cache",
