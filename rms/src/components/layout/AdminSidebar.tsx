@@ -1,6 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth-store";
-import { useSettings } from "../../hooks/use-settings";
 import { usePushNotifications } from "../../hooks/use-push-notifications";
 import {
   LayoutDashboard, Wrench, Users, FileText, Receipt,
@@ -26,7 +25,6 @@ const navItems: { to: string; label: string; icon: React.ElementType; end?: bool
 const adminOnlyItems: { to: string; label: string; icon: React.ElementType; end?: boolean }[] = [
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/settings", label: "Settings", icon: Settings },
-  { to: "/admin/integrations/hnry", label: "Hnry", icon: Zap },
 ];
 
 export default function AdminSidebar() {
@@ -34,8 +32,6 @@ export default function AdminSidebar() {
   const logout = useAuthStore((s) => s.logout);
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const [collapsed, setCollapsed] = useState(false);
-  const { data: settings } = useSettings();
-  const logoUrl = settings?.admin_logo_url || settings?.logo_url;
   const { isSupported, isSubscribed, isLoading, toggle } = usePushNotifications();
 
   const handleLogout = async () => {

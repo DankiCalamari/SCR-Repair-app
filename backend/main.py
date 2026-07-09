@@ -261,16 +261,7 @@ if os.path.isdir(_PUBLIC_SITE_DIR):
 
 # Mount RMS assets at /app/assets
 if os.path.isdir(_RMS_DIR):
-    # Custom HTML response for missing assets to prevent SPA fallback
-    from starlette.responses import Response as StarletteResponse
-    class RMSAssetsHandler(StaticFiles):
-        def not_found_response(self, name: str, scope: dict):
-            return StarletteResponse(
-                "Asset not found",
-                status_code=404,
-                media_type="text/plain"
-            )
-    app.mount("/app/assets", RMSAssetsHandler(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
+    app.mount("/app/assets", StaticFiles(directory=os.path.join(_RMS_DIR, "assets")), name="rms-assets")
 
 class NoCacheMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):

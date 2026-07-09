@@ -17,7 +17,6 @@ from api.v1.system_health import router as system_health_router
 from api.v1.admin import router as admin_router
 from api.v1.public import router as public_router
 from api.v1.push_subscriptions import router as push_subscriptions_router
-from api.v1.integrations import router as integrations_router
 
 api_router = APIRouter(prefix="/v1")
 api_router.include_router(public_router, prefix="", tags=["public"])
@@ -37,4 +36,3 @@ api_router.include_router(dashboard_router, prefix="/dashboard", tags=["dashboar
 api_router.include_router(system_health_router, prefix="/system-health", tags=["system-health"])
 api_router.include_router(admin_router, prefix="/admin", tags=["admin"])
 api_router.include_router(push_subscriptions_router, prefix="/push", tags=["push-notifications"])
-api_router.include_router(integrations_router, prefix="", tags=["integrations"])

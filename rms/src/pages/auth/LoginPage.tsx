@@ -1,11 +1,9 @@
 import { useState, type FormEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth-store";
-import { useSettings } from "../../hooks/use-settings";
 import { useFavicon } from "../../hooks/use-favicon";
 import { EMAIL_REGEX } from "../../lib/constants";
 import { Shield } from "lucide-react";
-import apiClient from "../../api/client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,11 +18,8 @@ export default function LoginPage() {
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const navigate = useNavigate();
-  const { data: settings } = useSettings();
   useFavicon();
-  const logoUrl = settings?.logo_url;
-  const businessName = settings?.business_name || "Sunset Country Repairs";
-  const ssoEnabled = settings?.authentik_url && settings?.authentik_client_id;
+  const businessName = "Sunset Country Repairs";
 
   // Sync with SSO cookies on mount
   useEffect(() => {
@@ -42,9 +37,15 @@ export default function LoginPage() {
             if (data.refresh_token) {
               localStorage.setItem("refresh_token", data.refresh_token);
             }
-            const userResponse = await apiClient.get("/auth/me");
-            localStorage.setItem("user_data", JSON.stringify(userResponse.data));
-            setUser(userResponse.data);
+            const userResponse = await fetch("/api/v1/auth/me", {
+              method: "GET",
+              headers: { Authorization: `Bearer ${data.access_token}` },
+            });
+            if (userResponse.ok) {
+              const user = await userResponse.json();
+              localStorage.setItem("user_data", JSON.stringify(user));
+              setUser(user);
+            }
           }
         }
       } catch {
@@ -241,24 +242,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* SSO Login */}
-          {ssoEnabled && (
-            <>
-              <div className="my-6 flex items-center gap-4 text-sm text-warm-400">
-                <div className="flex-1 border-t border-warm-200"></div>
-                <span>Or</span>
-                <div className="flex-1 border-t border-warm-200"></div>
-              </div>
-              <a
-                href="/api/v1/auth/sso/login"
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-copper-500 bg-white px-4 py-2.5 font-semibold text-copper-600 transition-colors hover:bg-copper-50 focus:outline-none focus:ring-2 focus:ring-copper-500"
-              >
-                <Shield className="h-4 w-4" />
-                Sign in with SSO
-              </a>
-            </>
-          )}
 
           {/* Register Link */}
           <div className="mt-6 text-center text-sm text-warm-500">

@@ -13,7 +13,6 @@ class InvoiceStatus(str, enum.Enum):
     PAID = "paid"
     OVERDUE = "overdue"
     CANCELLED = "cancelled"
-    FINALISED = "finalised"  # Finalised status for accounting sync
 
 
 class Invoice(Base):
