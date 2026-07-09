@@ -29,6 +29,7 @@ const AdminCustomerDetailPage = lazy(() => import("./pages/admin/AdminCustomerDe
 const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
 const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminCommunicationsPage = lazy(() => import("./pages/admin/AdminCommunicationsPage"));
+const AdminHnryIntegrationPage = lazy(() => import("./pages/admin/AdminHnryIntegrationPage"));
 
 const AdminSidebar = lazy(() => import("./components/layout/AdminSidebar"));
 
@@ -143,6 +144,7 @@ export default function App() {
         >
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/admin/integrations/hnry" element={<AdminHnryIntegrationPage />} />
         </Route>
 
         {/* Catch all - redirect to login */}

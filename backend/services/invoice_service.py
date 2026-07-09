@@ -138,7 +138,7 @@ async def update_invoice(
 ) -> Invoice:
     invoice = await get_invoice_or_404(db, invoice_id)
 
-    if invoice.status not in (InvoiceStatus.DRAFT, InvoiceStatus.SENT):
+    if invoice.status not in (InvoiceStatus.DRAFT, InvoiceStatus.SENT, InvoiceStatus.FINALISED):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Cannot update invoice in '{invoice.status.value}' status",
@@ -162,12 +162,51 @@ async def update_invoice(
 
     invoice.created_by = user_id
 
+    # Auto-sync to Hnry when invoice is finalised
+    if new_status == InvoiceStatus.FINALISED.value:
+        from services.integration_service import execute_sync, IntegrationProvider, get_integration_settings
+        integration = await get_integration_settings(db, IntegrationProvider.HNTRY)
+        if integration and integration.is_enabled and integration.webhook_url:
+            # Build payload for Hnry
+            payload = {
+                "invoiceNumber": invoice.invoice_number,
+                "invoiceDate": invoice.created_at.isoformat() if invoice.created_at else None,
+                "dueDate": invoice.due_date.isoformat() if invoice.due_date else None,
+                "customer": {
+                    "id": str(invoice.repair.customer_id) if invoice.repair else None,
+                },
+                "subtotal": float(invoice.subtotal),
+                "gst": float(invoice.gst_amount),
+                "total": float(invoice.total_amount),
+                "currency": "AUD",
+                "lineItems": [
+                    {
+                        "description": item.description,
+                        "quantity": float(item.quantity),
+                        "unitPrice": float(item.unit_price),
+                        "total": float(item.total),
+                        "type": item.item_type
+                    }
+                    for item in invoice.items
+                ]
+            }
+            # Execute sync in background (don't wait for result)
+            import asyncio
+            asyncio.create_task(
+                execute_sync(
+                    db, IntegrationProvider.HNTRY, "invoice", invoice_id,
+                    "create_invoice", payload, f"invoice-{invoice_id}"
+                )
+            )
+
     await db.flush()
 
     from sqlalchemy import select
     from sqlalchemy.orm import selectinload
     result = await db.execute(
-        select(Invoice).options(selectinload(Invoice.items)).where(Invoice.id == invoice.id)
+        select(Invoice)
+        .options(selectinload(Invoice.items), selectinload(Invoice.repair))
+        .where(Invoice.id == invoice.id)
     )
     return result.scalar_one()
 
