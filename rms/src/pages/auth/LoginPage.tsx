@@ -43,6 +43,7 @@ export default function LoginPage() {
               localStorage.setItem("refresh_token", data.refresh_token);
             }
             const userResponse = await apiClient.get("/auth/me");
+            localStorage.setItem("user_data", JSON.stringify(userResponse.data));
             setUser(userResponse.data);
           }
         }
