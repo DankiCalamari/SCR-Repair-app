@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth-store";
 import { usePushNotifications } from "../../hooks/use-push-notifications";
+import { usePublicSettings } from "../../hooks/use-settings";
 import {
   LayoutDashboard, Wrench, Users, FileText, Receipt,
   MessageSquare, Mail, Shield, Settings,
-  LogOut, ChevronLeft, ChevronRight, Zap, Inbox, Globe, Bell, BellOff
+  LogOut, ChevronLeft, ChevronRight, Zap, Inbox, Globe, Bell, BellOff, Calendar
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useState } from "react";
@@ -19,6 +20,7 @@ const navItems: { to: string; label: string; icon: React.ElementType; end?: bool
   { to: "/admin/email", label: "Email", icon: Mail },
   { to: "/admin/communications", label: "Unassigned", icon: Inbox },
   { to: "/admin/warranty", label: "Warranty", icon: Shield },
+  { to: "/admin/bookings", label: "Bookings", icon: Calendar },
   { to: "/admin/system-health", label: "System", icon: Zap },
 ];
 
@@ -33,6 +35,11 @@ export default function AdminSidebar() {
   const isAdmin = useAuthStore((s) => s.isAdmin);
   const [collapsed, setCollapsed] = useState(false);
   const { isSupported, isSubscribed, isLoading, toggle } = usePushNotifications();
+  
+  // Fetch logo from public settings
+  const { data: settings } = usePublicSettings();
+  
+  const logoUrl = settings?.admin_logo_url || settings?.logo_url || "/app/static/logo.svg";
 
   const handleLogout = async () => {
     await logout();

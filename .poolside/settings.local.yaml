@@ -2,3 +2,5 @@ tools:
     shell:
         allow:
             - docker ps *
+            - find *
+            - head *

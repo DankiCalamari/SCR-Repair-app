@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useSettings } from "./use-settings";
+import { usePublicSettings } from "./use-settings";
 
 export function useFavicon() {
-  const { data: settings } = useSettings();
+  const { data: settings } = usePublicSettings();
   useEffect(() => {
     const url = settings?.favicon_url;
     if (!url) return;

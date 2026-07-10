@@ -47,6 +47,7 @@ class Repair(Base):
     documents = relationship("Document", back_populates="repair", cascade="all, delete-orphan")
     quotes = relationship("Quote", back_populates="repair", cascade="all, delete-orphan")
     invoices = relationship("Invoice", back_populates="repair", cascade="all, delete-orphan")
+    bookings = relationship("Booking", back_populates="repair", cascade="all, delete-orphan")
     sms_messages = relationship("SmsMessage", back_populates="repair", cascade="all, delete-orphan")
     emails = relationship("EmailMessage", back_populates="repair", cascade="all, delete-orphan")
     warranty = relationship("WarrantyRecord", back_populates="repair", uselist=False, cascade="all, delete-orphan")

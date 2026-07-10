@@ -501,6 +501,58 @@ export interface WarrantyRecord {
   created_at: string;
 }
 
+// Booking types
+export type BookingType = "pickup" | "dropoff";
+
+export type BookingStatus = "scheduled" | "completed" | "cancelled" | "no_show";
+
+export interface Booking {
+  id: string;
+  repair_id: string | null;
+  customer_id: string;
+  booking_type: BookingType;
+  status: BookingStatus;
+  scheduled_at: string;
+  duration_minutes: number;
+  address: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookingDetail extends Booking {
+  ticket_number: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+}
+
+export interface CreateBookingRequest {
+  repair_id?: string | null;
+  customer_id: string;
+  booking_type: BookingType;
+  scheduled_at: string;
+  duration_minutes?: number;
+  address?: string | null;
+  notes?: string | null;
+}
+
+export interface UpdateBookingRequest {
+  repair_id?: string | null;
+  booking_type?: BookingType;
+  status?: BookingStatus;
+  scheduled_at?: string;
+  duration_minutes?: number;
+  address?: string | null;
+  notes?: string | null;
+}
+
+export interface TimeSlot {
+  time: string;
+  datetime: string;
+  available: boolean;
+}
+
 export interface WarrantyClaim {
   id: string;
   warranty_id: string;

@@ -5,6 +5,7 @@ import {
   Activity, Database, Server, HardDrive, CheckCircle2,
   XCircle, AlertTriangle, Cpu, MemoryStick
 } from "lucide-react";
+import LogViewer from "../../components/admin/LogViewer";
 
 interface HealthCheck {
   name: string;
@@ -127,15 +128,9 @@ export default function AdminSystemHealthPage() {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="rounded-lg border border-warm-800 bg-warm-900">
-          <div className="border-b border-warm-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-warm-50">Recent Activity</h2>
-          </div>
-          <div className="p-5 text-center text-warm-400">
-            <Activity className="mx-auto h-8 w-8 text-warm-600 mb-2" />
-            <p>Activity log will appear here</p>
-          </div>
+        {/* Real-time Logs */}
+        <div className="mb-8">
+          <LogViewer maxEntries={300} />
         </div>
     </div>
   );

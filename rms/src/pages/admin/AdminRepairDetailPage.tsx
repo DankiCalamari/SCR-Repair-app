@@ -8,14 +8,16 @@ import { downloadDocument, uploadDocument } from "../../api/documents";
 import { sendSms, listSmsMessages, getSmsTemplates, sendSmsTemplate } from "../../api/sms";
 import { sendEmailTemplate, getEmailTemplates, listEmails } from "../../api/email";
 import { getPhotoCategoryCounts, deletePhoto } from "../../api/photos";
+import { createBooking, listBookings } from "../../api/bookings";
 import PhotoGallery from "../../components/photos/PhotoGallery";
 import PhotoUploader from "../../components/photos/PhotoUploader";
+import BookingModal from "../../components/bookings/BookingModal";
 import { getStatusLabel, getStatusColor, formatDate, formatDateTime, formatCurrency, cn } from "../../lib/utils";
-import type { RepairDetail, RepairStatus, Quote, Invoice, PhotoCategoryCount } from "../../types";
+import type { RepairDetail, RepairStatus, Quote, Invoice, PhotoCategoryCount, Booking } from "../../types";
 import {
   ArrowLeft, Smartphone, FileText, Image,
   Download, Clock, FileDown, Camera, MessageSquare, Send, ChevronDown,
-  Plus, Check, X, DollarSign, Upload,
+  Plus, Check, X, DollarSign, Upload, Calendar,
 } from "lucide-react";
 
 const ALL_STATUSES: RepairStatus[] = [
@@ -235,6 +237,13 @@ export default function AdminRepairDetailPage() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
   const [showCreateQuote, setShowCreateQuote] = useState(false);
   const [showCreateInvoice, setShowCreateInvoice] = useState(false);
+  const [showCreateBooking, setShowCreateBooking] = useState(false);
+
+  const { data: repairBookings } = useQuery({
+    queryKey: ["repair-bookings", id],
+    queryFn: () => listBookings(0, 50, undefined, undefined, undefined, undefined).then(r => r.data),
+    enabled: !!id,
+  });
 
   const { data: repair, isLoading } = useQuery<RepairDetail>({
     queryKey: ["admin-repair", id],
@@ -410,6 +419,13 @@ export default function AdminRepairDetailPage() {
     },
   });
 
+  const createBookingMutation = useMutation({
+    mutationFn: createBooking,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["repair-bookings", id] });
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-warm-900">
@@ -527,6 +543,46 @@ export default function AdminRepairDetailPage() {
               {repair.parts_cost && <div><p className="text-xs text-warm-400">Parts</p><p className="text-warm-50">{formatCurrency(Number(repair.parts_cost))}</p></div>}
               {repair.estimated_completion && <div><p className="text-xs text-warm-400">Est. Completion</p><p className="text-warm-50">{repair.estimated_completion}</p></div>}
               {repair.completed_date && <div><p className="text-xs text-warm-400">Completed</p><p className="text-warm-50">{formatDate(repair.completed_date)}</p></div>}
+            </div>
+            
+            {/* Pickup/Dropoff Scheduling */}
+            <div className="mt-6 border-t border-warm-700 pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-medium text-warm-300">Pickup / Dropoff</h4>
+                <button
+                  onClick={() => setShowCreateBooking(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-copper-500/30 bg-copper-500/5 px-3 py-1.5 text-xs text-copper-500 hover:bg-copper-500/10"
+                >
+                  <Calendar className="h-3.5 w-3.5" /> Schedule
+                </button>
+              </div>
+              {repairBookings && repairBookings.length > 0 ? (
+                <div className="space-y-2">
+                  {repairBookings.filter((b: Booking) => b.repair_id === id).map((booking: Booking) => (
+                    <div key={booking.id} className="flex items-center justify-between rounded-lg border border-warm-600 bg-warm-700/30 px-3 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className={cn(
+                          "text-xs font-medium capitalize",
+                          booking.booking_type === "pickup" ? "text-copper-400" : "text-teal-400"
+                        )}>
+                          {booking.booking_type}
+                        </span>
+                        <span className="text-xs text-warm-400">
+                          {formatDate(booking.scheduled_at)}
+                        </span>
+                      </div>
+                      <span className={cn(
+                        "rounded-full px-2 py-0.5 text-xs",
+                        booking.status === "scheduled" ? "bg-copper-500/20 text-copper-400" : "bg-green-500/20 text-green-400"
+                      )}>
+                        {booking.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-warm-400">No pickup/dropoff scheduled.</p>
+              )}
             </div>
           </div>
         </div>
@@ -971,6 +1027,13 @@ export default function AdminRepairDetailPage() {
           customerName={repair.customer?.name || ""}
           onClose={() => setShowCreateInvoice(false)}
           onSuccess={() => { setShowCreateInvoice(false); invalidateRepair(); }}
+        />
+      )}
+      {showCreateBooking && (
+        <BookingModal
+          booking={null}
+          onClose={() => setShowCreateBooking(false)}
+          onSuccess={() => { setShowCreateBooking(false); queryClient.invalidateQueries({ queryKey: ["repair-bookings", id] }); }}
         />
       )}
     </div>

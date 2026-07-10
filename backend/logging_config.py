@@ -17,6 +17,7 @@ from typing import Any
 import structlog
 
 from config import settings
+from services.log_broadcaster import WebSocketLogHandler
 
 
 def _add_app_context(
@@ -35,6 +36,44 @@ def _add_correlation_id(
     correlation_id = structlog.contextvars.get_contextvars().get("correlation_id")
     if correlation_id:
         event_dict["correlation_id"] = correlation_id
+    return event_dict
+
+
+def _broadcast_to_websocket(logger: Any, method_name: str, event_dict: dict[str, Any]) -> dict[str, Any]:
+    """
+    Processor that broadcasts log events to WebSocket clients.
+    
+    This processor runs after the log event is formatted and sends it to all
+    connected WebSocket clients for real-time log streaming.
+    """
+    try:
+        # Use asyncio to schedule the broadcast without blocking
+        import asyncio
+        from datetime import datetime
+        
+        # Create the log entry for WebSocket transmission
+        log_entry = {
+            "type": "log",
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "level": event_dict.get("level", method_name).lower(),
+            "level_name": event_dict.get("level", method_name).upper(),
+            "message": event_dict.get("event", ""),
+            "logger": event_dict.get("logger", ""),
+            "data": event_dict,
+        }
+        
+        # Schedule broadcast in the running event loop
+        loop = asyncio.get_running_loop()
+        # Import here to avoid circular import
+        from services.log_broadcaster import broadcaster
+        loop.create_task(broadcaster.broadcast(log_entry))
+    except RuntimeError:
+        # No running loop - skip WebSocket broadcast
+        pass
+    except Exception:
+        # Never fail logging because of WebSocket issues
+        pass
+    
     return event_dict
 
 
@@ -63,6 +102,7 @@ def configure() -> None:
     structlog.configure(
         processors=[
             *shared_processors,
+            _broadcast_to_websocket,  # Broadcast to WebSocket before final rendering
             structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],
         logger_factory=structlog.stdlib.LoggerFactory(),
@@ -82,6 +122,11 @@ def configure() -> None:
     root_logger.handlers.clear()
     root_logger.addHandler(handler)
     root_logger.setLevel(getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO))
+
+    # Add WebSocket log handler for standard Python logging
+    ws_handler = WebSocketLogHandler(None)
+    ws_handler.setLevel(logging.DEBUG)
+    root_logger.addHandler(ws_handler)
 
     # Silence noisy third-party loggers in production.
     for noisy in ("uvicorn.access", "sqlalchemy.engine"):

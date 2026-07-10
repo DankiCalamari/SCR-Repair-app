@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth-store";
+import { usePublicSettings } from "../../hooks/use-settings";
 import { EMAIL_REGEX } from "../../lib/constants";
 
 export default function RegisterPage() {
@@ -13,6 +14,9 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const register = useAuthStore((s) => s.register);
   const navigate = useNavigate();
+  const { data: settings } = usePublicSettings();
+  const businessName = settings?.business_name || "Sunset Country Repairs";
+  const logoUrl = settings?.logo_url || null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +53,20 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-warm-50 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="font-heading text-3xl font-bold text-warm-900">Sunset Country Repairs</h1>
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={businessName}
+              className="mx-auto mb-4 h-16 w-auto object-contain"
+            />
+          ) : (
+            <img
+              src="/app/static/logo.svg"
+              alt={businessName}
+              className="mx-auto mb-4 h-12 w-auto object-contain"
+            />
+          )}
+          <h1 className="font-heading text-3xl font-bold text-warm-900">{businessName}</h1>
           <p className="mt-2 text-warm-500">Create your customer account</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-xl border border-warm-200 bg-white p-8">

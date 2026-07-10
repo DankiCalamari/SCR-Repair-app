@@ -82,6 +82,12 @@ from schemas.lead import (
     LeadResponse,
     LeadConvertRequest,
 )
+from schemas.booking import (
+    BookingCreate,
+    BookingUpdate,
+    BookingResponse,
+    BookingDetailResponse,
+)
 from schemas.audit_log import AuditLogResponse
 from schemas.dashboard import (
     DashboardWidgets,
@@ -166,6 +172,11 @@ __all__ = [
     "LeadUpdate",
     "LeadResponse",
     "LeadConvertRequest",
+    # Booking
+    "BookingCreate",
+    "BookingUpdate",
+    "BookingResponse",
+    "BookingDetailResponse",
     # Audit Log
     "AuditLogResponse",
     # Dashboard

@@ -1,5 +1,3 @@
-from uuid import UUID
-
 import os
 import uuid
 from uuid import UUID

@@ -38,6 +38,7 @@ from models.warranty import WarrantyRecord, WarrantyClaim  # noqa: F401
 from models.lead import Lead  # noqa: F401
 from models.audit_log import AuditLog  # noqa: F401
 from models.system_setting import SystemSetting  # noqa: F401
+from models.booking import Booking  # noqa: F401
 
 # Alembic Config object
 config = context.config

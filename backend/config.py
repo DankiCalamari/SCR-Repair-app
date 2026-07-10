@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     ACCENT_COLOR: str = "#d97706"   # copper-600
     LOGO_URL: str = "/app/static/logo.svg"
     ADMIN_LOGO_URL: str = "/app/static/logo.svg"
-    FAVICON_URL: str = "/app/static/favicon.ico"
+    FAVICON_URL: str = "/app/static/favicon.svg"
 
     SMS_GATEWAY_USERNAME: str = ""
     SMS_GATEWAY_PASSWORD: str = ""

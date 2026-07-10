@@ -22,6 +22,7 @@ class Customer(Base):
     user = relationship("User", back_populates="customer_profile")
     devices = relationship("Device", back_populates="customer", cascade="all, delete-orphan")
     repairs = relationship("Repair", back_populates="customer", cascade="all, delete-orphan")
+    bookings = relationship("Booking", back_populates="customer", cascade="all, delete-orphan")
     sms_messages = relationship("SmsMessage", back_populates="customer", cascade="all, delete-orphan")
     emails = relationship("EmailMessage", back_populates="customer", cascade="all, delete-orphan")
     leads = relationship("Lead", back_populates="customer", cascade="all, delete-orphan")

@@ -14,12 +14,14 @@ export interface SettingsMap {
 
 /**
  * Public settings — no authentication required.
- * Used by public pages (navbar, footer, login, favicon).
+ * Uses fetch directly to avoid auth interceptor issues.
  */
 export async function getPublicSettings(): Promise<SettingsMap> {
-  const { data } = await apiClient.get("/public/settings");
+  const response = await fetch("/api/v1/public/settings");
+  if (!response.ok) throw new Error("Failed to load settings");
+  const responseData = await response.json();
   const map: SettingsMap = {};
-  for (const item of data.data as SystemSetting[]) {
+  for (const item of responseData.data as SystemSetting[]) {
     if (item.value) {
       map[item.key] = item.value;
     }
