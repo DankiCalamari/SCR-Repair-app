@@ -112,19 +112,65 @@ async def send_template_sms(
 
     context = {}
     customer = None
+    repair = None
 
     if data.repair_id:
         repair = await db.get(Repair, data.repair_id)
         if repair:
             context["ticket_number"] = repair.ticket_number
             context["repair_status"] = repair.status.value
+            context["issue_description"] = repair.issue_description
             customer = await db.get(Customer, repair.customer_id)
             if repair.device_id:
                 from models.device import Device
                 device = await db.get(Device, repair.device_id)
                 if device:
-                    context["device_model"] = f"{device.brand} {device.model}"
+                    context["device_model"] = f"{device.brand} {device.model}".strip()
                     context["device_type"] = device.device_type
+            
+            # Check if template uses financial or quote-related variables
+            template_var_str = " ".join(template.variables) if template.variables else ""
+            
+            if "total_amount" in template_var_str or "labour_cost" in template_var_str or "parts_cost" in template_var_str:
+                from models.invoice import Invoice
+                from models.quote import Quote
+                invoice_result = await db.execute(
+                    select(Invoice)
+                    .where(Invoice.repair_id == repair.id)
+                    .order_by(Invoice.created_at.desc())
+                    .limit(1)
+                )
+                invoice = invoice_result.scalar_one_or_none()
+                if invoice:
+                    context["total_amount"] = f"{invoice.total_amount:.2f}"
+                    context["labour_cost"] = f"{invoice.subtotal - invoice.gst_amount:.2f}" if invoice.subtotal and invoice.gst_amount else "0.00"
+                    context["parts_cost"] = f"{invoice.gst_amount:.2f}" if invoice.gst_amount else "0.00"
+                else:
+                    quote_result = await db.execute(
+                        select(Quote)
+                        .where(Quote.repair_id == repair.id)
+                        .order_by(Quote.created_at.desc())
+                        .limit(1)
+                    )
+                    quote = quote_result.scalar_one_or_none()
+                    if quote:
+                        context["total_amount"] = f"{quote.total_amount:.2f}"
+                        context["labour_cost"] = f"{quote.labour_cost:.2f}" if quote.labour_cost else "0.00"
+                        context["parts_cost"] = f"{quote.parts_cost:.2f}" if quote.parts_cost else "0.00"
+
+            # Fetch appointment info if needed
+            if "appointment_date" in template_var_str or "appointment_time" in template_var_str:
+                from models.booking import Booking
+                booking_result = await db.execute(
+                    select(Booking)
+                    .where(Booking.repair_id == repair.id)
+                    .order_by(Booking.created_at.desc())
+                    .limit(1)
+                )
+                booking = booking_result.scalar_one_or_none()
+                if booking:
+                    context["appointment_date"] = booking.date.strftime("%d %b %Y") if booking.date else ""
+                    context["appointment_time"] = booking.time.strftime("%H:%M") if booking.time else ""
 
     if not customer and data.customer_id:
         customer = await db.get(Customer, data.customer_id)

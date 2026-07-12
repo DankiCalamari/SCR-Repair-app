@@ -41,6 +41,7 @@ export interface Repair {
   issue_description: string;
   diagnosis: string | null;
   repair_notes: string | null;
+  internal_notes: string | null;
   labour_hours: string | null;
   labour_cost: string | null;
   parts_cost: string | null;
@@ -97,6 +98,7 @@ export interface UpdateRepairRequest {
   issue_description?: string | null;
   diagnosis?: string | null;
   repair_notes?: string | null;
+  internal_notes?: string | null;
   labour_hours?: string | null;
   labour_cost?: string | null;
   parts_cost?: string | null;
@@ -213,6 +215,7 @@ export interface Photo {
   is_important: boolean;
   sort_order: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface PhotoUpdateRequest {
@@ -404,6 +407,8 @@ export interface SmsMessage {
   to_number: string;
   body: string;
   external_id: string | null;
+  sim_number: number | null;
+  device_info: unknown | null;
   error_message: string | null;
   delivered_at: string | null;
   created_at: string;
@@ -651,6 +656,42 @@ export interface RecentActivity {
   timestamp: string;
   entity_type: string | null;
   entity_id: string | null;
+}
+
+export interface InventoryItem {
+  id: string;
+  name: string;
+  sku: string | null;
+  category: string | null;
+  quantity: number;
+  unit_price: number;
+  min_stock: number;
+  location: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateInventoryItemRequest {
+  name: string;
+  sku?: string | null;
+  category?: string | null;
+  quantity?: number;
+  unit_price?: number;
+  min_stock?: number;
+  location?: string | null;
+  notes?: string | null;
+}
+
+export interface UpdateInventoryItemRequest {
+  name?: string | null;
+  sku?: string | null;
+  category?: string | null;
+  quantity?: number | null;
+  unit_price?: number | null;
+  min_stock?: number | null;
+  location?: string | null;
+  notes?: string | null;
 }
 
 export interface PaginatedResponse<T> {

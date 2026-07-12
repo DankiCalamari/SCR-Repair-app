@@ -29,7 +29,7 @@ const categoryColors: Record<string, string> = {
   parts_replacement: "bg-orange-100 text-orange-800",
   completed: "bg-green-100 text-green-800",
   warranty: "bg-teal-100 text-teal-800",
-  general: "bg-warm-100 text-warm-800",
+  general: "bg-rms-raised text-rms-text-secondary",
 };
 
 function formatFileSize(bytes: number | null): string {
@@ -64,11 +64,11 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
 
   return (
     <div
-      className="group relative bg-white rounded-lg border border-warm-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      className="group relative bg-white rounded-lg border border-rms-border overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
       onClick={() => onView?.(photo)}
     >
       {/* Image */}
-      <div className="aspect-square bg-warm-100 relative overflow-hidden">
+      <div className="aspect-square bg-rms-raised relative overflow-hidden">
         {!imgError && thumbUrl ? (
           <img
             src={thumbUrl}
@@ -78,14 +78,14 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-warm-500">
+          <div className="w-full h-full flex items-center justify-center text-rms-text0">
             <FileText size={32} />
           </div>
         )}
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-          <ZoomIn className="text-warm-900" size={28} />
+          <ZoomIn className="text-rms-text" size={28} />
         </div>
 
         {/* Important star */}
@@ -99,15 +99,15 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
         <span className={`inline-block text-xs font-medium px-1.5 py-0.5 rounded ${categoryColors[photo.category] || categoryColors.general}`}>
           {categoryLabels[photo.category] || photo.category}
         </span>
-        <p className="text-xs text-warm-400 mt-1 truncate" title={photo.original_filename}>
+        <p className="text-xs text-rms-text-secondary mt-1 truncate" title={photo.original_filename}>
           {photo.original_filename}
         </p>
-        <p className="text-xs text-warm-500">
+        <p className="text-xs text-rms-text0">
           {formatFileSize(photo.file_size)}
           {photo.width && photo.height ? ` · ${photo.width}×${photo.height}` : ""}
         </p>
         {photo.notes && (
-          <p className="text-xs text-warm-400 mt-0.5 truncate" title={photo.notes}>
+          <p className="text-xs text-rms-text-secondary mt-0.5 truncate" title={photo.notes}>
             {photo.notes}
           </p>
         )}
@@ -118,7 +118,7 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={handleToggleImportant}
-            className={`p-1 rounded ${photo.is_important ? "text-yellow-500" : "text-warm-900/80 hover:text-warm-900"}`}
+            className={`p-1 rounded ${photo.is_important ? "text-yellow-500" : "text-rms-text/80 hover:text-rms-text"}`}
             title={photo.is_important ? "Unmark important" : "Mark important"}
           >
             <Star size={16} className={photo.is_important ? "fill-current" : ""} />
@@ -126,7 +126,7 @@ export default function PhotoCard({ photo, onDelete, onView, readonly = false }:
           <button
             onClick={handleDelete}
             disabled={deleting}
-            className="p-1 rounded text-warm-900/80 hover:text-red-300"
+            className="p-1 rounded text-rms-text/80 hover:text-red-300"
             title="Delete"
           >
             <Trash2 size={16} />

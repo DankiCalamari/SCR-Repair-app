@@ -323,6 +323,18 @@ async def process_webhook(event: str, payload: dict, db: AsyncSession) -> SmsMes
             db.add(inbound)
             await db.flush()
             await db.refresh(inbound)
+            
+            # Broadcast real-time event for incoming SMS
+            from services.repair_events import broadcast_repair_event
+            await broadcast_repair_event(
+                "sms_received",
+                str(repair_id) if repair_id else "unassigned",
+                sms_id=str(inbound.id),
+                from_number=from_number,
+                body=body,
+                customer_id=str(customer_id) if customer_id else None
+            )
+            
             return inbound
 
         elif event == "message:status":
@@ -351,6 +363,16 @@ async def process_webhook(event: str, payload: dict, db: AsyncSession) -> SmsMes
                 )
                 db.add(report)
                 await db.flush()
+                
+                # Broadcast status update
+                from services.repair_events import broadcast_repair_event
+                await broadcast_repair_event(
+                    "sms_status",
+                    str(sms.repair_id) if sms.repair_id else "unassigned",
+                    sms_id=str(sms.id),
+                    status=status_str
+                )
+                
                 return sms
 
     except Exception as exc:

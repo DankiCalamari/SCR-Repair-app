@@ -100,21 +100,21 @@ export default function NewQuoteModal({ open, onClose }: Props) {
   return (
     <Modal open={open} onClose={resetAndClose} title="New Quote" maxWidth="max-w-xl">
       <div className="mb-6 flex items-center gap-2 text-sm">
-        <span className={`font-medium ${step === "repair" ? "text-copper-500" : "text-warm-400"}`}>Repair</span>
-        <ChevronRight className="h-3 w-3 text-warm-600" />
-        <span className={`font-medium ${step === "details" ? "text-copper-500" : "text-warm-400"}`}>Details</span>
+        <span className={`font-medium ${step === "repair" ? "text-brand-500" : "text-rms-text-secondary"}`}>Repair</span>
+        <ChevronRight className="h-3 w-3 text-rms-text-secondary" />
+        <span className={`font-medium ${step === "details" ? "text-brand-500" : "text-rms-text-secondary"}`}>Details</span>
       </div>
 
       {step === "repair" && (
         <div>
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-warm-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-rms-text-secondary" />
             <input
               type="text"
               placeholder="Search repairs by ticket number..."
               value={repairSearch}
               onChange={(e) => setRepairSearch(e.target.value)}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 py-2.5 pl-10 pr-4 text-warm-50 placeholder-warm-400 focus:border-copper-500 focus:outline-none"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised py-2.5 pl-10 pr-4 text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
               autoFocus
             />
           </div>
@@ -123,19 +123,19 @@ export default function NewQuoteModal({ open, onClose }: Props) {
               <button
                 key={r.id}
                 onClick={() => { setSelectedRepair(r); setStep("details"); }}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-warm-700"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-rms-raised"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-copper-500/10 text-sm font-bold text-copper-500">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-500/10 text-sm font-bold text-brand-500">
                   {r.ticket_number.slice(0, 3)}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-warm-50">{r.ticket_number}</p>
-                  <p className="text-xs text-warm-400">{r.issue_description.slice(0, 60)}{r.issue_description.length > 60 ? "..." : ""}</p>
+                  <p className="text-sm font-medium text-rms-text">{r.ticket_number}</p>
+                  <p className="text-xs text-rms-text-secondary">{r.issue_description.slice(0, 60)}{r.issue_description.length > 60 ? "..." : ""}</p>
                 </div>
               </button>
             ))}
             {repairs.length === 0 && (
-              <p className="py-8 text-center text-sm text-warm-400">
+              <p className="py-8 text-center text-sm text-rms-text-secondary">
                 {repairSearch ? "No repairs found" : "Type to search repairs"}
               </p>
             )}
@@ -145,13 +145,13 @@ export default function NewQuoteModal({ open, onClose }: Props) {
 
       {step === "details" && selectedRepair && (
         <div>
-          <p className="mb-4 text-sm text-warm-400">
-            Repair: <span className="font-medium text-warm-50">{selectedRepair.ticket_number}</span>
+          <p className="mb-4 text-sm text-rms-text-secondary">
+            Repair: <span className="font-medium text-rms-text">{selectedRepair.ticket_number}</span>
           </p>
           <div className="space-y-4">
             {/* Line items */}
             <div>
-              <label className="mb-2 block text-xs font-medium text-warm-400">Line Items</label>
+              <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Line Items</label>
               <div className="space-y-2">
                 {items.map((item, idx) => (
                   <div key={idx} className="flex items-start gap-2">
@@ -161,13 +161,13 @@ export default function NewQuoteModal({ open, onClose }: Props) {
                         placeholder="Description"
                         value={item.description}
                         onChange={(e) => updateItem(idx, "description", e.target.value)}
-                        className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+                        className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
                       />
                     </div>
                     <select
                       value={item.item_type}
                       onChange={(e) => updateItem(idx, "item_type", e.target.value)}
-                      className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-xs text-warm-50 focus:border-copper-500 focus:outline-none"
+                      className="w-20 rounded-lg border border-rms-border bg-rms-raised px-2 py-2 text-xs text-rms-text focus:border-brand-500 focus:outline-none"
                     >
                       <option value="labour">Labour</option>
                       <option value="parts">Parts</option>
@@ -179,7 +179,7 @@ export default function NewQuoteModal({ open, onClose }: Props) {
                       placeholder="Qty"
                       value={item.quantity}
                       onChange={(e) => updateItem(idx, "quantity", parseInt(e.target.value) || 1)}
-                      className="w-16 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                      className="w-16 rounded-lg border border-rms-border bg-rms-raised px-2 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
                     />
                     <input
                       type="number"
@@ -188,12 +188,12 @@ export default function NewQuoteModal({ open, onClose }: Props) {
                       placeholder="Price"
                       value={item.unit_price || ""}
                       onChange={(e) => updateItem(idx, "unit_price", parseFloat(e.target.value) || 0)}
-                      className="w-20 rounded-lg border border-warm-600 bg-warm-700 px-2 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                      className="w-20 rounded-lg border border-rms-border bg-rms-raised px-2 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
                     />
                     <button
                       onClick={() => removeItem(idx)}
                       disabled={items.length <= 1}
-                      className="mt-1 rounded p-1 text-warm-500 hover:text-red-400 disabled:opacity-30"
+                      className="mt-1 rounded p-1 text-rms-text0 hover:text-red-400 disabled:opacity-30"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -202,45 +202,45 @@ export default function NewQuoteModal({ open, onClose }: Props) {
               </div>
               <button
                 onClick={addItem}
-                className="mt-2 flex items-center gap-1 text-xs text-copper-500 hover:text-copper-600"
+                className="mt-2 flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600"
               >
                 <Plus className="h-3 w-3" /> Add Line Item
               </button>
             </div>
 
             <div>
-              <label className="mb-1 block text-xs font-medium text-warm-400">Description</label>
+              <label className="mb-1 block text-xs font-medium text-rms-text-secondary">Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={2}
                 placeholder="Quote description or notes..."
-                className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+                className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-warm-400">Valid Until</label>
+              <label className="mb-1 block text-xs font-medium text-rms-text-secondary">Valid Until</label>
               <input
                 type="date"
                 value={validUntil}
                 onChange={(e) => setValidUntil(e.target.value)}
-                className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
               />
             </div>
 
             {/* Totals preview */}
-            <div className="rounded-lg border border-warm-600 bg-warm-700 p-4">
+            <div className="rounded-lg border border-rms-border bg-rms-raised p-4">
               <div className="flex justify-between text-sm">
-                <span className="text-warm-400">Subtotal</span>
-                <span className="text-warm-50">${subtotal.toFixed(2)}</span>
+                <span className="text-rms-text-secondary">Subtotal</span>
+                <span className="text-rms-text">${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-warm-400">GST (10%)</span>
-                <span className="text-warm-50">${gst.toFixed(2)}</span>
+                <span className="text-rms-text-secondary">GST (10%)</span>
+                <span className="text-rms-text">${gst.toFixed(2)}</span>
               </div>
-              <div className="mt-2 flex justify-between border-t border-warm-600 pt-2">
-                <span className="font-medium text-warm-300">Total</span>
-                <span className="font-semibold text-copper-500">${total.toFixed(2)}</span>
+              <div className="mt-2 flex justify-between border-t border-rms-border pt-2">
+                <span className="font-medium text-rms-text-secondary">Total</span>
+                <span className="font-semibold text-brand-500">${total.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -248,14 +248,14 @@ export default function NewQuoteModal({ open, onClose }: Props) {
           <div className="mt-4 flex gap-3">
             <button
               onClick={() => setStep("repair")}
-              className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700"
+              className="flex-1 rounded-lg border border-rms-border py-2.5 text-sm font-medium text-rms-text-secondary hover:bg-rms-raised"
             >
               Back
             </button>
             <button
               onClick={handleCreate}
               disabled={createMutation.isPending || !items.some((i) => i.description.trim())}
-              className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50"
+              className="flex-1 rounded-lg bg-brand-500 py-2.5 text-sm font-semibold text-rms-text hover:bg-brand-600 disabled:opacity-50"
             >
               {createMutation.isPending ? "Creating..." : "Create Quote"}
             </button>

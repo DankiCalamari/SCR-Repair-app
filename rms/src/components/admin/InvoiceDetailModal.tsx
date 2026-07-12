@@ -33,15 +33,15 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
     <Modal open={open} onClose={onClose} title="Invoice Details" maxWidth="max-w-2xl">
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-copper-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
         </div>
       ) : invoice ? (
         <div className="space-y-6">
           {/* Header */}
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="font-mono text-xl font-bold text-warm-100">{invoice.invoice_number}</h3>
-              <p className="mt-1 text-sm text-warm-400">Created {formatDate(invoice.created_at)}</p>
+              <h3 className="font-mono text-xl font-bold text-rms-text">{invoice.invoice_number}</h3>
+              <p className="mt-1 text-sm text-rms-text-secondary">Created {formatDate(invoice.created_at)}</p>
             </div>
             <span className={cn("rounded-full border px-3 py-1 text-xs font-medium", getStatusColor(invoice.status))}>
               {getStatusLabel(invoice.status)}
@@ -49,27 +49,27 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
           </div>
 
           {/* Meta */}
-          <div className="grid grid-cols-2 gap-4 rounded-lg border border-warm-800 bg-warm-900 p-4 text-sm">
+          <div className="grid grid-cols-2 gap-4 rounded-lg border border-rms-border bg-rms-surface p-4 text-sm">
             <div>
-              <span className="text-warm-400">Repair ID</span>
-              <p className="font-mono text-warm-100">{invoice.repair_id.slice(0, 8)}…</p>
+              <span className="text-rms-text-secondary">Repair ID</span>
+              <p className="font-mono text-rms-text">{invoice.repair_id.slice(0, 8)}…</p>
             </div>
             {invoice.due_date && (
               <div>
-                <span className="text-warm-400">Due Date</span>
-                <p className="text-warm-100">{formatDate(invoice.due_date)}</p>
+                <span className="text-rms-text-secondary">Due Date</span>
+                <p className="text-rms-text">{formatDate(invoice.due_date)}</p>
               </div>
             )}
             {invoice.paid_date && (
               <div>
-                <span className="text-warm-400">Paid Date</span>
-                <p className="text-warm-100">{formatDate(invoice.paid_date)}</p>
+                <span className="text-rms-text-secondary">Paid Date</span>
+                <p className="text-rms-text">{formatDate(invoice.paid_date)}</p>
               </div>
             )}
             {invoice.paid_amount != null && (
               <div>
-                <span className="text-warm-400">Paid Amount</span>
-                <p className="text-warm-100">{formatCurrency(invoice.paid_amount)}</p>
+                <span className="text-rms-text-secondary">Paid Amount</span>
+                <p className="text-rms-text">{formatCurrency(invoice.paid_amount)}</p>
               </div>
             )}
           </div>
@@ -77,18 +77,18 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
           {/* Notes */}
           {invoice.notes && (
             <div>
-              <p className="mb-1 text-xs font-medium text-warm-400">Notes</p>
-              <p className="text-sm text-warm-100 whitespace-pre-wrap">{invoice.notes}</p>
+              <p className="mb-1 text-xs font-medium text-rms-text-secondary">Notes</p>
+              <p className="text-sm text-rms-text whitespace-pre-wrap">{invoice.notes}</p>
             </div>
           )}
 
           {/* Line Items */}
           {invoice.items && invoice.items.length > 0 && (
             <div>
-              <p className="mb-2 text-xs font-medium text-warm-400">Line Items</p>
+              <p className="mb-2 text-xs font-medium text-rms-text-secondary">Line Items</p>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-warm-800 text-left text-xs text-warm-500">
+                  <tr className="border-b border-rms-border text-left text-xs text-rms-text0">
                     <th className="pb-2 font-medium">Description</th>
                     <th className="pb-2 font-medium">Type</th>
                     <th className="pb-2 font-medium text-right">Qty</th>
@@ -96,23 +96,23 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
                     <th className="pb-2 font-medium text-right">Total</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-warm-800">
+                <tbody className="divide-y divide-rms-border">
                   {invoice.items.map((item) => (
                     <tr key={item.id}>
-                      <td className="py-2 pr-4 text-warm-100">{item.description}</td>
+                      <td className="py-2 pr-4 text-rms-text">{item.description}</td>
                       <td className="py-2 pr-4">
                         <span className={cn(
                           "rounded px-1.5 py-0.5 text-xs",
-                          item.item_type === "labour" && "bg-copper-500/10 text-copper-500",
+                          item.item_type === "labour" && "bg-brand-500/10 text-brand-500",
                           item.item_type === "parts" && "bg-amber-500/5 text-amber-400",
-                          item.item_type === "other" && "bg-warm-800 text-warm-300",
+                          item.item_type === "other" && "bg-rms-raised text-rms-text-secondary",
                         )}>
                           {item.item_type}
                         </span>
                       </td>
-                      <td className="py-2 pr-4 text-right text-warm-300">{item.quantity}</td>
-                      <td className="py-2 pr-4 text-right text-warm-300">{formatCurrency(item.unit_price)}</td>
-                      <td className="py-2 text-right font-medium text-warm-100">{formatCurrency(item.total)}</td>
+                      <td className="py-2 pr-4 text-right text-rms-text-secondary">{item.quantity}</td>
+                      <td className="py-2 pr-4 text-right text-rms-text-secondary">{formatCurrency(item.unit_price)}</td>
+                      <td className="py-2 text-right font-medium text-rms-text">{formatCurrency(item.total)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -121,25 +121,25 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
           )}
 
           {/* Totals */}
-          <div className="rounded-lg border border-warm-800 bg-warm-900 p-4">
+          <div className="rounded-lg border border-rms-border bg-rms-surface p-4">
             <div className="flex justify-between text-sm">
-              <span className="text-warm-400">Subtotal</span>
-              <span className="text-warm-100">{formatCurrency(invoice.subtotal)}</span>
+              <span className="text-rms-text-secondary">Subtotal</span>
+              <span className="text-rms-text">{formatCurrency(invoice.subtotal)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-warm-400">GST (10%)</span>
-              <span className="text-warm-100">{formatCurrency(invoice.gst_amount)}</span>
+              <span className="text-rms-text-secondary">GST (10%)</span>
+              <span className="text-rms-text">{formatCurrency(invoice.gst_amount)}</span>
             </div>
-            <div className="mt-2 flex justify-between border-t border-warm-700 pt-2">
-              <span className="font-semibold text-warm-100">Total</span>
-              <span className="text-lg font-bold text-copper-500">{formatCurrency(invoice.total_amount)}</span>
+            <div className="mt-2 flex justify-between border-t border-rms-border pt-2">
+              <span className="font-semibold text-rms-text">Total</span>
+              <span className="text-lg font-bold text-brand-500">{formatCurrency(invoice.total_amount)}</span>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex gap-3">
             <label
-              className="flex items-center gap-2 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-warm-300 hover:bg-warm-800 cursor-pointer"
+              className="flex items-center gap-2 rounded-lg border border-rms-border px-4 py-2 text-sm font-medium text-rms-text-secondary hover:bg-rms-raised cursor-pointer"
             >
               <Upload className="h-4 w-4" /> Upload PDF
               <input type="file" accept=".pdf" className="hidden"
@@ -154,7 +154,7 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
               <button
                 onClick={() => sendMutation.mutate(invoice.id)}
                 disabled={sendMutation.isPending}
-                className="flex items-center gap-2 rounded-lg border border-warm-700 px-4 py-2 text-sm font-medium text-copper-500 hover:bg-warm-800"
+                className="flex items-center gap-2 rounded-lg border border-rms-border px-4 py-2 text-sm font-medium text-brand-500 hover:bg-rms-raised"
               >
                 <Send className="h-4 w-4" /> Send
               </button>
@@ -162,7 +162,7 @@ export default function InvoiceDetailModal({ open, onClose, invoiceId }: Props) 
           </div>
         </div>
       ) : (
-        <p className="py-8 text-center text-warm-400">Invoice not found</p>
+        <p className="py-8 text-center text-rms-text-secondary">Invoice not found</p>
       )}
     </Modal>
   );

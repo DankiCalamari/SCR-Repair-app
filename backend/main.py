@@ -45,6 +45,7 @@ from models.lead import Lead  # noqa: F401
 from models.audit_log import AuditLog  # noqa: F401
 from models.system_setting import SystemSetting  # noqa: F401
 from models.user import UserRole  # noqa: F401
+from models.inventory import InventoryItem  # noqa: F401
 
 # ── Logging ──────────────────────────────────────────────────────────────
 configure_logging()
@@ -165,6 +166,7 @@ async def lifespan(app: FastAPI):
         ("admin_notify_sms", "true", "Send admin notifications via SMS"),
         ("admin_notify_push", "true", "Send admin notifications via push"),
         ("email_signature", "", "Email signature appended to outgoing emails"),
+        ("timezone", "Australia/Melbourne", "Business timezone for timestamps"),
     ]
     from models.system_setting import SystemSetting
     from sqlalchemy import select

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import PublicNavbar from "./components/layout/PublicNavbar";
 import PublicFooter from "./components/layout/PublicFooter";
 import { useSettingsContext } from "./context/settings-context";
@@ -41,27 +42,29 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        <Route
-          element={
-            <PublicLayout>
-              <Outlet />
-            </PublicLayout>
-          }
-        >
-          <Route path="/" element={<HomePage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/service-areas" element={<ServiceAreasPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/warranty" element={<WarrantyPage />} />
-        </Route>
+    <HelmetProvider>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route
+            element={
+              <PublicLayout>
+                <Outlet />
+              </PublicLayout>
+            }
+          >
+            <Route path="/" element={<HomePage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/service-areas" element={<ServiceAreasPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/warranty" element={<WarrantyPage />} />
+          </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Suspense>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
+    </HelmetProvider>
   );
 }

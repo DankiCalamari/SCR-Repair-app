@@ -7,6 +7,7 @@ events occur, and optionally notifies customers using pre-seeded templates.
 from __future__ import annotations
 
 import logging
+from datetime import datetime, timezone
 from uuid import UUID
 
 from sqlalchemy import select
@@ -179,10 +180,29 @@ async def notify_repair_status_change(
             return
 
         template = await _find_email_template(db, "Repair Complete Notification")
+        
+        # Get device info for context
+        from models.device import Device
+        device = await db.get(Device, repair.device_id) if repair and repair.device_id else None
+        
+        # Get invoice for total
+        from models.invoice import Invoice
+        invoice_result = await db.execute(
+            select(Invoice)
+            .where(Invoice.repair_id == repair.id)
+            .order_by(Invoice.created_at.desc())
+            .limit(1)
+        )
+        invoice = invoice_result.scalar_one_or_none()
+        
         context = {
             "customer_name": customer.name,
             "ticket_number": repair.ticket_number,
             "status": status_label,
+            "device_type": device.device_type if device else "Device",
+            "device_model": f"{device.brand} {device.model}" if device and device.brand and device.model else "",
+            "completed_date": datetime.now(timezone.utc).strftime("%d %b %Y"),
+            "total_amount": f"{invoice.total_amount:.2f}" if invoice and invoice.total_amount else "0.00",
         }
 
         if customer.email and template:
@@ -216,20 +236,68 @@ async def notify_repair_status_change(
 
 
 async def notify_quote_sent(db: AsyncSession, quote, repair) -> None:
-    """Notify customer that a quote is ready for review."""
+    """Notify customer that a quote is ready for review. Also sends diagnosis complete email."""
     from services.email_service import send_email, render_email_template
     from services.sms_service import send_sms, render_sms_template
+    from models.device import Device
 
     customer = await _get_customer(db, repair.customer_id) if repair.customer_id else None
     if not customer:
         return
 
+    # ── Diagnosis Complete Email ───────────────────────────────────────────
+    device = await db.get(Device, repair.device_id) if repair else None
+    diag_tpl = await _find_email_template(db, "Diagnosis Complete")
+    if customer.email and diag_tpl:
+        diag_context = {
+            "customer_name": customer.name,
+            "ticket_number": repair.ticket_number if repair else "",
+            "device_type": device.device_type if device else "Device",
+            "device_model": f"{device.brand} {device.model}" if device and device.brand and device.model else "",
+        }
+        subject, body, body_html = render_email_template(diag_tpl, diag_context)
+        try:
+            await send_email(
+                to_address=customer.email,
+                subject=subject,
+                body=body,
+                db=db,
+                body_html=body_html,
+                customer_id=customer.id,
+                repair_id=repair.id if repair else None,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send diagnosis complete email: %s", exc)
+
+    sms_tpl = await _find_sms_template(db, "Diagnosis Complete")
+    if customer.phone and sms_tpl:
+        sms_context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+        }
+        sms_body = render_sms_template(sms_tpl.body, sms_context)
+        try:
+            await send_sms(
+                to_number=customer.phone,
+                body=sms_body,
+                db=db,
+                customer_id=customer.id,
+                repair_id=repair.id if repair else None,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send diagnosis complete SMS: %s", exc)
+
+    # ── Quote Ready Email ───────────────────────────────────────────────────
     template = await _find_email_template(db, "Quote Ready")
     context = {
         "customer_name": customer.name,
-        "quote_number": quote.quote_number,
-        "total_amount": f"${quote.total_amount:.2f}",
         "ticket_number": repair.ticket_number if repair else "",
+        "device_type": device.device_type if device else "Device",
+        "device_model": f"{device.brand} {device.model}" if device and device.brand and device.model else "",
+        "labour_cost": f"{quote.labour_cost:.2f}" if quote and quote.labour_cost else "0.00",
+        "parts_cost": f"{quote.parts_cost:.2f}" if quote and quote.parts_cost else "0.00",
+        "total_amount": f"{quote.total_amount:.2f}" if quote and quote.total_amount else "0.00",
+        "quote_link": f"{settings.APP_URL}/portal/repairs/{repair.id}?tab=quotes" if repair else "",
     }
 
     if customer.email and template:
@@ -346,10 +414,9 @@ async def notify_invoice_paid(db: AsyncSession, invoice, repair) -> None:
     template = await _find_email_template(db, "Payment Receipt")
     context = {
         "customer_name": customer.name,
-        "invoice_number": invoice.invoice_number,
-        "total_amount": f"${invoice.total_amount:.2f}",
-        "paid_amount": f"${invoice.paid_amount:.2f}",
         "ticket_number": repair.ticket_number if repair else "",
+        "total_amount": f"{invoice.total_amount:.2f}" if invoice.total_amount else "0.00",
+        "paid_amount": f"{invoice.paid_amount:.2f}" if invoice.paid_amount else "0.00",
     }
 
     if template:
@@ -460,3 +527,218 @@ async def send_lead_acknowledgement(db: AsyncSession, lead) -> None:
         )
     except Exception as exc:
         logger.warning("Failed to send lead acknowledgement email: %s", exc)
+
+
+async def notify_repair_intake(db: AsyncSession, repair) -> None:
+    """Send intake confirmation to customer when repair is created (device received)."""
+    from services.email_service import send_email, render_email_template
+    from services.sms_service import send_sms, render_sms_template
+    from models.device import Device
+
+    if not await _is_enabled(db, "notify_repair_complete"):
+        return
+
+    customer = await _get_customer(db, repair.customer_id) if repair.customer_id else None
+    if not customer:
+        return
+
+    device = await db.get(Device, repair.device_id)
+
+    # ── Device Received SMS ───────────────────────────────────────────────────
+    sms_tpl = await _find_sms_template(db, "Device Received")
+    if customer.phone and sms_tpl:
+        context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+            "device_model": f"{device.brand} {device.model}" if device else "",
+        }
+        sms_body = render_sms_template(sms_tpl.body, context)
+        try:
+            await send_sms(
+                to_number=customer.phone,
+                body=sms_body,
+                db=db,
+                customer_id=customer.id,
+                repair_id=repair.id,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send device received SMS: %s", exc)
+
+    # ── Repair Intake Confirmation Email ───────────────────────────────────────
+    template = await _find_email_template(db, "Repair Intake Confirmation")
+    if not customer.email or not template:
+        return
+
+    context = {
+        "customer_name": customer.name,
+        "ticket_number": repair.ticket_number,
+        "device_type": device.device_type if device else "Device",
+        "device_model": f"{device.brand} {device.model}" if device else "",
+        "issue_description": repair.issue_description or "",
+    }
+    subject, body, body_html = render_email_template(template, context)
+
+    try:
+        await send_email(
+            to_address=customer.email,
+            subject=subject,
+            body=body,
+            db=db,
+            body_html=body_html,
+            customer_id=customer.id,
+            repair_id=repair.id,
+        )
+    except Exception as exc:
+        logger.warning("Failed to send repair intake email: %s", exc)
+
+
+async def notify_diagnosis_complete(db: AsyncSession, repair) -> None:
+    """Send notification to customer when diagnosis is complete."""
+    from services.email_service import send_email, render_email_template
+    from services.sms_service import send_sms, render_sms_template
+
+    if not await _is_enabled(db, "notify_repair_complete"):
+        return
+
+    customer = await _get_customer(db, repair.customer_id) if repair.customer_id else None
+    if not customer:
+        return
+
+    # Get device info
+    from models.device import Device
+    device = await db.get(Device, repair.device_id)
+
+    email_tpl = await _find_email_template(db, "Diagnosis Complete")
+    if customer.email and email_tpl:
+        context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+            "device_model": f"{device.brand} {device.model}" if device and device.brand and device.model else "",
+            "ticket_number": repair.ticket_number,
+        }
+        subject, body, body_html = render_email_template(email_tpl, context)
+        try:
+            await send_email(
+                to_address=customer.email,
+                subject=subject,
+                body=body,
+                db=db,
+                body_html=body_html,
+                customer_id=customer.id,
+                repair_id=repair.id,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send diagnosis complete email: %s", exc)
+
+    sms_tpl = await _find_sms_template(db, "Diagnosis Complete")
+    if customer.phone and sms_tpl:
+        context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+        }
+        sms_body = render_sms_template(sms_tpl.body, context)
+        try:
+            await send_sms(
+                to_number=customer.phone,
+                body=sms_body,
+                db=db,
+                customer_id=customer.id,
+                repair_id=repair.id,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send diagnosis complete SMS: %s", exc)
+
+
+async def notify_parts_ordered(db: AsyncSession, repair) -> None:
+    """Send notification to customer when parts are ordered."""
+    from services.email_service import send_email, render_email_template
+    from services.sms_service import send_sms, render_sms_template
+
+    if not await _is_enabled(db, "notify_repair_complete"):
+        return
+
+    customer = await _get_customer(db, repair.customer_id) if repair.customer_id else None
+    if not customer:
+        return
+
+    # Get device info
+    from models.device import Device
+    device = await db.get(Device, repair.device_id)
+
+    email_tpl = await _find_email_template(db, "Parts Ordered")
+    if customer.email and email_tpl:
+        context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+            "ticket_number": repair.ticket_number,
+        }
+        subject, body, body_html = render_email_template(email_tpl, context)
+        try:
+            await send_email(
+                to_address=customer.email,
+                subject=subject,
+                body=body,
+                db=db,
+                body_html=body_html,
+                customer_id=customer.id,
+                repair_id=repair.id,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send parts ordered email: %s", exc)
+
+    sms_tpl = await _find_sms_template(db, "Parts Ordered")
+    if customer.phone and sms_tpl:
+        context = {
+            "customer_name": customer.name,
+            "device_type": device.device_type if device else "Device",
+        }
+        sms_body = render_sms_template(sms_tpl.body, context)
+        try:
+            await send_sms(
+                to_number=customer.phone,
+                body=sms_body,
+                db=db,
+                customer_id=customer.id,
+                repair_id=repair.id,
+            )
+        except Exception as exc:
+            logger.warning("Failed to send parts ordered SMS: %s", exc)
+
+
+async def notify_invoice_created(db: AsyncSession, invoice, repair) -> None:
+    """Send invoice to customer when created."""
+    from services.email_service import send_email, render_email_template
+
+    if not await _is_enabled(db, "notify_invoice_paid"):
+        return
+
+    customer = await _get_customer(db, repair.customer_id) if repair.customer_id else None
+    if not customer or not customer.email:
+        return
+
+    template = await _find_email_template(db, "Invoice")
+    if not template:
+        return
+
+    context = {
+        "customer_name": customer.name,
+        "ticket_number": repair.ticket_number,
+        "subtotal": f"{invoice.subtotal:.2f}" if invoice.subtotal else "0.00",
+        "gst_amount": f"{invoice.gst_amount:.2f}" if invoice.gst_amount else "0.00",
+        "total_amount": f"{invoice.total_amount:.2f}" if invoice.total_amount else "0.00",
+        "due_date": invoice.due_date.strftime("%d %b %Y") if invoice.due_date else "",
+    }
+    subject, body, body_html = render_email_template(template, context)
+
+    try:
+        await send_email(
+            to_address=customer.email,
+            subject=subject,
+            body=body,
+            db=db,
+            body_html=body_html,
+            customer_id=customer.id,
+            repair_id=repair.id,
+        )
+    except Exception as exc:
+        logger.warning("Failed to send invoice email: %s", exc)

@@ -151,10 +151,10 @@ export default function LoginPage() {
               className="mx-auto mb-4 h-12 w-auto object-contain"
             />
           )}
-          <h1 className="font-heading text-3xl font-bold text-warm-900">
+          <h1 className="font-heading text-3xl font-bold text-rms-text">
             {businessName}
           </h1>
-          <p className="mt-2 text-warm-500">Sign in to your account</p>
+          <p className="mt-2 text-rms-text0">Sign in to your account</p>
         </div>
 
         {/* Login Card */}
@@ -168,7 +168,7 @@ export default function LoginPage() {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-warm-600">
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                 Email Address
               </label>
               <input
@@ -182,7 +182,7 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 autoComplete="email"
                 disabled={isLoading}
-                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50 ${
+                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50 ${
                   emailError ? "border-red-500" : "border-warm-200"
                 }`}
               />
@@ -191,7 +191,7 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-warm-600">
+              <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                 Password
               </label>
               <input
@@ -205,7 +205,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 autoComplete="current-password"
                 disabled={isLoading}
-                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50 ${
+                className={`w-full rounded-lg border bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50 ${
                   passwordError ? "border-red-500" : "border-warm-200"
                 }`}
               />
@@ -216,7 +216,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center rounded-lg bg-copper-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-copper-600 focus:outline-none focus:ring-2 focus:ring-copper-500 focus:ring-offset-2 focus:ring-offset-warm-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-rms-bg disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -250,14 +250,14 @@ export default function LoginPage() {
           {/* SSO Login */}
           {ssoEnabled && (
             <>
-              <div className="my-6 flex items-center gap-4 text-sm text-warm-400">
+              <div className="my-6 flex items-center gap-4 text-sm text-rms-text-secondary">
                 <div className="flex-1 border-t border-warm-200"></div>
                 <span>Or</span>
                 <div className="flex-1 border-t border-warm-200"></div>
               </div>
               <a
                 href="/api/v1/auth/sso/login"
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-copper-500 bg-white px-4 py-2.5 font-semibold text-copper-600 transition-colors hover:bg-copper-50 focus:outline-none focus:ring-2 focus:ring-copper-500"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-500 bg-white px-4 py-2.5 font-semibold text-brand-600 transition-colors hover:bg-copper-50 focus:outline-none focus:ring-2 focus:ring-brand-500"
               >
                 <Shield className="h-4 w-4" />
                 Sign in with SSO
@@ -266,9 +266,9 @@ export default function LoginPage() {
           )}
 
           {/* Register Link */}
-          <div className="mt-6 text-center text-sm text-warm-500">
+          <div className="mt-6 text-center text-sm text-rms-text0">
             Don&apos;t have an account?{" "}
-            <Link to="/register" className="font-medium text-copper-600 hover:text-copper-700">
+            <Link to="/register" className="font-medium text-brand-600 hover:text-copper-700">
               Register
             </Link>
           </div>
@@ -276,7 +276,7 @@ export default function LoginPage() {
 
         {/* Back to Home */}
         <div className="mt-6 text-center">
-          <a href="/" className="text-sm text-warm-400 hover:text-warm-600">
+          <a href="/" className="text-sm text-rms-text-secondary hover:text-rms-text-secondary">
             &larr; Back to Home
           </a>
         </div>

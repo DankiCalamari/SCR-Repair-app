@@ -15,21 +15,21 @@ function RepairCard({ repair }: { repair: Repair }) {
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="font-heading text-lg font-semibold text-warm-900">{repair.ticket_number}</p>
-          <p className="mt-1 text-sm text-warm-500">{repair.device_id ? "Device loaded" : "Loading..."}</p>
+          <p className="font-heading text-lg font-semibold text-rms-text">{repair.ticket_number}</p>
+          <p className="mt-1 text-sm text-rms-text0">{repair.device_id ? "Device loaded" : "Loading..."}</p>
         </div>
         <span className={`rounded-full border px-3 py-1 text-xs font-medium ${getStatusColor(repair.status)}`}>
           {getStatusLabel(repair.status)}
         </span>
       </div>
-      <p className="mt-3 text-sm text-warm-600 line-clamp-2">{repair.issue_description}</p>
-      <div className="mt-3 flex items-center gap-4 text-xs text-warm-500">
+      <p className="mt-3 text-sm text-rms-text-secondary line-clamp-2">{repair.issue_description}</p>
+      <div className="mt-3 flex items-center gap-4 text-xs text-rms-text0">
         <span className="flex items-center gap-1">
           <Clock className="h-3.5 w-3.5" />
           Updated {formatDate(repair.updated_at)}
         </span>
         {isActive && (
-          <span className="flex items-center gap-1 text-copper-500">
+          <span className="flex items-center gap-1 text-brand-500">
             <Wrench className="h-3.5 w-3.5" />
             Active
           </span>
@@ -63,10 +63,10 @@ export default function PortalDashboardPage() {
     <div className="min-h-screen bg-warm-50">
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-warm-900">
+          <h1 className="font-heading text-3xl font-bold text-rms-text">
             Welcome back, {customer?.name?.split(" ")[0] || user?.full_name?.split(" ")[0] || "Customer"}
           </h1>
-          <p className="mt-2 text-warm-500">Track your repairs and manage your account</p>
+          <p className="mt-2 text-rms-text0">Track your repairs and manage your account</p>
         </div>
 
         {/* Stats */}
@@ -74,11 +74,11 @@ export default function PortalDashboardPage() {
           <div className="rounded-lg border border-warm-200 bg-white p-5">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-accent-50 p-2.5">
-                <Wrench className="h-5 w-5 text-copper-500" />
+                <Wrench className="h-5 w-5 text-brand-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-warm-900">{activeRepairs.length}</p>
-                <p className="text-sm text-warm-500">Active Repairs</p>
+                <p className="text-2xl font-bold text-rms-text">{activeRepairs.length}</p>
+                <p className="text-sm text-rms-text0">Active Repairs</p>
               </div>
             </div>
           </div>
@@ -88,19 +88,19 @@ export default function PortalDashboardPage() {
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-warm-900">{completedRepairs.length}</p>
-                <p className="text-sm text-warm-500">Completed</p>
+                <p className="text-2xl font-bold text-rms-text">{completedRepairs.length}</p>
+                <p className="text-sm text-rms-text0">Completed</p>
               </div>
             </div>
           </div>
           <div className="rounded-lg border border-warm-200 bg-white p-5">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-copper-50 p-2.5">
-                <AlertCircle className="h-5 w-5 text-copper-600" />
+                <AlertCircle className="h-5 w-5 text-brand-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-warm-900">{repairs.length}</p>
-                <p className="text-sm text-warm-500">Total Repairs</p>
+                <p className="text-2xl font-bold text-rms-text">{repairs.length}</p>
+                <p className="text-sm text-rms-text0">Total Repairs</p>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function PortalDashboardPage() {
 
         {/* Active Repairs */}
         <div className="mb-8">
-          <h2 className="mb-4 font-heading text-xl font-semibold text-warm-900">Your Repairs</h2>
+          <h2 className="mb-4 font-heading text-xl font-semibold text-rms-text">Your Repairs</h2>
           {isLoading ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {[1, 2].map((i) => (
@@ -117,14 +117,14 @@ export default function PortalDashboardPage() {
             </div>
           ) : repairs.length === 0 ? (
             <div className="rounded-lg border border-warm-200 bg-white p-8 text-center">
-              <Wrench className="mx-auto h-12 w-12 text-warm-400" />
-              <h3 className="mt-4 text-lg font-semibold text-warm-900">No repairs yet</h3>
-              <p className="mt-2 text-warm-500">
+              <Wrench className="mx-auto h-12 w-12 text-rms-text-secondary" />
+              <h3 className="mt-4 text-lg font-semibold text-rms-text">No repairs yet</h3>
+              <p className="mt-2 text-rms-text0">
                 You haven't submitted any repair requests yet. Contact us to get started.
               </p>
               <Link
                 to="/contact"
-                className="mt-4 inline-block rounded-lg bg-copper-500 px-6 py-2 font-semibold text-white hover:bg-copper-600"
+                className="mt-4 inline-block rounded-lg bg-brand-500 px-6 py-2 font-semibold text-white hover:bg-brand-600"
               >
                 Contact Us
               </Link>
@@ -140,21 +140,21 @@ export default function PortalDashboardPage() {
 
         {/* Quick Links */}
         <div>
-          <h2 className="mb-4 font-heading text-xl font-semibold text-warm-900">Quick Links</h2>
+          <h2 className="mb-4 font-heading text-xl font-semibold text-rms-text">Quick Links</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Link
               to="/contact"
               className="rounded-lg border border-warm-200 bg-white p-5 transition hover:border-accent-300"
             >
-              <h3 className="font-semibold text-warm-900">Request a Quote</h3>
-              <p className="mt-1 text-sm text-warm-500">Get a free assessment and quote for your device</p>
+              <h3 className="font-semibold text-rms-text">Request a Quote</h3>
+              <p className="mt-1 text-sm text-rms-text0">Get a free assessment and quote for your device</p>
             </Link>
             <Link
               to="/warranty"
               className="rounded-lg border border-warm-200 bg-white p-5 transition hover:border-accent-300"
             >
-              <h3 className="font-semibold text-warm-900">Warranty Info</h3>
-              <p className="mt-1 text-sm text-warm-500">View our 90-day workmanship warranty terms</p>
+              <h3 className="font-semibold text-rms-text">Warranty Info</h3>
+              <p className="mt-1 text-sm text-rms-text0">View our 90-day workmanship warranty terms</p>
             </Link>
           </div>
         </div>

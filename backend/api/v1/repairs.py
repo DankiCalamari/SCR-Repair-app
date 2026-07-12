@@ -182,7 +182,7 @@ async def update_repair(
     current_user: User = Depends(require_staff),
 ):
     repair = await update_repair_service(repair_id, data, db, current_user.id)
-    return repair
+    return RepairResponse.model_validate(repair)
 
 
 @router.patch("/{repair_id}/status", response_model=RepairResponse)
@@ -193,7 +193,7 @@ async def update_repair_status(
     current_user: User = Depends(require_staff),
 ):
     repair = await update_repair_status_service(repair_id, data, db, current_user.id)
-    return repair
+    return RepairResponse.model_validate(repair)
 
 
 @router.get("/{repair_id}/timeline")

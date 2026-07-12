@@ -34,13 +34,13 @@ export default function AdminWarrantyPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-warm-50">Warranties</h1>
-          <p className="mt-1 text-warm-400">{data?.total ?? 0} total warranties</p>
+          <h1 className="font-heading text-3xl font-bold text-rms-text">Warranties</h1>
+          <p className="mt-1 text-rms-text-secondary">{data?.total ?? 0} total warranties</p>
         </div>
 
         {/* Validate Warranty */}
-        <div className="mb-6 rounded-lg border border-warm-800 bg-warm-900 p-5">
-          <h2 className="mb-4 font-heading text-lg font-semibold text-warm-50">Validate Warranty</h2>
+        <div className="mb-6 rounded-lg border border-rms-border bg-rms-surface p-5">
+          <h2 className="mb-4 font-heading text-lg font-semibold text-rms-text">Validate Warranty</h2>
           <div className="flex gap-3">
             <input
               type="text"
@@ -48,11 +48,11 @@ export default function AdminWarrantyPage() {
               value={validateInput}
               onChange={(e) => setValidateInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") handleValidate(); }}
-              className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+              className="flex-1 rounded-lg border border-rms-border bg-rms-raised px-4 py-2.5 text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
             />
             <button
               onClick={handleValidate}
-              className="flex items-center gap-2 rounded-lg bg-copper-500 px-4 py-2.5 font-semibold text-warm-950 hover:bg-copper-600"
+              className="flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 font-semibold text-white hover:bg-brand-600"
             >
               <Shield className="h-4 w-4" /> Validate
             </button>
@@ -74,7 +74,7 @@ export default function AdminWarrantyPage() {
           <select
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
-            className="rounded-lg border border-warm-700 bg-warm-800 px-3 py-2.5 text-warm-50 focus:border-copper-500 focus:outline-none"
+            className="rounded-lg border border-rms-border bg-rms-raised px-3 py-2.5 text-rms-text focus:border-brand-500 focus:outline-none"
           >
             <option value="">All Statuses</option>
             {WARRANTY_STATUSES.map((s) => (
@@ -84,10 +84,10 @@ export default function AdminWarrantyPage() {
         </div>
 
         {/* Warranty List */}
-        <div className="overflow-x-auto rounded-lg border border-warm-800 bg-warm-900">
+        <div className="overflow-x-auto rounded-lg border border-rms-border bg-rms-surface">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-warm-800 text-left text-sm text-warm-400">
+              <tr className="border-b border-rms-border text-left text-sm text-rms-text-secondary">
                 <th className="px-5 py-3 font-medium">Warranty #</th>
                 <th className="px-5 py-3 font-medium">Status</th>
                 <th className="px-5 py-3 font-medium">Issue Date</th>
@@ -95,35 +95,35 @@ export default function AdminWarrantyPage() {
                 <th className="px-5 py-3 font-medium">Notes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-warm-800">
+            <tbody className="divide-y divide-rms-border">
               {isLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="px-5 py-4"><div className="h-4 w-28 rounded bg-warm-800" /></td>
-                    <td className="px-5 py-4"><div className="h-4 w-20 rounded bg-warm-800" /></td>
-                    <td className="px-5 py-4"><div className="h-4 w-24 rounded bg-warm-800" /></td>
-                    <td className="px-5 py-4"><div className="h-4 w-24 rounded bg-warm-800" /></td>
-                    <td className="px-5 py-4"><div className="h-4 w-32 rounded bg-warm-800" /></td>
+                    <td className="px-5 py-4"><div className="h-4 w-28 rounded bg-rms-raised" /></td>
+                    <td className="px-5 py-4"><div className="h-4 w-20 rounded bg-rms-raised" /></td>
+                    <td className="px-5 py-4"><div className="h-4 w-24 rounded bg-rms-raised" /></td>
+                    <td className="px-5 py-4"><div className="h-4 w-24 rounded bg-rms-raised" /></td>
+                    <td className="px-5 py-4"><div className="h-4 w-32 rounded bg-rms-raised" /></td>
                   </tr>
                 ))
               ) : data?.data?.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-12 text-center text-warm-400">No warranties found</td>
+                  <td colSpan={5} className="px-5 py-12 text-center text-rms-text-secondary">No warranties found</td>
                 </tr>
               ) : (
                 data?.data?.map((warranty: WarrantyRecord) => (
-                  <tr key={warranty.id} className="transition hover:bg-warm-800">
+                  <tr key={warranty.id} className="transition hover:bg-rms-raised">
                     <td className="px-5 py-4">
-                      <span className="font-mono text-sm font-medium text-copper-500">{warranty.warranty_number}</span>
+                      <span className="font-mono text-sm font-medium text-brand-500">{warranty.warranty_number}</span>
                     </td>
                     <td className="px-5 py-4">
                       <span className={cn("rounded-full border px-2.5 py-0.5 text-xs font-medium", getStatusColor(warranty.status))}>
                         {getStatusLabel(warranty.status)}
                       </span>
                     </td>
-                    <td className="px-5 py-4 text-sm text-warm-300">{formatDate(warranty.issue_date)}</td>
-                    <td className="px-5 py-4 text-sm text-warm-300">{formatDate(warranty.expiry_date)}</td>
-                    <td className="max-w-xs truncate px-5 py-4 text-sm text-warm-400">{warranty.notes || "—"}</td>
+                    <td className="px-5 py-4 text-sm text-rms-text-secondary">{formatDate(warranty.issue_date)}</td>
+                    <td className="px-5 py-4 text-sm text-rms-text-secondary">{formatDate(warranty.expiry_date)}</td>
+                    <td className="max-w-xs truncate px-5 py-4 text-sm text-rms-text-secondary">{warranty.notes || "—"}</td>
                   </tr>
                 ))
               )}
@@ -133,19 +133,19 @@ export default function AdminWarrantyPage() {
 
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
-            <p className="text-sm text-warm-400">Page {page + 1} of {totalPages}</p>
+            <p className="text-sm text-rms-text-secondary">Page {page + 1} of {totalPages}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="flex items-center gap-1 rounded-lg border border-warm-700 px-3 py-2 text-sm text-warm-50 hover:bg-warm-800 disabled:opacity-50"
+                className="flex items-center gap-1 rounded-lg border border-rms-border px-3 py-2 text-sm text-rms-text hover:bg-rms-raised disabled:opacity-50"
               >
                 <ChevronLeft className="h-4 w-4" /> Previous
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="flex items-center gap-1 rounded-lg border border-warm-700 px-3 py-2 text-sm text-warm-50 hover:bg-warm-800 disabled:opacity-50"
+                className="flex items-center gap-1 rounded-lg border border-rms-border px-3 py-2 text-sm text-rms-text hover:bg-rms-raised disabled:opacity-50"
               >
                 Next <ChevronRight className="h-4 w-4" />
               </button>

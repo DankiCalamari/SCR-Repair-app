@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Ensure the project root is importable
@@ -179,7 +179,7 @@ async def _create_system_settings(session) -> None:
             key=key,
             value=value,
             description=description,
-            updated_at=datetime.utcnow(),
+            updated_at=datetime.now(timezone.utc),
         )
         session.add(setting)
         logger.info("seed_system_setting_created", key=key)
@@ -192,8 +192,8 @@ async def _create_sms_templates(session) -> None:
             name=data["name"],
             body=data["body"],
             variables=data["variables"],
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
         )
         session.add(template)
         logger.info("seed_sms_template_created", name=data["name"])
@@ -208,8 +208,8 @@ async def _create_email_templates(session) -> None:
             body=data["body"],
             body_html=data.get("body_html"),
             variables=data["variables"],
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
         )
         session.add(template)
         logger.info("seed_email_template_created", name=data["name"])

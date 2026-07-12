@@ -89,6 +89,27 @@ async def update_setting(
     }
 
 
+@router.get("/settings/timezone", response_model=str)
+async def get_timezone(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    """Get the configured business timezone."""
+    result = await db.execute(select(SystemSetting).where(SystemSetting.key == "timezone"))
+    setting = result.scalar_one_or_none()
+    return setting.value if setting else settings.TZ_DEFAULT
+
+
+@router.get("/public/settings/timezone", response_model=str)
+async def get_public_timezone(
+    db: AsyncSession = Depends(get_db),
+):
+    """Get the configured business timezone (public endpoint)."""
+    result = await db.execute(select(SystemSetting).where(SystemSetting.key == "timezone"))
+    setting = result.scalar_one_or_none()
+    return setting.value if setting else settings.TZ_DEFAULT
+
+
 # ---------------------------------------------------------------------------
 # Users
 # ---------------------------------------------------------------------------

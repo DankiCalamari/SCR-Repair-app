@@ -1,9 +1,12 @@
+import logging
 import random
 from uuid import UUID
 
 from fastapi import HTTPException, status
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = logging.getLogger(__name__)
 
 from models.repair import Repair, RepairStatus, RepairStatusHistory
 from models.sms import SmsMessage
@@ -78,6 +81,7 @@ async def list_repairs(
 async def create_repair(
     data: RepairCreate, db: AsyncSession, user_id: UUID
 ) -> Repair:
+    # No explicit commit needed - get_db() handles it after the request
     ticket_number = await generate_ticket_number(db)
 
     repair = Repair(
@@ -88,6 +92,7 @@ async def create_repair(
         issue_description=data.issue_description,
         diagnosis=data.diagnosis,
         repair_notes=data.repair_notes,
+        internal_notes=data.internal_notes,
         labour_hours=data.labour_hours,
         labour_cost=data.labour_cost,
         parts_cost=data.parts_cost,
@@ -106,6 +111,13 @@ async def create_repair(
     )
     db.add(history)
     await db.flush()
+
+    # Send intake confirmation email
+    try:
+        from services.notification_service import notify_repair_intake
+        await notify_repair_intake(db, repair)
+    except Exception as exc:
+        logger.warning("Failed to send repair intake notification: %s", exc)
 
     return repair
 
@@ -169,8 +181,42 @@ async def update_repair_status(
     await db.flush()
     await db.refresh(repair)
 
-    from services.notification_service import notify_repair_status_change
-    await notify_repair_status_change(db, repair, old_status, new_status)
+    # Send status change notifications
+    try:
+        from services.notification_service import notify_repair_status_change
+        await notify_repair_status_change(db, repair, old_status, new_status)
+    except Exception as exc:
+        logger.warning("Notification error for repair %s: %s", repair_id, exc)
+
+    # Send device received confirmation (when device is physically received)
+    if new_status == "device_received":
+        try:
+            from services.notification_service import notify_repair_intake
+            await notify_repair_intake(db, repair)
+        except Exception as exc:
+            logger.warning("Failed to send device received notification: %s", exc)
+
+    # Send parts ordered notification
+    if new_status == "waiting_for_parts":
+        try:
+            from services.notification_service import notify_parts_ordered
+            await notify_parts_ordered(db, repair)
+        except Exception as exc:
+            logger.warning("Failed to send parts ordered notification: %s", exc)
+
+    # Broadcast real-time event
+    try:
+        from services.repair_events import broadcast_repair_event
+        await broadcast_repair_event(
+            "status_change",
+            str(repair.id),
+            ticket_number=repair.ticket_number,
+            old_status=old_status,
+            new_status=new_status,
+            tab="completed" if new_status in ("completed", "cancelled") else "active"
+        )
+    except Exception as exc:
+        logger.warning("Broadcast error for repair %s: %s", repair_id, exc)
 
     return repair
 
@@ -304,6 +350,8 @@ async def get_repair_communications(
 
 async def delete_repair(repair_id: UUID, db: AsyncSession) -> None:
     repair = await get_repair_or_404(db, repair_id)
+    
+    old_status = repair.status.value
 
     # Delete status history
     from models.repair import RepairStatusHistory
@@ -370,4 +418,6 @@ async def delete_repair(repair_id: UUID, db: AsyncSession) -> None:
         await db.delete(warranty)
 
     await db.delete(repair)
-    await db.flush()
+    
+    # Note: get_db() handles the commit after request completes
+    # Broadcast event (non-blocking - errors won't affect deletion)

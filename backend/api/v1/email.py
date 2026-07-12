@@ -1,9 +1,12 @@
 from uuid import UUID
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.deps import get_db, require_staff
+from config import settings
 from models.user import User
 from models.customer import Customer
 from models.repair import Repair
@@ -60,12 +63,25 @@ async def send_template_email(
 
     context = {}
     customer = None
+    repair = None
+    quote = None
+    invoice = None
 
+    # Fetch customer and repair context
     if data.repair_id:
         repair = await db.get(Repair, data.repair_id)
         if repair:
             context["ticket_number"] = repair.ticket_number
+            context["issue_description"] = repair.issue_description
             customer = await db.get(Customer, repair.customer_id)
+            
+            # Fetch device info if available
+            if repair.device_id:
+                from models.device import Device
+                device = await db.get(Device, repair.device_id)
+                if device:
+                    context["device_type"] = device.device_type
+                    context["device_model"] = f"{device.brand} {device.model}".strip()
 
     if not customer and data.customer_id:
         customer = await db.get(Customer, data.customer_id)
@@ -78,6 +94,71 @@ async def send_template_email(
 
     if not email:
         raise HTTPException(status_code=400, detail="Customer has no email address")
+
+    # Fetch additional context based on template name or variables used
+    # Check if template uses quote-related variables
+    template_var_str = " ".join(template.variables) if template.variables else ""
+    
+    if repair and ("labour_cost" in template_var_str or "parts_cost" in template_var_str or "total_amount" in template_var_str or "quote_link" in template_var_str):
+        from models.quote import Quote
+        quote_result = await db.execute(
+            select(Quote)
+            .where(Quote.repair_id == repair.id)
+            .order_by(Quote.created_at.desc())
+            .limit(1)
+        )
+        quote = quote_result.scalar_one_or_none()
+        if quote:
+            context["labour_cost"] = f"{quote.labour_cost:.2f}" if quote.labour_cost else "0.00"
+            context["parts_cost"] = f"{quote.parts_cost:.2f}" if quote.parts_cost else "0.00"
+            context["total_amount"] = f"{quote.total_amount:.2f}" if quote.total_amount else "0.00"
+            context["quote_link"] = f"{settings.APP_URL}/portal/repairs/{repair.id}?tab=quotes"
+
+    if repair and ("subtotal" in template_var_str or "gst_amount" in template_var_str or "due_date" in template_var_str or "paid_amount" in template_var_str):
+        from models.invoice import Invoice
+        invoice_result = await db.execute(
+            select(Invoice)
+            .where(Invoice.repair_id == repair.id)
+            .order_by(Invoice.created_at.desc())
+            .limit(1)
+        )
+        invoice = invoice_result.scalar_one_or_none()
+        if invoice:
+            context["subtotal"] = f"{invoice.subtotal:.2f}"
+            context["gst_amount"] = f"{invoice.gst_amount:.2f}"
+            context["total_amount"] = f"{invoice.total_amount:.2f}"
+            context["due_date"] = invoice.due_date.strftime("%d %b %Y") if invoice.due_date else ""
+            context["paid_amount"] = f"{invoice.paid_amount:.2f}" if invoice.paid_amount else "0.00"
+
+    if repair and ("completed_date" in template_var_str):
+        context["completed_date"] = datetime.now(timezone.utc).strftime("%d %b %Y")
+
+    # Fetch appointment info if needed
+    if repair and ("appointment_date" in template_var_str or "appointment_time" in template_var_str):
+        from models.booking import Booking
+        booking_result = await db.execute(
+            select(Booking)
+            .where(Booking.repair_id == repair.id)
+            .order_by(Booking.created_at.desc())
+            .limit(1)
+        )
+        booking = booking_result.scalar_one_or_none()
+        if booking:
+            context["appointment_date"] = booking.date.strftime("%d %b %Y") if booking.date else ""
+            context["appointment_time"] = booking.time.strftime("%H:%M") if booking.time else ""
+
+    # Fetch warranty info if needed
+    if repair and ("warranty_expiry" in template_var_str or "claim_status" in template_var_str or "resolution_notes" in template_var_str):
+        from models.warranty import WarrantyRecord
+        warranty_result = await db.execute(
+            select(WarrantyRecord)
+            .where(WarrantyRecord.repair_id == repair.id)
+        )
+        warranty = warranty_result.scalar_one_or_none()
+        if warranty:
+            context["warranty_expiry"] = warranty.expiry_date.strftime("%d %b %Y") if warranty.expiry_date else ""
+            context["claim_status"] = warranty.status.value if warranty.status else ""
+            context["resolution_notes"] = warranty.notes or ""
 
     subject, body, body_html = render_email_template(template, context)
 

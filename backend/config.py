@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     SMS_API_KEY: str = ""
     SMS_WEBHOOK_SECRET: str = ""
 
+    # Email Settings
     SMTP_HOST: str = ""
     SMTP_PORT: int = 587
     SMTP_USER: str = ""
@@ -74,6 +75,8 @@ class Settings(BaseSettings):
     PHOTO_STORAGE_PREFIX: str = "photos"
 
     LOG_LEVEL: str = "INFO"
+
+    TZ_DEFAULT: str = "Australia/Melbourne"
 
     VAPID_PRIVATE_KEY: str = ""
     VAPID_PUBLIC_KEY: str = ""

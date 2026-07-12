@@ -26,6 +26,7 @@ _PUBLIC_SETTING_KEYS = {
     "authentik_url",
     "authentik_client_id",
     "authentik_redirect_uri",
+    "timezone",
 }
 
 
@@ -45,6 +46,7 @@ def _get_env_fallbacks():
         "logo_url": settings.LOGO_URL,
         "admin_logo_url": settings.ADMIN_LOGO_URL,
         "favicon_url": settings.FAVICON_URL,
+        "timezone": settings.TZ_DEFAULT,
     }
 
 
@@ -78,6 +80,14 @@ async def get_public_settings(db=Depends(get_db)):
             for key in merged_settings if merged_settings[key] is not None
         ]
     }
+
+
+@router.get("/public/settings/timezone", response_model=str)
+async def get_public_timezone(db=Depends(get_db)):
+    """Get the configured business timezone (public endpoint)."""
+    result = await db.execute(select(SystemSetting).where(SystemSetting.key == "timezone"))
+    setting = result.scalar_one_or_none()
+    return setting.value if setting else settings.TZ_DEFAULT
 
 
 @router.get("/public/setup-status", response_model=dict)

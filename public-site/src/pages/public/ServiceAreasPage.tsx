@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { MapPin, Truck } from "lucide-react";
 import { SERVICE_AREAS } from "../../lib/constants";
 
@@ -15,12 +15,16 @@ const areaDescriptions: Record<string, string> = {
 };
 
 export default function ServiceAreasPage() {
-  useEffect(() => {
-    document.title = "Service Areas | Sunset Country Repairs";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>Service Areas | Sunset Country Repairs Mildura</title>
+        <meta name="description" content="Mobile electronics repair service across Mildura and Sunraysia region. Areas include Red Cliffs, Irymple, Merbein, Nichols Point, Buronga, Gol Gol, Wentworth." />
+        <meta name="keywords" content="Mildura, Red Cliffs, Irymple, Merbein, Sunraysia, service area, mobile repair" />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/service-areas" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero */}
       <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -91,5 +95,6 @@ export default function ServiceAreasPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

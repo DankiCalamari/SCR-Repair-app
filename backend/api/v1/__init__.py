@@ -13,12 +13,16 @@ from api.v1.warranty import router as warranty_router
 from api.v1.documents import router as documents_router
 from api.v1.photos import router as photos_router
 from api.v1.bookings import router as bookings_router
+from api.v1.inventory import router as inventory_router
+from api.v1.reports import router as reports_router
 from api.v1.dashboard import router as dashboard_router
 from api.v1.system_health import router as system_health_router
 from api.v1.admin import router as admin_router
 from api.v1.public import router as public_router
 from api.v1.push_subscriptions import router as push_subscriptions_router
 from api.v1.logs_ws import router as logs_ws_router
+from api.v1.repairs_ws import router as repairs_ws_router
+from api.v1.pdf_templates import router as pdf_templates_router
 
 api_router = APIRouter(prefix="/v1")
 api_router.include_router(public_router, prefix="", tags=["public"])
@@ -35,8 +39,12 @@ api_router.include_router(warranty_router, prefix="/warranties", tags=["warranti
 api_router.include_router(documents_router, prefix="/documents", tags=["documents"])
 api_router.include_router(photos_router, prefix="/photos", tags=["photos"])
 api_router.include_router(bookings_router, prefix="/bookings", tags=["bookings"])
+api_router.include_router(inventory_router, prefix="/inventory", tags=["inventory"])
+api_router.include_router(reports_router, prefix="/reports", tags=["reports"])
 api_router.include_router(dashboard_router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(system_health_router, prefix="/system-health", tags=["system-health"])
 api_router.include_router(admin_router, prefix="/admin", tags=["admin"])
 api_router.include_router(push_subscriptions_router, prefix="/push", tags=["push-notifications"])
 api_router.include_router(logs_ws_router, prefix="/admin", tags=["logs"])
+api_router.include_router(repairs_ws_router, prefix="/admin", tags=["repairs-realtime"])
+api_router.include_router(pdf_templates_router, prefix="/admin", tags=["pdf-templates"])

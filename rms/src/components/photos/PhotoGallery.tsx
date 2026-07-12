@@ -47,7 +47,7 @@ export default function PhotoGallery({
 
   if (photos.length === 0) {
     return (
-      <div className="text-center py-12 text-warm-500">
+      <div className="text-center py-12 text-rms-text0">
         <p className="text-sm">No photos yet.</p>
         {!readonly && (
           <p className="text-xs mt-1">Upload photos using the form above.</p>
@@ -61,7 +61,7 @@ export default function PhotoGallery({
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <Filter size={14} className="text-warm-500" />
+          <Filter size={14} className="text-rms-text0" />
           <div className="flex gap-1 flex-wrap">
             {CATEGORY_FILTERS.map((cf) => {
               const count = cf.value === "all" ? photos.length : (categoryCounts?.[cf.value] ?? 0);
@@ -71,8 +71,8 @@ export default function PhotoGallery({
                   onClick={() => setFilter(cf.value)}
                   className={`text-xs px-2 py-1 rounded-full border transition-colors ${
                     filter === cf.value
-                      ? "bg-copper-500 text-white border-copper-500"
-                      : "bg-white text-warm-400 border-warm-200 hover:border-warm-400"
+                      ? "bg-brand-500 text-white border-brand-500"
+                      : "bg-white text-rms-text-secondary border-rms-border hover:border-rms-border"
                   }`}
                 >
                   {cf.label}
@@ -87,14 +87,14 @@ export default function PhotoGallery({
         <div className="flex items-center gap-1">
           <button
             onClick={() => setViewMode("grid")}
-            className={`p-1.5 rounded ${viewMode === "grid" ? "bg-warm-200" : "hover:bg-warm-100"}`}
+            className={`p-1.5 rounded ${viewMode === "grid" ? "bg-rms-raised" : "hover:bg-rms-raised"}`}
             title="Grid view"
           >
             <Grid size={16} />
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`p-1.5 rounded ${viewMode === "list" ? "bg-warm-200" : "hover:bg-warm-100"}`}
+            className={`p-1.5 rounded ${viewMode === "list" ? "bg-rms-raised" : "hover:bg-rms-raised"}`}
             title="List view"
           >
             <List size={16} />
@@ -120,10 +120,10 @@ export default function PhotoGallery({
           {filteredPhotos.map((photo) => (
             <div
               key={photo.id}
-              className="flex items-center gap-3 p-2 bg-white rounded-lg border border-warm-200 hover:shadow-sm cursor-pointer"
+              className="flex items-center gap-3 p-2 bg-white rounded-lg border border-rms-border hover:shadow-sm cursor-pointer"
               onClick={() => handleView(photo)}
             >
-              <div className="w-12 h-12 bg-warm-100 rounded overflow-hidden flex-shrink-0">
+              <div className="w-12 h-12 bg-rms-raised rounded overflow-hidden flex-shrink-0">
                 {photo.thumbnail_path ? (
                   <img
                     src={`${import.meta.env.VITE_API_URL || ""}/uploads/${photo.thumbnail_path}`}
@@ -131,16 +131,16 @@ export default function PhotoGallery({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-warm-600 text-xs">
+                  <div className="w-full h-full flex items-center justify-center text-rms-text-secondary text-xs">
                     📷
                   </div>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-warm-800 truncate">
+                <p className="text-sm font-medium text-rms-text-secondary truncate">
                   {photo.original_filename}
                 </p>
-                <p className="text-xs text-warm-400">
+                <p className="text-xs text-rms-text-secondary">
                   {photo.category}
                   {photo.notes ? ` · ${photo.notes}` : ""}
                 </p>
@@ -151,7 +151,7 @@ export default function PhotoGallery({
                     e.stopPropagation();
                     onDeletePhoto(photo.id);
                   }}
-                  className="p-1 text-warm-500 hover:text-red-500"
+                  className="p-1 text-rms-text0 hover:text-red-500"
                 >
                   <span className="text-xs">Delete</span>
                 </button>

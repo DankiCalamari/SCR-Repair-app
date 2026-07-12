@@ -20,8 +20,6 @@ const AdminRepairsPage = lazy(() => import("./pages/admin/AdminRepairsPage"));
 const AdminCustomersPage = lazy(() => import("./pages/admin/AdminCustomersPage"));
 const AdminQuotesPage = lazy(() => import("./pages/admin/AdminQuotesPage"));
 const AdminInvoicesPage = lazy(() => import("./pages/admin/AdminInvoicesPage"));
-const AdminSmsPage = lazy(() => import("./pages/admin/AdminSmsPage"));
-const AdminEmailPage = lazy(() => import("./pages/admin/AdminEmailPage"));
 const AdminWarrantyPage = lazy(() => import("./pages/admin/AdminWarrantyPage"));
 const AdminSystemHealthPage = lazy(() => import("./pages/admin/AdminSystemHealthPage"));
 const AdminRepairDetailPage = lazy(() => import("./pages/admin/AdminRepairDetailPage"));
@@ -30,6 +28,9 @@ const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
 const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminCommunicationsPage = lazy(() => import("./pages/admin/AdminCommunicationsPage"));
 const AdminBookingsPage = lazy(() => import("./pages/admin/AdminBookingsPage"));
+const AdminLeadsPage = lazy(() => import("./pages/admin/AdminLeadsPage"));
+const AdminInventoryPage = lazy(() => import("./pages/admin/AdminInventoryPage"));
+const AdminReportsPage = lazy(() => import("./pages/admin/AdminReportsPage"));
 
 const AdminSidebar = lazy(() => import("./components/layout/AdminSidebar"));
 
@@ -61,22 +62,22 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
 }
 
 function PortalLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-warm-50 text-warm-900">{children}</div>;
+  return <div className="min-h-screen bg-rms-bg text-rms-text">{children}</div>;
 }
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-warm-900 text-warm-50">
+    <div className="flex min-h-screen bg-rms-bg text-rms-text">
       <AdminSidebar />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</main>
     </div>
   );
 }
 
 function PageLoader() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-warm-50">
-      <div className="h-7 w-7 animate-spin rounded-full border-2 border-copper-500 border-t-transparent" />
+    <div className="flex min-h-screen items-center justify-center bg-rms-bg">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
     </div>
   );
 }
@@ -123,11 +124,10 @@ export default function App() {
           <Route path="/admin/customers" element={<AdminCustomersPage />} />
           <Route path="/admin/quotes" element={<AdminQuotesPage />} />
           <Route path="/admin/invoices" element={<AdminInvoicesPage />} />
-          <Route path="/admin/sms" element={<AdminSmsPage />} />
-          <Route path="/admin/email" element={<AdminEmailPage />} />
           <Route path="/admin/communications" element={<AdminCommunicationsPage />} />
-          <Route path="/admin/warranty" element={<AdminWarrantyPage />} />
           <Route path="/admin/bookings" element={<AdminBookingsPage />} />
+          <Route path="/admin/leads" element={<AdminLeadsPage />} />
+          <Route path="/admin/warranty" element={<AdminWarrantyPage />} />
           <Route path="/admin/system-health" element={<AdminSystemHealthPage />} />
           <Route path="/admin/repairs/:id" element={<AdminRepairDetailPage />} />
           <Route path="/admin/customers/:id" element={<AdminCustomerDetailPage />} />
@@ -145,6 +145,8 @@ export default function App() {
         >
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/settings" element={<AdminSettingsPage />} />
+          <Route path="/admin/inventory" element={<AdminInventoryPage />} />
+          <Route path="/admin/reports" element={<AdminReportsPage />} />
         </Route>
 
         {/* Catch all - redirect to login */}

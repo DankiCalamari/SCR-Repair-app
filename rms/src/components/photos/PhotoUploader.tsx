@@ -140,25 +140,25 @@ export default function PhotoUploader({
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
           dragOver
-            ? "border-copper-500 bg-copper-50"
-            : "border-warm-300 hover:border-warm-400"
+            ? "border-brand-500 bg-copper-50"
+            : "border-rms-border hover:border-rms-border"
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <ImagePlus className="mx-auto text-warm-500 mb-2" size={36} />
-        <p className="text-sm text-warm-400 mb-1">
+        <ImagePlus className="mx-auto text-rms-text0 mb-2" size={36} />
+        <p className="text-sm text-rms-text-secondary mb-1">
           Drag & drop photos here, or{" "}
           <button
             type="button"
-            className="text-copper-600 underline"
+            className="text-brand-600 underline"
             onClick={() => inputRef.current?.click()}
           >
             browse
           </button>
         </p>
-        <p className="text-xs text-warm-500">
+        <p className="text-xs text-rms-text0">
           JPG, PNG, WEBP · Max 10MB per file · Up to {maxFiles} files
         </p>
         <input
@@ -176,13 +176,13 @@ export default function PhotoUploader({
       {files.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-medium text-warm-700 mb-1">
+            <label className="block text-xs font-medium text-rms-text-secondary mb-1">
               Category
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as PhotoCategory)}
-              className="w-full border border-warm-300 rounded-md px-2 py-1.5 text-sm"
+              className="w-full border border-rms-border rounded-md px-2 py-1.5 text-sm"
             >
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -192,7 +192,7 @@ export default function PhotoUploader({
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-warm-700 mb-1">
+            <label className="block text-xs font-medium text-rms-text-secondary mb-1">
               Notes (optional)
             </label>
             <input
@@ -200,11 +200,11 @@ export default function PhotoUploader({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add a note for these photos"
-              className="w-full border border-warm-300 rounded-md px-2 py-1.5 text-sm"
+              className="w-full border border-rms-border rounded-md px-2 py-1.5 text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-warm-700 mb-1">
+            <label className="block text-xs font-medium text-rms-text-secondary mb-1">
               Tags (optional)
             </label>
             <input
@@ -212,7 +212,7 @@ export default function PhotoUploader({
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="Comma-separated tags"
-              className="w-full border border-warm-300 rounded-md px-2 py-1.5 text-sm"
+              className="w-full border border-rms-border rounded-md px-2 py-1.5 text-sm"
             />
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function PhotoUploader({
             <div
               key={i}
               className={`relative aspect-square rounded border overflow-hidden ${
-                fp.error ? "border-red-300 bg-red-50" : "border-warm-200"
+                fp.error ? "border-red-300 bg-red-50" : "border-rms-border"
               }`}
             >
               {fp.error ? (
@@ -242,7 +242,7 @@ export default function PhotoUploader({
               <button
                 type="button"
                 onClick={() => removeFile(i)}
-                className="absolute top-0.5 right-0.5 bg-black/60 text-warm-900 rounded-full p-0.5 hover:bg-black/80"
+                className="absolute top-0.5 right-0.5 bg-black/60 text-rms-text rounded-full p-0.5 hover:bg-black/80"
               >
                 <X size={12} />
               </button>
@@ -256,7 +256,7 @@ export default function PhotoUploader({
         <button
           onClick={handleUpload}
           disabled={uploading}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-copper-500 text-white rounded-md text-sm font-medium hover:bg-copper-600 disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-md text-sm font-medium hover:bg-brand-600 disabled:opacity-50"
         >
           {uploading ? (
             <Loader2 size={16} className="animate-spin" />

@@ -103,14 +103,14 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-20">
-      <div className="w-full max-w-lg rounded-lg border border-warm-700 bg-warm-800 shadow-xl">
-        <div className="flex items-center justify-between border-b border-warm-700 px-6 py-4">
-          <h2 className="font-heading text-lg font-semibold text-warm-50">
+      <div className="w-full max-w-lg rounded-lg border border-rms-border bg-rms-raised shadow-xl">
+        <div className="flex items-center justify-between border-b border-rms-border px-6 py-4">
+          <h2 className="font-heading text-lg font-semibold text-rms-text">
             {isEditing ? "Edit Booking" : "New Booking"}
           </h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-warm-400 hover:bg-warm-700 hover:text-warm-50"
+            className="rounded p-1 text-rms-text-secondary hover:bg-rms-raised hover:text-rms-text"
           >
             <X className="h-5 w-5" />
           </button>
@@ -119,15 +119,15 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
         <div className="px-6 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
           {/* Booking Type */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">Booking Type</label>
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Booking Type</label>
             <div className="flex gap-2">
               <button
                 onClick={() => setBookingType("pickup")}
                 className={cn(
                   "flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
                   bookingType === "pickup"
-                    ? "border-copper-500 bg-copper-500/20 text-copper-400"
-                    : "border-warm-600 bg-warm-700 text-warm-300 hover:bg-warm-600"
+                    ? "border-brand-500 bg-brand-500/20 text-brand-500"
+                    : "border-rms-border bg-rms-raised text-rms-text-secondary hover:bg-rms-border"
                 )}
               >
                 Pickup
@@ -138,7 +138,7 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
                   "flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
                   bookingType === "dropoff"
                     ? "border-teal-500 bg-teal-500/20 text-teal-400"
-                    : "border-warm-600 bg-warm-700 text-warm-300 hover:bg-warm-600"
+                    : "border-rms-border bg-rms-raised text-rms-text-secondary hover:bg-rms-border"
                 )}
               >
                 Dropoff
@@ -148,12 +148,12 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
 
           {/* Customer Selection */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">Customer</label>
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Customer</label>
             <select
               value={customerId}
               onChange={(e) => setCustomerId(e.target.value)}
               disabled={isEditing}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none disabled:opacity-50"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none disabled:opacity-50"
             >
               <option value="">Select a customer</option>
               {customers?.data?.map((c) => (
@@ -166,14 +166,14 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
 
           {/* Repair Selection (optional) */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">
               Repair (optional)
             </label>
             <select
               value={repairId}
               onChange={(e) => setRepairId(e.target.value)}
               disabled={isEditing}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none disabled:opacity-50"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none disabled:opacity-50"
             >
               <option value="">Link to a repair (optional)</option>
               {repairs?.data?.map((r) => (
@@ -187,20 +187,20 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
           {/* Date & Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-2 block text-xs font-medium text-warm-400">Date</label>
+              <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Date</label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-2 block text-xs font-medium text-warm-400">Time</label>
+              <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Time</label>
               <select
                 value={selectedTime}
                 onChange={(e) => setSelectedTime(e.target.value)}
-                className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
               >
                 {availableSlots?.map((slot) => (
                   <option 
@@ -217,11 +217,11 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
 
           {/* Duration */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">Duration (minutes)</label>
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Duration (minutes)</label>
             <select
               value={duration}
               onChange={(e) => setDuration(parseInt(e.target.value))}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
             >
               <option value={15}>15 minutes</option>
               <option value={30}>30 minutes</option>
@@ -234,7 +234,7 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
 
           {/* Address */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">
               Address (for pickup/dropoff)
             </label>
             <textarea
@@ -242,30 +242,30 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Enter address for pickup/dropoff..."
               rows={2}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
             />
           </div>
 
           {/* Notes */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-warm-400">Notes</label>
+            <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Notes</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Additional notes..."
               rows={2}
-              className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+              className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text placeholder-rms-text-secondary focus:border-brand-500 focus:outline-none"
             />
           </div>
 
           {/* Status (editing only) */}
           {isEditing && (
             <div>
-              <label className="mb-2 block text-xs font-medium text-warm-400">Status</label>
+              <label className="mb-2 block text-xs font-medium text-rms-text-secondary">Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as BookingStatus)}
-                className="w-full rounded-lg border border-warm-600 bg-warm-700 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                className="w-full rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
               >
                 <option value="scheduled">Scheduled</option>
                 <option value="completed">Completed</option>
@@ -276,17 +276,17 @@ export default function BookingModal({ booking, onClose, onSuccess }: BookingMod
           )}
         </div>
 
-        <div className="flex gap-3 border-t border-warm-700 p-4">
+        <div className="flex gap-3 border-t border-rms-border p-4">
           <button
             onClick={onClose}
-            className="flex-1 rounded-lg border border-warm-600 py-2.5 text-sm font-medium text-warm-300 hover:bg-warm-700"
+            className="flex-1 rounded-lg border border-rms-border py-2.5 text-sm font-medium text-rms-text-secondary hover:bg-rms-raised"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={createMutation.isPending || updateMutation.isPending || !customerId}
-            className="flex-1 rounded-lg bg-copper-500 py-2.5 text-sm font-semibold text-warm-50 hover:bg-copper-600 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="flex-1 rounded-lg bg-brand-500 py-2.5 text-sm font-semibold text-rms-text hover:bg-brand-600 disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <Save className="h-4 w-4" />
             {isEditing ? "Update" : "Create"} Booking

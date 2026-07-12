@@ -44,13 +44,13 @@ export default function SetupPage() {
       <div className="w-full max-w-md">
         {/* Brand Logo Area */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-copper-500">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-brand-500">
             <Wrench className="h-8 w-8 text-white" />
           </div>
-          <h1 className="font-heading text-3xl font-bold text-warm-900">
+          <h1 className="font-heading text-3xl font-bold text-rms-text">
             Sunset Country Repairs
           </h1>
-          <p className="mt-2 text-warm-500">Initial Setup</p>
+          <p className="mt-2 text-rms-text0">Initial Setup</p>
         </div>
 
         {/* Setup Card */}
@@ -58,10 +58,10 @@ export default function SetupPage() {
           {isSuccess ? (
             <div className="text-center">
               <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
-              <h2 className="mt-4 font-heading text-xl font-semibold text-warm-900">
+              <h2 className="mt-4 font-heading text-xl font-semibold text-rms-text">
                 Setup Complete!
               </h2>
-              <p className="mt-2 text-warm-500">Redirecting to login...</p>
+              <p className="mt-2 text-rms-text0">Redirecting to login...</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -71,13 +71,13 @@ export default function SetupPage() {
                 </div>
               )}
 
-              <p className="text-sm text-warm-600">
+              <p className="text-sm text-rms-text-secondary">
                 Create your admin account to get started. This is the first and only time you'll see this screen.
               </p>
 
               {/* Full Name Field */}
               <div>
-                <label htmlFor="fullName" className="mb-1.5 block text-sm font-medium text-warm-600">
+                <label htmlFor="fullName" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                   Full Name
                 </label>
                 <input
@@ -88,13 +88,13 @@ export default function SetupPage() {
                   placeholder="Your name"
                   required
                   disabled={isLoading}
-                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50"
+                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50"
                 />
               </div>
 
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-warm-600">
+                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                   Email Address
                 </label>
                 <input
@@ -105,13 +105,13 @@ export default function SetupPage() {
                   placeholder="you@example.com"
                   required
                   disabled={isLoading}
-                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50"
+                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50"
                 />
               </div>
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-warm-600">
+                <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                   Password
                 </label>
                 <input
@@ -122,13 +122,13 @@ export default function SetupPage() {
                   placeholder="Create a secure password"
                   required
                   disabled={isLoading}
-                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50"
+                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50"
                 />
               </div>
 
               {/* Phone Field (Optional) */}
               <div>
-                <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-warm-600">
+                <label htmlFor="phone" className="mb-1.5 block text-sm font-medium text-rms-text-secondary">
                   Phone (Optional)
                 </label>
                 <input
@@ -138,7 +138,7 @@ export default function SetupPage() {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="0400 123 456"
                   disabled={isLoading}
-                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 outline-none transition-colors focus:border-copper-500 focus:ring-1 focus:ring-copper-500 disabled:opacity-50"
+                  className="w-full rounded-lg border border-warm-200 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 outline-none transition-colors focus:border-brand-500 focus:ring-1 focus:ring-brand-500 disabled:opacity-50"
                 />
               </div>
 
@@ -146,7 +146,7 @@ export default function SetupPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex w-full items-center justify-center rounded-lg bg-copper-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-copper-600 focus:outline-none focus:ring-2 focus:ring-copper-500 focus:ring-offset-2 focus:ring-offset-warm-50 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center justify-center rounded-lg bg-brand-500 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-rms-bg disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isLoading ? (
                   <>
@@ -180,7 +180,7 @@ export default function SetupPage() {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 text-center text-xs text-warm-400">
+        <div className="mt-6 text-center text-xs text-rms-text-secondary">
           Sunset Country Repairs &copy; {new Date().getFullYear()}
         </div>
       </div>

@@ -31,6 +31,7 @@ class Repair(Base):
     issue_description: Mapped[str] = mapped_column(Text, nullable=False)
     diagnosis: Mapped[str] = mapped_column(Text, nullable=True)
     repair_notes: Mapped[str] = mapped_column(Text, nullable=True)
+    internal_notes: Mapped[str] = mapped_column(Text, nullable=True)  # Staff-only notes, not visible to customer
     labour_hours: Mapped[str] = mapped_column(String(10), nullable=True)
     labour_cost: Mapped[str] = mapped_column(String(20), nullable=True)
     parts_cost: Mapped[str] = mapped_column(String(20), nullable=True)

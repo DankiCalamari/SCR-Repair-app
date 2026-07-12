@@ -40,6 +40,7 @@ class PhotoResponse(BaseModel):
     is_important: bool = False
     sort_order: int = 0
     created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -58,6 +59,7 @@ class PhotoUploadResponse(BaseModel):
     device_id: Optional[uuid.UUID] = None
     customer_id: Optional[uuid.UUID] = None
     created_at: datetime
+    updated_at: datetime
 
 
 class PhotoUpdate(BaseModel):

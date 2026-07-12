@@ -57,6 +57,8 @@ class EmailTemplateResponse(BaseModel):
     body: str
     body_html: Optional[str] = None
     variables: list[str] = Field(default_factory=list)
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
 

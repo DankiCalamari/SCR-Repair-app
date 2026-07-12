@@ -128,19 +128,19 @@ export default function AdminCommunicationsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-warm-50">Communications</h1>
-        <p className="mt-1 text-warm-400">
+        <h1 className="font-heading text-3xl font-bold text-rms-text">Communications</h1>
+        <p className="mt-1 text-rms-text-secondary">
           Manage inbound messages, conversations, and contact form submissions
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 rounded-lg border border-warm-800 bg-warm-900 p-1 w-fit">
+      <div className="mb-6 flex gap-1 rounded-lg border border-rms-border bg-rms-surface p-1 w-fit">
         <button
           onClick={() => { setTab("inbox"); setActiveConversation(null); }}
           className={cn(
             "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "inbox" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
+            tab === "inbox" ? "bg-brand-500 text-white" : "text-rms-text-secondary hover:text-rms-text"
           )}
         >
           <Inbox className="h-4 w-4" /> Inbox
@@ -154,7 +154,7 @@ export default function AdminCommunicationsPage() {
           onClick={() => { setTab("conversations"); setActiveConversation(null); }}
           className={cn(
             "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
-            tab === "conversations" ? "bg-copper-500 text-warm-950" : "text-warm-400 hover:text-warm-50"
+            tab === "conversations" ? "bg-brand-500 text-white" : "text-rms-text-secondary hover:text-rms-text"
           )}
         >
           <MessageSquare className="h-4 w-4" /> Conversations
@@ -163,35 +163,35 @@ export default function AdminCommunicationsPage() {
 
       {/* INBOX TAB */}
       {tab === "inbox" && (
-        <div className="rounded-lg border border-warm-800 bg-warm-900">
-          <div className="border-b border-warm-800 px-5 py-4">
+        <div className="rounded-lg border border-rms-border bg-rms-surface">
+          <div className="border-b border-rms-border px-5 py-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-heading text-lg font-semibold text-warm-50">Unassigned Messages</h2>
+              <h2 className="font-heading text-lg font-semibold text-rms-text">Unassigned Messages</h2>
               <button
                 onClick={() => refetchInbox()}
-                className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-3 py-1.5 text-xs text-warm-300 hover:bg-warm-800"
+                className="flex items-center gap-1.5 rounded-lg border border-rms-border px-3 py-1.5 text-xs text-rms-text-secondary hover:bg-rms-raised"
               >
                 <ArrowLeft className="h-3 w-3 rotate-45" /> Refresh
               </button>
             </div>
-            <p className="mt-1 text-sm text-warm-400">
+            <p className="mt-1 text-sm text-rms-text-secondary">
               Emails, SMS, and contact form submissions not yet linked to a customer or repair
             </p>
           </div>
 
-          <div className="divide-y divide-warm-800">
+          <div className="divide-y divide-rms-raised">
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="animate-pulse px-5 py-4">
-                  <div className="h-4 w-40 rounded bg-warm-800" />
-                  <div className="mt-2 h-3 w-56 rounded bg-warm-800" />
+                  <div className="h-4 w-40 rounded bg-rms-raised" />
+                  <div className="mt-2 h-3 w-56 rounded bg-rms-raised" />
                 </div>
               ))
             ) : !data?.data?.length ? (
               <div className="px-5 py-24 text-center">
-                <Inbox className="mx-auto h-12 w-12 text-warm-600" />
-                <p className="mt-4 text-warm-400">No unassigned communications</p>
-                <p className="mt-1 text-xs text-warm-500">All messages have been linked to customers</p>
+                <Inbox className="mx-auto h-12 w-12 text-rms-text-secondary" />
+                <p className="mt-4 text-rms-text-secondary">No unassigned communications</p>
+                <p className="mt-1 text-xs text-rms-text0">All messages have been linked to customers</p>
               </div>
             ) : (
               data?.data.map((item: UnassignedCommunication) => (
@@ -199,7 +199,7 @@ export default function AdminCommunicationsPage() {
                   <div className="flex items-start gap-4">
                     <div className={cn(
                       "mt-0.5 rounded-full p-2",
-                      item.type === "email" ? "bg-copper-500/10 text-copper-500" :
+                      item.type === "email" ? "bg-brand-500/10 text-brand-500" :
                       item.type === "sms" ? "bg-purple-500/10 text-purple-400" :
                       "bg-green-500/10 text-green-400"
                     )}>
@@ -210,26 +210,26 @@ export default function AdminCommunicationsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-warm-50">{item.from}</span>
-                          <span className="rounded bg-warm-700 px-1.5 py-0.5 text-[10px] font-medium uppercase text-warm-300">
+                          <span className="font-semibold text-rms-text">{item.from}</span>
+                          <span className="rounded bg-rms-raised px-1.5 py-0.5 text-[10px] font-medium uppercase text-rms-text-secondary">
                             {item.type === "lead" ? "contact form" : item.type}
                           </span>
                         </div>
-                        <span className="text-[10px] text-warm-500 uppercase tracking-wider">
+                        <span className="text-[10px] text-rms-text0 uppercase tracking-wider">
                           {formatDateTime(item.created_at)}
                         </span>
                       </div>
                       {item.subject && (
-                        <p className="mt-0.5 text-sm font-medium text-warm-200">{item.subject}</p>
+                        <p className="mt-0.5 text-sm font-medium text-rms-text-secondary">{item.subject}</p>
                       )}
-                      <p className="mt-1 text-sm text-warm-300 line-clamp-2 whitespace-pre-line">{item.body}</p>
+                      <p className="mt-1 text-sm text-rms-text-secondary line-clamp-2 whitespace-pre-line">{item.body}</p>
 
                       {assigningId === item.id && assigningType === item.type ? (
                         <div className="mt-3 flex items-center gap-2">
                           <select
                             value={selectedRepair}
                             onChange={(e) => setSelectedRepair(e.target.value)}
-                            className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-3 py-2 text-sm text-warm-50 focus:border-copper-500 focus:outline-none"
+                            className="flex-1 rounded-lg border border-rms-border bg-rms-raised px-3 py-2 text-sm text-rms-text focus:border-brand-500 focus:outline-none"
                           >
                             <option value="">Select a repair ticket...</option>
                             {repairsData?.data?.map((r: Repair) => (
@@ -245,14 +245,14 @@ export default function AdminCommunicationsPage() {
                               }
                             }}
                             disabled={!selectedRepair || assignMutation.isPending}
-                            className="flex items-center gap-1.5 rounded-lg bg-copper-500 px-4 py-2 text-sm font-medium text-warm-950 hover:bg-copper-600 disabled:opacity-50"
+                            className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
                           >
                             <Link2 className="h-3.5 w-3.5" />
                             {assignMutation.isPending ? "Linking..." : "Assign"}
                           </button>
                           <button
                             onClick={() => { setAssigningId(null); setAssigningType(null); setSelectedRepair(""); }}
-                            className="rounded-lg border border-warm-700 px-3 py-2 text-sm text-warm-400 hover:bg-warm-800"
+                            className="rounded-lg border border-rms-border px-3 py-2 text-sm text-rms-text-secondary hover:bg-rms-raised"
                           >
                             <X className="h-3.5 w-3.5" />
                           </button>
@@ -272,7 +272,7 @@ export default function AdminCommunicationsPage() {
                               <button
                                 onClick={() => updateLeadMutation.mutate({ leadId: item.id, status: "contacted" })}
                                 disabled={updateLeadMutation.isPending}
-                                className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-3 py-1.5 text-xs font-medium text-warm-300 hover:border-copper-500 hover:text-copper-500 transition"
+                                className="flex items-center gap-1.5 rounded-lg border border-rms-border px-3 py-1.5 text-xs font-medium text-rms-text-secondary hover:border-brand-500 hover:text-brand-500 transition"
                               >
                                 <CheckCircle2 className="h-3 w-3" />
                                 Mark Contacted
@@ -289,7 +289,7 @@ export default function AdminCommunicationsPage() {
                           ) : (
                             <button
                               onClick={() => { setAssigningId(item.id); setAssigningType(item.type); setSelectedRepair(""); }}
-                              className="flex items-center gap-1.5 rounded-lg border border-warm-700 px-3 py-1.5 text-xs font-medium text-warm-300 hover:border-copper-500 hover:text-copper-500 transition"
+                              className="flex items-center gap-1.5 rounded-lg border border-rms-border px-3 py-1.5 text-xs font-medium text-rms-text-secondary hover:border-brand-500 hover:text-brand-500 transition"
                             >
                               <Link2 className="h-3 w-3" />
                               Assign to repair
@@ -305,15 +305,15 @@ export default function AdminCommunicationsPage() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-warm-800 px-5 py-4">
-              <p className="text-xs text-warm-400">Page {page + 1} of {totalPages}</p>
+            <div className="flex items-center justify-between border-t border-rms-border px-5 py-4">
+              <p className="text-xs text-rms-text-secondary">Page {page + 1} of {totalPages}</p>
               <div className="flex gap-2">
                 <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}
-                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50">
+                  className="flex items-center gap-1 rounded border border-rms-border px-3 py-1 text-xs text-rms-text hover:bg-rms-raised disabled:opacity-50">
                   <ChevronLeft className="h-3 w-3" /> Previous
                 </button>
                 <button onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1}
-                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50">
+                  className="flex items-center gap-1 rounded border border-rms-border px-3 py-1 text-xs text-rms-text hover:bg-rms-raised disabled:opacity-50">
                   Next <ChevronRight className="h-3 w-3" />
                 </button>
               </div>
@@ -324,24 +324,24 @@ export default function AdminCommunicationsPage() {
 
       {/* CONVERSATIONS TAB */}
       {tab === "conversations" && !activeConversation && (
-        <div className="rounded-lg border border-warm-800 bg-warm-900">
-          <div className="border-b border-warm-800 px-5 py-4">
-            <h2 className="font-heading text-lg font-semibold text-warm-50">Conversations</h2>
-            <p className="mt-1 text-sm text-warm-400">All email and SMS threads grouped by contact</p>
+        <div className="rounded-lg border border-rms-border bg-rms-surface">
+          <div className="border-b border-rms-border px-5 py-4">
+            <h2 className="font-heading text-lg font-semibold text-rms-text">Conversations</h2>
+            <p className="mt-1 text-sm text-rms-text-secondary">All email and SMS threads grouped by contact</p>
           </div>
 
-          <div className="divide-y divide-warm-800">
+          <div className="divide-y divide-rms-raised">
             {isLoadingConversations ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="animate-pulse px-5 py-4">
-                  <div className="h-4 w-40 rounded bg-warm-800" />
-                  <div className="mt-2 h-3 w-56 rounded bg-warm-800" />
+                  <div className="h-4 w-40 rounded bg-rms-raised" />
+                  <div className="mt-2 h-3 w-56 rounded bg-rms-raised" />
                 </div>
               ))
             ) : !conversationsData?.data?.length ? (
               <div className="px-5 py-24 text-center">
-                <MessageSquare className="mx-auto h-12 w-12 text-warm-600" />
-                <p className="mt-4 text-warm-400">No conversations yet</p>
+                <MessageSquare className="mx-auto h-12 w-12 text-rms-text-secondary" />
+                <p className="mt-4 text-rms-text-secondary">No conversations yet</p>
               </div>
             ) : (
               conversationsData?.data.map((conv: Conversation) => (
@@ -357,36 +357,36 @@ export default function AdminCommunicationsPage() {
                       setReplyTo(conv.contact_phone || "");
                     }
                   }}
-                  className="w-full text-left px-5 py-4 hover:bg-warm-800 transition"
+                  className="w-full text-left px-5 py-4 hover:bg-rms-raised transition"
                 >
                   <div className="flex items-start gap-4">
                     <div className={cn(
                       "mt-0.5 flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold",
-                      conv.last_message_direction === "inbound" ? "bg-copper-500/10 text-copper-500" : "bg-warm-700 text-warm-300"
+                      conv.last_message_direction === "inbound" ? "bg-brand-500/10 text-brand-500" : "bg-rms-raised text-rms-text-secondary"
                     )}>
                       {conv.contact_name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-warm-50">{conv.contact_name}</span>
-                        <span className="text-[10px] text-warm-500">{formatDateTime(conv.last_message_at)}</span>
+                        <span className="font-semibold text-rms-text">{conv.contact_name}</span>
+                        <span className="text-[10px] text-rms-text0">{formatDateTime(conv.last_message_at)}</span>
                       </div>
                       <div className="mt-0.5 flex items-center gap-2">
                         {conv.contact_email && (
-                          <span className="flex items-center gap-1 text-xs text-warm-500">
+                          <span className="flex items-center gap-1 text-xs text-rms-text0">
                             <Mail className="h-3 w-3" /> {conv.contact_email}
                           </span>
                         )}
                         {conv.contact_phone && (
-                          <span className="flex items-center gap-1 text-xs text-warm-500">
+                          <span className="flex items-center gap-1 text-xs text-rms-text0">
                             <Phone className="h-3 w-3" /> {conv.contact_phone}
                           </span>
                         )}
                       </div>
-                      <p className="mt-1 text-sm text-warm-400 line-clamp-1">{conv.last_message_body}</p>
+                      <p className="mt-1 text-sm text-rms-text-secondary line-clamp-1">{conv.last_message_body}</p>
                     </div>
                     {conv.unread_count > 0 && (
-                      <span className="rounded-full bg-copper-500 px-2 py-0.5 text-[10px] font-bold text-warm-950">
+                      <span className="rounded-full bg-brand-500 px-2 py-0.5 text-[10px] font-bold text-white">
                         {conv.unread_count}
                       </span>
                     )}
@@ -397,15 +397,15 @@ export default function AdminCommunicationsPage() {
           </div>
 
           {convTotalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-warm-800 px-5 py-4">
-              <p className="text-xs text-warm-400">Page {page + 1} of {convTotalPages}</p>
+            <div className="flex items-center justify-between border-t border-rms-border px-5 py-4">
+              <p className="text-xs text-rms-text-secondary">Page {page + 1} of {convTotalPages}</p>
               <div className="flex gap-2">
                 <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}
-                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50">
+                  className="flex items-center gap-1 rounded border border-rms-border px-3 py-1 text-xs text-rms-text hover:bg-rms-raised disabled:opacity-50">
                   <ChevronLeft className="h-3 w-3" /> Previous
                 </button>
                 <button onClick={() => setPage((p) => Math.min(convTotalPages - 1, p + 1))} disabled={page >= convTotalPages - 1}
-                  className="flex items-center gap-1 rounded border border-warm-700 px-3 py-1 text-xs text-warm-50 hover:bg-warm-800 disabled:opacity-50">
+                  className="flex items-center gap-1 rounded border border-rms-border px-3 py-1 text-xs text-rms-text hover:bg-rms-raised disabled:opacity-50">
                   Next <ChevronRight className="h-3 w-3" />
                 </button>
               </div>
@@ -416,18 +416,18 @@ export default function AdminCommunicationsPage() {
 
       {/* CONVERSATION DETAIL */}
       {tab === "conversations" && activeConversation && (
-        <div className="rounded-lg border border-warm-800 bg-warm-900">
-          <div className="border-b border-warm-800 px-5 py-4">
+        <div className="rounded-lg border border-rms-border bg-rms-surface">
+          <div className="border-b border-rms-border px-5 py-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setActiveConversation(null)}
-                className="rounded-lg border border-warm-700 p-1.5 text-warm-400 hover:bg-warm-800 hover:text-warm-50"
+                className="rounded-lg border border-rms-border p-1.5 text-rms-text-secondary hover:bg-rms-raised hover:text-rms-text"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
               <div>
-                <h2 className="font-heading text-lg font-semibold text-warm-50">{activeConversation.contact_name}</h2>
-                <div className="flex items-center gap-3 text-xs text-warm-500">
+                <h2 className="font-heading text-lg font-semibold text-rms-text">{activeConversation.contact_name}</h2>
+                <div className="flex items-center gap-3 text-xs text-rms-text0">
                   {activeConversation.contact_email && (
                     <span className="flex items-center gap-1"><Mail className="h-3 w-3" /> {activeConversation.contact_email}</span>
                   )}
@@ -446,37 +446,37 @@ export default function AdminCommunicationsPage() {
                 <div className={cn(
                   "max-w-[75%] rounded-lg px-4 py-3",
                   msg.direction === "outbound"
-                    ? "bg-copper-500/10 border border-copper-500/20"
-                    : "bg-warm-800 border border-warm-700"
+                    ? "bg-brand-500/10 border border-brand-500/20"
+                    : "bg-rms-raised border border-rms-border"
                 )}>
                   <div className="flex items-center gap-2 mb-1">
                     {msg.type === "email" ? (
-                      <Mail className="h-3 w-3 text-copper-600" />
+                      <Mail className="h-3 w-3 text-brand-600" />
                     ) : (
                       <MessageSquare className="h-3 w-3 text-purple-400" />
                     )}
-                    <span className="text-[10px] text-warm-500 uppercase tracking-wider">
+                    <span className="text-[10px] text-rms-text0 uppercase tracking-wider">
                       {msg.direction === "outbound" ? "You" : msg.type}
                     </span>
-                    <span className="text-[10px] text-warm-600">{formatDateTime(msg.created_at)}</span>
+                    <span className="text-[10px] text-rms-text-secondary">{formatDateTime(msg.created_at)}</span>
                   </div>
                   {msg.subject && (
-                    <p className="text-sm font-medium text-warm-200 mb-1">{msg.subject}</p>
+                    <p className="text-sm font-medium text-rms-text-secondary mb-1">{msg.subject}</p>
                   )}
-                  <p className="text-sm text-warm-300 whitespace-pre-wrap">{msg.body}</p>
+                  <p className="text-sm text-rms-text-secondary whitespace-pre-wrap">{msg.body}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Reply */}
-          <div className="border-t border-warm-800 px-5 py-4">
+          <div className="border-t border-rms-border px-5 py-4">
             <div className="mb-3 flex items-center gap-2">
               <button
                 onClick={() => { setReplyType("email"); setReplyTo(activeConversation.contact_email || ""); }}
                 className={cn(
                   "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition",
-                  replyType === "email" ? "bg-copper-500/10 text-copper-500 border border-copper-500/30" : "border border-warm-700 text-warm-400 hover:text-warm-50"
+                  replyType === "email" ? "bg-brand-500/10 text-brand-500 border border-brand-500/30" : "border border-rms-border text-rms-text-secondary hover:text-rms-text"
                 )}
               >
                 <Mail className="h-3 w-3" /> Reply via Email
@@ -485,7 +485,7 @@ export default function AdminCommunicationsPage() {
                 onClick={() => { setReplyType("sms"); setReplyTo(activeConversation.contact_phone || ""); }}
                 className={cn(
                   "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition",
-                  replyType === "sms" ? "bg-purple-500/10 text-purple-400 border border-purple-500/30" : "border border-warm-700 text-warm-400 hover:text-warm-50"
+                  replyType === "sms" ? "bg-purple-500/10 text-purple-400 border border-purple-500/30" : "border border-rms-border text-rms-text-secondary hover:text-rms-text"
                 )}
               >
                 <MessageSquare className="h-3 w-3" /> Reply via SMS
@@ -498,7 +498,7 @@ export default function AdminCommunicationsPage() {
                 placeholder="Subject"
                 value={replySubject}
                 onChange={(e) => setReplySubject(e.target.value)}
-                className="mb-2 w-full rounded-lg border border-warm-700 bg-warm-800 px-4 py-2 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none"
+                className="mb-2 w-full rounded-lg border border-rms-border bg-rms-raised px-4 py-2 text-sm text-rms-text placeholder-rms-text0 focus:border-brand-500 focus:outline-none"
               />
             )}
 
@@ -508,7 +508,7 @@ export default function AdminCommunicationsPage() {
                 value={replyBody}
                 onChange={(e) => setReplyBody(e.target.value)}
                 rows={3}
-                className="flex-1 rounded-lg border border-warm-700 bg-warm-800 px-4 py-2.5 text-sm text-warm-50 placeholder-warm-500 focus:border-copper-500 focus:outline-none resize-none"
+                className="flex-1 rounded-lg border border-rms-border bg-rms-raised px-4 py-2.5 text-sm text-rms-text placeholder-rms-text0 focus:border-brand-500 focus:outline-none resize-none"
               />
               <button
                 onClick={() => {
@@ -517,7 +517,7 @@ export default function AdminCommunicationsPage() {
                   sendReplyMutation.mutate(undefined, { onSettled: () => setSendingReply(false) });
                 }}
                 disabled={!replyBody.trim() || !replyTo || sendingReply || (replyType === "sms" && !gatewayStatus?.connected)}
-                className="flex items-center gap-2 self-end rounded-lg bg-copper-500 px-4 py-2.5 text-sm font-semibold text-warm-950 hover:bg-copper-600 disabled:opacity-50"
+                className="flex items-center gap-2 self-end rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 disabled:opacity-50"
               >
                 <Send className="h-4 w-4" />
                 {sendingReply ? "Sending..." : "Send"}
@@ -531,13 +531,13 @@ export default function AdminCommunicationsPage() {
             {/* Quick templates */}
             {replyType === "email" && emailTemplates && emailTemplates.length > 0 && (
               <div className="mt-3">
-                <p className="text-xs text-warm-500 mb-1.5">Quick templates:</p>
+                <p className="text-xs text-rms-text0 mb-1.5">Quick templates:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {emailTemplates.map((t: EmailTemplate) => (
                     <button
                       key={t.id}
                       onClick={() => { setReplySubject(t.subject); setReplyBody(t.body); }}
-                      className="rounded border border-warm-700 px-2 py-1 text-[10px] text-warm-400 hover:border-copper-500 hover:text-copper-600 transition"
+                      className="rounded border border-rms-border px-2 py-1 text-[10px] text-rms-text-secondary hover:border-brand-500 hover:text-brand-600 transition"
                     >
                       {t.name}
                     </button>
@@ -547,13 +547,13 @@ export default function AdminCommunicationsPage() {
             )}
             {replyType === "sms" && smsTemplates && smsTemplates.length > 0 && (
               <div className="mt-3">
-                <p className="text-xs text-warm-500 mb-1.5">Quick templates:</p>
+                <p className="text-xs text-rms-text0 mb-1.5">Quick templates:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {smsTemplates.map((t: SmsTemplate) => (
                     <button
                       key={t.id}
                       onClick={() => setReplyBody(t.body)}
-                      className="rounded border border-warm-700 px-2 py-1 text-[10px] text-warm-400 hover:border-copper-500 hover:text-copper-600 transition"
+                      className="rounded border border-rms-border px-2 py-1 text-[10px] text-rms-text-secondary hover:border-brand-500 hover:text-brand-600 transition"
                     >
                       {t.name}
                     </button>

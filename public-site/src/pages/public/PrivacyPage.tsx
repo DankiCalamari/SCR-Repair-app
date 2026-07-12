@@ -1,13 +1,16 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function PrivacyPage() {
-  useEffect(() => {
-    document.title = "Privacy Policy | Sunset Country Repairs";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>Privacy Policy | Sunset Country Repairs</title>
+        <meta name="description" content="Privacy policy for Sunset Country Repairs. Learn how we collect, use, and protect your personal information." />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/privacy" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero */}
       <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -78,5 +81,6 @@ export default function PrivacyPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

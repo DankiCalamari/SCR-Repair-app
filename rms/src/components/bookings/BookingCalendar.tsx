@@ -37,27 +37,27 @@ export default function CalendarView({ bookings, onBookingClick, onDateClick }: 
 
   const getBookingTypeColor = (type: BookingType) => {
     return type === "pickup" 
-      ? "bg-copper-500/20 border-copper-500/30 text-copper-400" 
+      ? "bg-brand-500/20 border-brand-500/30 text-brand-500" 
       : "bg-teal-500/20 border-teal-500/30 text-teal-400";
   };
 
   return (
-    <div className="rounded-lg border border-warm-700 bg-warm-800">
+    <div className="rounded-lg border border-rms-border bg-rms-raised">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-warm-700 px-4 py-3">
-        <h2 className="font-heading text-lg font-semibold text-warm-50">
+      <div className="flex items-center justify-between border-b border-rms-border px-4 py-3">
+        <h2 className="font-heading text-lg font-semibold text-rms-text">
           {format(currentMonth, "MMMM yyyy")}
         </h2>
         <div className="flex gap-1">
           <button
             onClick={previousMonth}
-            className="rounded p-1.5 text-warm-400 hover:bg-warm-700 hover:text-warm-50"
+            className="rounded p-1.5 text-rms-text-secondary hover:bg-rms-raised hover:text-rms-text"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={nextMonth}
-            className="rounded p-1.5 text-warm-400 hover:bg-warm-700 hover:text-warm-50"
+            className="rounded p-1.5 text-rms-text-secondary hover:bg-rms-raised hover:text-rms-text"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -65,9 +65,9 @@ export default function CalendarView({ bookings, onBookingClick, onDateClick }: 
       </div>
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 border-b border-warm-700">
+      <div className="grid grid-cols-7 border-b border-rms-border">
         {WEEKDAYS.map((day) => (
-          <div key={day} className="px-2 py-2 text-center text-xs font-medium text-warm-400">
+          <div key={day} className="px-2 py-2 text-center text-xs font-medium text-rms-text-secondary">
             {day}
           </div>
         ))}
@@ -85,16 +85,16 @@ export default function CalendarView({ bookings, onBookingClick, onDateClick }: 
             <div
               key={dateStr}
               className={cn(
-                "min-h-[100px] border-r border-b border-warm-700/50 p-1 last:border-r-0",
-                !isCurrentMonth && "bg-warm-850/30"
+                "min-h-[100px] border-r border-b border-rms-border/50 p-1 last:border-r-0",
+                !isCurrentMonth && "bg-rms-border/30"
               )}
               onClick={() => onDateClick?.(day)}
             >
               <div
                 className={cn(
                   "mb-1 flex h-6 w-6 items-center justify-center rounded-full text-sm font-medium",
-                  isCurrentDay && "bg-copper-500 text-white",
-                  !isCurrentMonth && "text-warm-600"
+                  isCurrentDay && "bg-brand-500 text-white",
+                  !isCurrentMonth && "text-rms-text-secondary"
                 )}
               >
                 {format(day, "d")}
@@ -124,7 +124,7 @@ export default function CalendarView({ bookings, onBookingClick, onDateClick }: 
                   </button>
                 ))}
                 {dayBookings.length > 3 && (
-                  <div className="text-xs text-warm-400">
+                  <div className="text-xs text-rms-text-secondary">
                     +{dayBookings.length - 3} more
                   </div>
                 )}

@@ -61,25 +61,25 @@ export default function PhotoLightbox({
     >
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/60 to-transparent z-10">
-        <div className="text-warm-50 text-sm">
+        <div className="text-rms-text text-sm">
           <span className="font-medium">
             {currentIndex + 1} / {photos.length}
           </span>
-          <span className="ml-3 text-warm-50/70 truncate max-w-xs inline-block align-bottom">
+          <span className="ml-3 text-rms-text/70 truncate max-w-xs inline-block align-bottom">
             {photo.original_filename}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={(e) => { e.stopPropagation(); handleDownload(); }}
-            className="text-warm-50/80 hover:text-warm-50 p-1.5 rounded"
+            className="text-rms-text/80 hover:text-rms-text p-1.5 rounded"
             title="Download"
           >
             <Download size={20} />
           </button>
           <button
             onClick={onClose}
-            className="text-warm-50/80 hover:text-warm-50 p-1.5 rounded"
+            className="text-rms-text/80 hover:text-rms-text p-1.5 rounded"
             title="Close"
           >
             <X size={22} />
@@ -91,7 +91,7 @@ export default function PhotoLightbox({
       {currentIndex > 0 && (
         <button
           onClick={(e) => { e.stopPropagation(); onNavigate(currentIndex - 1); }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-warm-50/70 hover:text-warm-50 bg-black/30 rounded-full p-2 z-10"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-rms-text/70 hover:text-rms-text bg-black/30 rounded-full p-2 z-10"
         >
           <ChevronLeft size={28} />
         </button>
@@ -99,7 +99,7 @@ export default function PhotoLightbox({
       {currentIndex < photos.length - 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); onNavigate(currentIndex + 1); }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-50/70 hover:text-warm-50 bg-black/30 rounded-full p-2 z-10"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-rms-text/70 hover:text-rms-text bg-black/30 rounded-full p-2 z-10"
         >
           <ChevronRight size={28} />
         </button>
@@ -111,7 +111,7 @@ export default function PhotoLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         {loading && (
-          <div className="absolute text-warm-50/50 text-sm">Loading...</div>
+          <div className="absolute text-rms-text/50 text-sm">Loading...</div>
         )}
         <img
           src={imageUrl}
@@ -128,24 +128,24 @@ export default function PhotoLightbox({
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1.5 z-10">
         <button
           onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.max(0.25, z - 0.25)); }}
-          className="text-warm-50/80 hover:text-warm-50"
+          className="text-rms-text/80 hover:text-rms-text"
           title="Zoom out"
         >
           <ZoomOut size={18} />
         </button>
-        <span className="text-warm-50/80 text-xs w-12 text-center">
+        <span className="text-rms-text/80 text-xs w-12 text-center">
           {Math.round(zoom * 100)}%
         </span>
         <button
           onClick={(e) => { e.stopPropagation(); setZoom((z) => Math.min(5, z + 0.25)); }}
-          className="text-warm-50/80 hover:text-warm-50"
+          className="text-rms-text/80 hover:text-rms-text"
           title="Zoom in"
         >
           <ZoomIn size={18} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); setZoom(1); }}
-          className="text-warm-50/80 hover:text-warm-50 ml-1"
+          className="text-rms-text/80 hover:text-rms-text ml-1"
           title="Reset zoom"
         >
           <RotateCcw size={16} />
@@ -154,7 +154,7 @@ export default function PhotoLightbox({
 
       {/* Photo info */}
       {photo.notes && (
-        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 text-warm-50/70 text-sm bg-black/50 rounded px-3 py-1 max-w-md text-center truncate z-10">
+        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 text-rms-text/70 text-sm bg-black/50 rounded px-3 py-1 max-w-md text-center truncate z-10">
           {photo.notes}
         </div>
       )}

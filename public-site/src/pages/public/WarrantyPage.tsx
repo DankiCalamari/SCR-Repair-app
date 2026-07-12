@@ -1,5 +1,6 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Wrench, Shield, CheckCircle, XCircle, Clock, Phone } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -36,10 +37,6 @@ const claimSteps = [
 ];
 
 export default function WarrantyPage() {
-  useEffect(() => {
-    document.title = "Warranty Information | Sunset Country Repairs";
-  }, []);
-
   const [warrantyNumber, setWarrantyNumber] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [result, setResult] = useState<WarrantyResult | null>(null);
@@ -64,7 +61,15 @@ export default function WarrantyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>Warranty Information | Sunset Country Repairs Mildura</title>
+        <meta name="description" content="90-day warranty on all electronics repairs. Learn what's covered, make a claim, and check your warranty status online." />
+        <meta name="keywords" content="warranty, repair guarantee, electronics repair warranty, Mildura repair" />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/warranty" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero */}
       <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -226,5 +231,6 @@ export default function WarrantyPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

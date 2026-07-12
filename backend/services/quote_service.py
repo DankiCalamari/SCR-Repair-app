@@ -1,6 +1,5 @@
 import random
 from uuid import UUID
-from datetime import datetime
 
 from fastapi import HTTPException, status
 from sqlalchemy import select, func
@@ -282,6 +281,8 @@ async def decline_quote(
 
 
 async def send_quote(quote_id: UUID, db: AsyncSession, user_id: UUID) -> Quote:
+    import logging
+    logger = logging.getLogger(__name__)
     quote = await get_quote_or_404(db, quote_id)
 
     if quote.status not in (QuoteStatus.DRAFT, QuoteStatus.SENT):
@@ -302,13 +303,17 @@ async def send_quote(quote_id: UUID, db: AsyncSession, user_id: UUID) -> Quote:
     )
     quote = result.scalar_one()
 
-    from services.notification_service import notify_quote_sent
-    from models.repair import Repair
-    repair_result = await db.execute(
-        select(Repair).where(Repair.id == quote.repair_id)
-    )
-    repair = repair_result.scalar_one_or_none()
-    await notify_quote_sent(db, quote, repair)
+    # Send diagnosis complete notification first (when quote is sent)
+    try:
+        from services.notification_service import notify_quote_sent
+        from models.repair import Repair
+        repair_result = await db.execute(
+            select(Repair).where(Repair.id == quote.repair_id)
+        )
+        repair = repair_result.scalar_one_or_none()
+        await notify_quote_sent(db, quote, repair)
+    except Exception as exc:
+        logger.warning("Failed to send quote notification: %s", exc)
 
     return quote
 

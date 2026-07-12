@@ -44,6 +44,7 @@ class RepairCreate(BaseModel):
     status: str = Field(default="lead")
     diagnosis: Optional[str] = None
     repair_notes: Optional[str] = None
+    internal_notes: Optional[str] = None
     labour_hours: Optional[str] = Field(None, max_length=10)
     labour_cost: Optional[str] = Field(None, max_length=20)
     parts_cost: Optional[str] = Field(None, max_length=20)
@@ -62,6 +63,7 @@ class RepairUpdate(BaseModel):
     issue_description: Optional[str] = Field(None, min_length=1)
     diagnosis: Optional[str] = None
     repair_notes: Optional[str] = None
+    internal_notes: Optional[str] = None
     labour_hours: Optional[str] = Field(None, max_length=10)
     labour_cost: Optional[str] = Field(None, max_length=20)
     parts_cost: Optional[str] = Field(None, max_length=20)
@@ -117,6 +119,7 @@ class RepairResponse(BaseModel):
     issue_description: str
     diagnosis: Optional[str] = None
     repair_notes: Optional[str] = None
+    internal_notes: Optional[str] = None
     labour_hours: Optional[str] = None
     labour_cost: Optional[str] = None
     parts_cost: Optional[str] = None

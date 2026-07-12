@@ -4,3 +4,4 @@ tools:
             - docker ps *
             - find *
             - head *
+            - mkdir *

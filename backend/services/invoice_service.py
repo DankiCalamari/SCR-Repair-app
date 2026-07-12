@@ -1,3 +1,4 @@
+import logging
 import random
 from uuid import UUID
 from datetime import datetime
@@ -12,6 +13,8 @@ from models.invoice import Invoice, InvoiceItem, InvoiceStatus
 
 
 GST_RATE = 0.10
+
+logger = logging.getLogger(__name__)
 
 
 async def generate_invoice_number(db: AsyncSession) -> str:
@@ -125,8 +128,6 @@ async def create_invoice(
 
     await db.flush()
 
-    from sqlalchemy import select
-    from sqlalchemy.orm import selectinload
     result = await db.execute(
         select(Invoice).options(selectinload(Invoice.items)).where(Invoice.id == invoice.id)
     )
@@ -227,12 +228,24 @@ async def send_invoice(invoice_id: UUID, db: AsyncSession, user_id: UUID) -> Inv
 
     await db.flush()
 
-    from sqlalchemy import select
-    from sqlalchemy.orm import selectinload
     result = await db.execute(
         select(Invoice).options(selectinload(Invoice.items)).where(Invoice.id == invoice.id)
     )
-    return result.scalar_one()
+    invoice = result.scalar_one()
+
+    # Send invoice notification
+    try:
+        from services.notification_service import notify_invoice_created
+        from models.repair import Repair
+        repair_result = await db.execute(
+            select(Repair).where(Repair.id == invoice.repair_id)
+        )
+        repair = repair_result.scalar_one_or_none()
+        await notify_invoice_created(db, invoice, repair)
+    except Exception as exc:
+        logger.warning("Failed to send invoice notification: %s", exc)
+
+    return invoice
 
 
 async def generate_invoice_pdf(invoice_id: UUID, db: AsyncSession) -> bytes:

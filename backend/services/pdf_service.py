@@ -3,6 +3,7 @@
 import io
 from datetime import datetime
 from decimal import Decimal
+from typing import Any
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -13,8 +14,9 @@ from reportlab.platypus import (
 )
 
 from config import settings
+from models.pdf_template import PdfTemplate
 
-# ─── Colours ─────────────────────────────────────────────────────────────────
+# ─── Default Colours ─────────────────────────────────────────────────────────────────
 BRAND_PRIMARY = colors.HexColor("#1a1a2e")
 BRAND_ACCENT = colors.HexColor("#e94560")
 BRAND_SUBTLE = colors.HexColor("#f5f5f5")
@@ -111,7 +113,6 @@ def _address_block(label: str, heading: str, phone: str, email: str) -> list:
         )),
     ]
     if phone:
-        Paragraph(f"Ph: {phone}", normal_style)
         items.append(Paragraph(f"Ph: {phone}", normal_style))
     if email:
         items.append(Paragraph(f"Email: {email}", normal_style))

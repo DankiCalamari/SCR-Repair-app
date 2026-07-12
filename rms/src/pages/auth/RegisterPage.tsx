@@ -66,8 +66,8 @@ export default function RegisterPage() {
               className="mx-auto mb-4 h-12 w-auto object-contain"
             />
           )}
-          <h1 className="font-heading text-3xl font-bold text-warm-900">{businessName}</h1>
-          <p className="mt-2 text-warm-500">Create your customer account</p>
+          <h1 className="font-heading text-3xl font-bold text-rms-text">{businessName}</h1>
+          <p className="mt-2 text-rms-text0">Create your customer account</p>
         </div>
         <form onSubmit={handleSubmit} className="rounded-xl border border-warm-200 bg-white p-8">
           {error && (
@@ -76,52 +76,52 @@ export default function RegisterPage() {
             </div>
           )}
           <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-medium text-warm-600">Full Name</label>
+            <label className="mb-1.5 block text-sm font-medium text-rms-text-secondary">Full Name</label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
               placeholder="John Smith"
             />
           </div>
           <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-medium text-warm-600">Email</label>
+            <label className="mb-1.5 block text-sm font-medium text-rms-text-secondary">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
               placeholder="you@example.com"
             />
           </div>
           <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-medium text-warm-600">Phone</label>
+            <label className="mb-1.5 block text-sm font-medium text-rms-text-secondary">Phone</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
               placeholder="0400 000 000"
             />
           </div>
           <div className="mb-4">
-            <label className="mb-1.5 block text-sm font-medium text-warm-600">Password</label>
+            <label className="mb-1.5 block text-sm font-medium text-rms-text-secondary">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
               placeholder="Minimum 8 characters"
             />
           </div>
           <div className="mb-6">
-            <label className="mb-1.5 block text-sm font-medium text-warm-600">Confirm Password</label>
+            <label className="mb-1.5 block text-sm font-medium text-rms-text-secondary">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-warm-900 placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
+              className="w-full rounded-lg border border-warm-300 bg-warm-100 px-4 py-2.5 text-rms-text placeholder-warm-400 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500"
               placeholder="Confirm your password"
             />
           </div>
@@ -132,7 +132,7 @@ export default function RegisterPage() {
           >
             {loading ? "Creating Account..." : "Create Account"}
           </button>
-          <p className="mt-4 text-center text-sm text-warm-500">
+          <p className="mt-4 text-center text-sm text-rms-text0">
             Already have an account?{" "}
             <Link to="/login" className="text-accent-500 hover:text-accent-600">
               Sign In

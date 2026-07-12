@@ -143,7 +143,7 @@ export default function LogViewer({
   const getLevelStyles = (level: string) => {
     switch (level) {
       case "debug":
-        return "text-warm-500";
+        return "text-rms-text0";
       case "info":
         return "text-blue-400";
       case "warning":
@@ -151,26 +151,26 @@ export default function LogViewer({
       case "error":
         return "text-red-400";
       default:
-        return "text-warm-300";
+        return "text-rms-text-secondary";
     }
   };
 
   const filteredLogs = logs.filter((log) => visibleLevels.has(log.level));
 
   return (
-    <div className={cn("flex flex-col rounded-lg border border-warm-800 bg-warm-900", className)}>
+    <div className={cn("flex flex-col rounded-lg border border-rms-border bg-rms-surface", className)}>
       {/* Header */}
-      <div className="border-b border-warm-800 px-4 py-3 flex items-center justify-between">
+      <div className="border-b border-rms-border px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 text-copper-500" />
-          <h3 className="font-heading text-sm font-semibold text-warm-50">
+          <Terminal className="h-4 w-4 text-brand-500" />
+          <h3 className="font-heading text-sm font-semibold text-rms-text">
             Real-time Logs
           </h3>
           <span className={cn(
             "text-xs px-2 py-0.5 rounded-full",
             isConnected 
               ? "bg-green-500/20 text-green-400" 
-              : "bg-warm-700 text-warm-400"
+              : "bg-rms-raised text-rms-text-secondary"
           )}>
             {connectionStatus}
           </span>
@@ -186,8 +186,8 @@ export default function LogViewer({
                 className={cn(
                   "text-xs px-1.5 py-0.5 rounded capitalize",
                   visibleLevels.has(level)
-                    ? cn(getLevelStyles(level), "bg-warm-800")
-                    : "text-warm-600 bg-transparent"
+                    ? cn(getLevelStyles(level), "bg-rms-raised")
+                    : "text-rms-text-secondary bg-transparent"
                 )}
               >
                 {level}
@@ -197,30 +197,30 @@ export default function LogViewer({
           
           <button
             onClick={togglePause}
-            className="p-1 rounded hover:bg-warm-800 transition-colors"
+            className="p-1 rounded hover:bg-rms-raised transition-colors"
             title={isPaused ? "Resume" : "Pause"}
           >
             {isPaused ? (
-              <Play className="h-3.5 w-3.5 text-warm-400" />
+              <Play className="h-3.5 w-3.5 text-rms-text-secondary" />
             ) : (
-              <Pause className="h-3.5 w-3.5 text-warm-400" />
+              <Pause className="h-3.5 w-3.5 text-rms-text-secondary" />
             )}
           </button>
           
           <button
             onClick={downloadLogs}
-            className="p-1 rounded hover:bg-warm-800 transition-colors"
+            className="p-1 rounded hover:bg-rms-raised transition-colors"
             title="Download logs"
           >
-            <Download className="h-3.5 w-3.5 text-warm-400" />
+            <Download className="h-3.5 w-3.5 text-rms-text-secondary" />
           </button>
           
           <button
             onClick={clearLogs}
-            className="p-1 rounded hover:bg-warm-800 transition-colors"
+            className="p-1 rounded hover:bg-rms-raised transition-colors"
             title="Clear logs"
           >
-            <Trash2 className="h-3.5 w-3.5 text-warm-400" />
+            <Trash2 className="h-3.5 w-3.5 text-rms-text-secondary" />
           </button>
         </div>
       </div>
@@ -231,7 +231,7 @@ export default function LogViewer({
         className="flex-1 overflow-y-auto max-h-96 p-2 font-mono text-xs"
       >
         {filteredLogs.length === 0 ? (
-          <div className="p-4 text-center text-warm-500">
+          <div className="p-4 text-center text-rms-text0">
             No logs to display
           </div>
         ) : (
@@ -239,18 +239,18 @@ export default function LogViewer({
             {filteredLogs.map((log, idx) => (
               <div
                 key={idx}
-                className="border-l-2 border-warm-700 pl-2 py-0.5 hover:bg-warm-800/50 transition-colors"
+                className="border-l-2 border-rms-border pl-2 py-0.5 hover:bg-rms-raised/50 transition-colors"
               >
                 <div className="flex items-start gap-2">
-                  <span className="text-warm-600 whitespace-nowrap">
+                  <span className="text-rms-text-secondary whitespace-nowrap">
                     {log.timestamp?.split("T")[1]?.split(".")[0] || "—"}
                   </span>
                   <span className={cn("font-medium whitespace-nowrap", getLevelStyles(log.level))}>
                     {log.level_name}
                   </span>
-                  <span className="text-warm-500 truncate min-w-0 flex-1">
-                    {log.logger && <span className="text-warm-600">{log.logger} — </span>}
-                    <span className="text-warm-300">{log.message}</span>
+                  <span className="text-rms-text0 truncate min-w-0 flex-1">
+                    {log.logger && <span className="text-rms-text-secondary">{log.logger} — </span>}
+                    <span className="text-rms-text-secondary">{log.message}</span>
                   </span>
                 </div>
               </div>

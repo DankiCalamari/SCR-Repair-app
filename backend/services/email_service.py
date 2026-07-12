@@ -100,6 +100,35 @@ async def send_email(
 ) -> EmailMessage:
     from_address = settings.SMTP_FROM_EMAIL
 
+    # Fetch email signature from database settings
+    from models.system_setting import SystemSetting
+    result = await db.execute(select(SystemSetting).where(SystemSetting.key == "email_signature"))
+    signature_setting = result.scalar_one_or_none()
+    signature = signature_setting.value if signature_setting and signature_setting.value else ""
+
+    # Build signature HTML/Plain text if configured
+    signature_html = ""
+    signature_text = ""
+    if signature:
+        # Check if signature is an image URL
+        if signature.startswith("/uploads/") or signature.startswith("http"):
+            # Convert relative URL to absolute URL for email HTML
+            if signature.startswith("/uploads/"):
+                image_url = f"{settings.APP_URL}{signature}"
+            else:
+                image_url = signature
+            signature_html = f'<br><br><img src="{image_url}" alt="Email signature" style="max-width: 100%; height: auto;">'
+            signature_text = ""  # No plain text version for image
+        else:
+            # Plain text signature
+            signature_text = f"\n\n{signature}"
+            signature_html = f"<br><br>{signature.replace(chr(10), '<br>')}"
+
+    # Append signature to body
+    body = f"{body}{signature_text}"
+    if body_html:
+        body_html = f"{body_html}{signature_html}"
+
     email_msg = EmailMessage(
         direction=EmailDirection.OUTBOUND,
         status=EmailStatus.PENDING,

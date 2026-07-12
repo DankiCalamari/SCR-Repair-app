@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Wrench, Clock, MapPin, Shield, Phone, Users, Award } from "lucide-react";
 import { useSettingsContext } from "../../context/settings-context";
 
@@ -55,15 +56,25 @@ const whyChooseUs = [
 ];
 
 export default function HomePage() {
-  useEffect(() => {
-    document.title = "Sunset Country Repairs | Electronics Repair Mildura";
-  }, []);
-
   const { settings } = useSettingsContext();
   const businessPhone = settings.business_phone || "03 5023 0000";
+  const businessName = settings.business_name || "Sunset Country Repairs";
 
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>Sunset Country Repairs | Mobile Electronics Repair Mildura</title>
+        <meta name="description" content="Mobile electronics repair service in Mildura & Sunraysia. We come to you for phone, tablet, laptop & console repairs. Same day screen replacements, battery changes, and more. Call 03 5023 0000." />
+        <meta name="keywords" content="phone repair, tablet repair, laptop repair, electronics repair, Mildura, Sunraysia, mobile repair, screen replacement, battery replacement" />
+        <meta property="og:title" content="Sunset Country Repairs | Mobile Electronics Repair" />
+        <meta property="og:description" content="Mobile electronics repair service in Mildura & Sunraysia. We come to you for phone, tablet, laptop & console repairs." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://sunsetcountryrepairs.com.au/" />
+        <meta property="og:locale" content="en_AU" />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero Section - Handwritten style */}
       <section className="relative bg-gradient-to-br from-copper-50 to-white border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
@@ -217,5 +228,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

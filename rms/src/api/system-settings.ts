@@ -89,3 +89,12 @@ export async function uploadEmailSignature(file: File): Promise<{ url: string; f
   });
   return data;
 }
+
+/**
+ * Get the configured business timezone.
+ */
+export async function getTimezone(): Promise<string> {
+  const response = await fetch("/api/v1/public/settings/timezone");
+  if (!response.ok) throw new Error("Failed to load timezone");
+  return response.text();
+}

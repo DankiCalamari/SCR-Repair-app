@@ -61,6 +61,8 @@ class SmsTemplateResponse(BaseModel):
     name: str
     body: str
     variables: list[str] = Field(default_factory=list)
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 
 class SmsGatewaySettingsSchema(BaseModel):

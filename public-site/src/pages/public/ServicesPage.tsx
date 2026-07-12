@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Wrench, Clock, Shield, Phone } from "lucide-react";
 
 const services = [
@@ -62,12 +62,16 @@ const services = [
 ];
 
 export default function ServicesPage() {
-  useEffect(() => {
-    document.title = "Repair Services | Sunset Country Repairs";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>Repair Services | Sunset Country Repairs Mildura</title>
+        <meta name="description" content="Phone, tablet, laptop & console repairs in Mildura & Sunraysia. Screen replacements, battery changes, software fixes. 90-day warranty on all repairs." />
+        <meta name="keywords" content="phone screen repair, tablet screen replacement, laptop repair, console repair, battery replacement, screen fix, Mildura repairs" />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/services" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero with character */}
       <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -142,5 +146,6 @@ export default function ServicesPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

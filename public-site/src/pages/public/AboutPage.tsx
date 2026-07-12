@@ -1,14 +1,18 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Wrench, Shield, Clock, Phone, MapPin, Heart } from "lucide-react";
 
 export default function AboutPage() {
-  useEffect(() => {
-    document.title = "About Us | Sunset Country Repairs";
-  }, []);
-
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900">
+    <>
+      <Helmet>
+        <title>About Us | Sunset Country Repairs Mildura</title>
+        <meta name="description" content="Local electronics repair business serving Mildura and Sunraysia. Honest, professional repairs with transparent pricing and clear communication." />
+        <meta name="keywords" content="about, local repair, Mildura, Sunraysia, electronics repair" />
+        <link rel="canonical" href="https://sunsetcountryrepairs.com.au/about" />
+      </Helmet>
+
+      <div className="min-h-screen bg-warm-50 text-warm-900">
       {/* Hero */}
       <section className="relative bg-copper-50 border-b-2 border-copper-200">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -181,5 +185,6 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
